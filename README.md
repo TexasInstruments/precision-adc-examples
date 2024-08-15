@@ -5,7 +5,7 @@
 [Introduction](#introduction) | [Devices](#devices) | [Repo Organization](#Repo-Organization) | [Usage](#usage) | [Contribute](#contributing-to-the-project)
 
 
-<img src="https://bitbucket.itg.ti.com/projects/DS-FW/repos/zz_github_staging/browse/docs/media/ADC.jpg"><br/>
+<img src="https://github.com/TexasInstruments/precision-adc-examples/blob/main/docs/media/ADC.jpg"><br/>
 
 </div>
 
