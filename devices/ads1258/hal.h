@@ -49,26 +49,22 @@
 //
 //****************************************************************************
 
-#ifdef EXAMPLE_CODE
 /*  --- TODO: INSERT YOUR CODE HERE --- */
 #include "ti/devices/msp432e4/driverlib/driverlib.h"
-#else
-#include "settings.h"
-#endif
-#include "ads1258.h"
+
 
 //*****************************************************************************
 //
-// Pin definitions (PAMB)
+// Pin definitions (MSP432E401Y)
 //
 //*****************************************************************************
 
 #define START_PORT          (GPIO_PORTQ_BASE)
 #define START_PIN           (GPIO_PIN_1)
 
-#define nDRDY_PORT          (GPIO_PORTN_BASE)
-#define nDRDY_PIN           (GPIO_PIN_3)
-#define nDRDY_INT           (INT_GPION)
+#define nDRDY_PORT          (GPIO_PORTP_BASE)
+#define nDRDY_PIN           (GPIO_PIN_5)
+#define nDRDY_INT           (INT_GPIOP5)
 
 #define nCS_PORT            (GPIO_PORTM_BASE)
 #define nCS_PIN             (GPIO_PIN_0)
@@ -76,14 +72,12 @@
 #define nRESET_PORT         (GPIO_PORTM_BASE)
 #define nRESET_PIN          (GPIO_PIN_6)
 
-#define nPWDN_PORT          (GPIO_PORTN_BASE)
-#define nPWDN_PIN           (GPIO_PIN_2)
+#define nPWDN_PORT          (GPIO_PORTP_BASE)
+#define nPWDN_PIN           (GPIO_PIN_3)
 
 
 #define CLKSEL_PORT         (GPIO_PORTD_BASE)
 #define CLKSEL_PIN          (GPIO_PIN_4)
-
-#define SSI_BASE_ADDR       (SSI3_BASE)
 
 
 //*****************************************************************************
@@ -94,7 +88,7 @@
 
 void    InitADCPeripherals(void);
 void    delay_ms(uint32_t delay_time_ms);
-void    delay_us(uint32_t delay_time_us);
+void    delay_ns(uint32_t delay_time_us);
 void    setCS(bool state);
 void    setSTART(bool state);
 void    setPWDN(bool state);

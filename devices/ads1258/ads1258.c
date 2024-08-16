@@ -349,7 +349,6 @@ int32_t readData(uint8_t status[], uint8_t data[], readMode mode)
     spiSendReceiveArrays(DataTx, DataRx, byteLength);
 
 
-
     //
     // Parse returned SPI data
     //

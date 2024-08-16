@@ -69,7 +69,7 @@ Copy and paste the example code into your project, and update the files as neede
 	
  4. Include a reference to *hal.h* somewhere in your program and call the **InitADCPeripherals()** function to initialize the MCU peripherals connected to the ADS1258.
 
- 5. Include a reference to *ads1258.h* in your application (from *main.c* or wherever ADC communication is handled). You should now be able to begin calling the `ADS1258` module functions in your code.
+ 5. Include a reference to *ads1261.h* in your application (from *main.c* or wherever ADC communication is handled). You should now be able to begin calling the `ADS1258` module functions in your code.
 
 > **IMPORTANT**: This code was tested on an MSP432E401Y 32-bit ARM® Cortex®-M4F based MCU using TI Code Composer Studio's 18.1.3.LTS ARM compiler (using the provided `Unit Tests` functions). This code is provided as example to aid in the creation of your own software implementation and should not be considered to be fully verified and end-equipment ready. This example code was written for readability and has not been optimized for performance.
 

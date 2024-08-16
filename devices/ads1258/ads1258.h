@@ -40,19 +40,6 @@
 
 #include "hal.h"
 
-#ifdef EXAMPLE_CODE
-#else
-
-// TODO: Either remove this section or add defines to ads1258.c to allow for compatibility with ADS1158!!
-
-//*****************************************************************************
-//
-// TODO: Select which device you are using...
-//
-//*****************************************************************************
-//#define ADS1158
-#define ADS1258
-#endif
 
 
 //*****************************************************************************

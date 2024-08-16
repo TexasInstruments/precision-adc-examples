@@ -266,6 +266,9 @@ bool test_multiple_read_write(void)
     writeValues[5]   = 0x00u;   // MUXSG1
     writeValues[6]   = 0xFFu;   // SYSRED
 
+    // In case of external GPIO connections, do not test GPIO pins here.
+    // This should be done in a separate test case.
+
     // Write registers
     writeMultipleRegisters(REG_ADDR_CONFIG0, 7, writeValues);
 

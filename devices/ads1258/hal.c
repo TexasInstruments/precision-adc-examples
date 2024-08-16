@@ -104,21 +104,22 @@ void delay_ms(uint32_t delay_time_ms)
     /* --- TODO: INSERT YOUR CODE HERE --- */
 
     const uint32_t cycles_per_loop = 3;
-    MAP_SysCtlDelay( delay_time_ms * getSysClockHz() / (cycles_per_loop * 1000u) );
+    MAP_SysCtlDelay( delay_time_ms * getSysClock() / (cycles_per_loop * 1000u) );
 }
 
 /**
- * \fn void delay_us(uint32_t delay_time_us)
- * \brief Provides a timing delay with microsecond resolution
+ * \fn void delay_ns(uint32_t delay_time_us, uint32_t sysClock_Hz)
+ * \brief Provides a timing delay with ns resolution
  * \param delay_time_us number of us to delay
  */
-void delay_us(uint32_t delay_time_us)
+void delay_ns(uint32_t delay_time_us)
 {
     /* --- TODO: INSERT YOUR CODE HERE --- */
 
     const uint32_t cycles_per_loop = 3;
-    MAP_SysCtlDelay( delay_time_us * getSysClockHz() / (cycles_per_loop * 1000000u) );
+    MAP_SysCtlDelay( delay_time_us * getSysClock() / (cycles_per_loop * 1000000u) );
 }
+
 
 
 //****************************************************************************
@@ -140,25 +141,18 @@ void InitGPIO(void)
     MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
     while(!(SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOD)))
     {
+
     }
 
     /* Configure the GPIO for 'CLKSEL' as output and set low */
     MAP_GPIOPinTypeGPIOOutput(CLKSEL_PORT, CLKSEL_PIN);
     MAP_GPIOPinWrite(CLKSEL_PORT, CLKSEL_PIN, 0);
 
-#ifdef EXAMPLE_CODE
-#else
-   // TODO: Enable clock on PM7?
-#endif
     /* Enable the clock to the GPIO Port M and wait for it to be ready */
     MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOM);
     while(!(SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOM)))
     {
-    }
 
-    MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
-    while(!(SysCtlPeripheralReady(SYSCTL_PERIPH_GPION)))
-    {
     }
 
     /* Configure the GPIO for 'nCS' as output and set high */
@@ -174,10 +168,11 @@ void InitGPIO(void)
     MAP_GPIOPinWrite(nPWDN_PORT, nPWDN_PIN, nPWDN_PIN);
 
     /* Enable the clock to the GPIO Port P and wait for it to be ready */
-    //MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP);
-    //while(!(SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOP)))
-    //{
-    //}
+    MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP);
+    while(!(SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOP)))
+    {
+
+    }
 
     /* Configure the GPIO for 'nDRDY' as input with falling edge interrupt */
     MAP_GPIOPinTypeGPIOInput(nDRDY_PORT, nDRDY_PIN);
@@ -189,6 +184,7 @@ void InitGPIO(void)
     MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOQ);
     while(!(SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOQ)))
     {
+
     }
 
     /* Configure the GPIO for 'START' as output and set high */
@@ -205,10 +201,10 @@ void InitGPIO(void)
 //*****************************************************************************
 
 /**
- * \fn void GPION_IRQHandler(void)
+ * \fn void GPIOP5_IRQHandler(void)
  * \brief Interrupt handler for /DRDY falling edge interrupt
  */
-void GPION_IRQHandler(void)
+void GPIOP5_IRQHandler(void)
 {
     /* --- TODO: INSERT YOUR CODE HERE --- */
     //TODO: Rename or register this interrupt function with your processor
@@ -227,20 +223,6 @@ void GPION_IRQHandler(void)
         MAP_GPIOIntClear(nDRDY_PORT, getIntStatus);
 
         flag_nDRDY_INTERRUPT = true;
-#ifdef EXAMPLE_CODE
-#else
-    // TODO: If streaming data, collect data here or set a flag to read data on SPI
-
-//        g_ui32DRDYCount++;
-//        if (g_ui32DRDYCount > 20)
-//        {
-//            g_ui32DRDYCount = 0;
-//
-//            /* Toggle the LED */
-//            MAP_GPIOPinWrite(GPIO_PORTN_BASE, GPIO_PIN_0,
-//                             ~(MAP_GPIOPinRead(GPIO_PORTN_BASE, GPIO_PIN_0)));
-//        }
-#endif
     }
 }
 
@@ -307,7 +289,7 @@ void setCS(bool state)
     MAP_GPIOPinWrite(nCS_PORT, nCS_PIN, value);
 
     // td(SCCS) & td(CSSC) delay
-    SysCtlDelay(2);
+    delay_ns(80);
 }
 
 /**
@@ -322,7 +304,7 @@ void setPWDN(bool state)
     MAP_GPIOPinWrite(nPWDN_PORT, nPWDN_PIN, value);
 
     // Minimum nPWDN width: 2 tCLKs
-    SysCtlDelay(4);
+    delay_ns(125);
 
     // Reset register array when powering down
     if(!state)      { restoreRegisterDefaults(); }
@@ -353,7 +335,7 @@ void setSTART(bool state)
 
     // Minimum START width ~4 tCLKs
     // REFERENCE: https://e2e.ti.com/support/data-converters/f/73/p/431463/1543880
-    SysCtlDelay(8);
+    delay_ns(250);
 }
 
 /**
@@ -366,7 +348,7 @@ void toggleRESET(void)
     MAP_GPIOPinWrite(nRESET_PORT, nRESET_PIN, 0);
 
     // Minimum nRESET width: 2 tCLKs
-    SysCtlDelay(4);
+    delay_ns(125);
 
     MAP_GPIOPinWrite(nRESET_PORT, nRESET_PIN, nRESET_PIN);
 }
@@ -387,11 +369,7 @@ bool waitForDRDYinterrupt(uint32_t timeout_ms)
      * Return a boolean to indicate if nDRDY went low or if a timeout occurred.
      */
 
-#ifdef EXAMPLE_CODE
     // Convert ms to # of loop iterations or use a timer
-#else
-    // TODO: In a future revision, utilize an internal timer to implement the timeout feature
-#endif
     uint32_t timeout = timeout_ms * 6000;   // convert to # of loop iterations
 
     // Reset interrupt flag
@@ -451,8 +429,8 @@ void InitSPI(void)
     {
     }
 
-    MAP_SSIConfigSetExpClk(SSI3_BASE, getSysClockHz(), SSI_FRF_MOTO_MODE_0,
-                           SSI_MODE_MASTER, (getSysClockHz()/24), 8);
+    MAP_SSIConfigSetExpClk(SSI3_BASE, getSysClock(), SSI_FRF_MOTO_MODE_0,
+                           SSI_MODE_MASTER, (getSysClock()/24), 8);
     MAP_SSIEnable(SSI3_BASE);
 
     //
@@ -531,9 +509,9 @@ uint8_t spiSendReceiveByte(uint8_t dataTx)
     while (SSIDataGetNonBlocking(SSI3_BASE, &junk));
 
     /* SSI TX & RX */
-    uint32_t dataRx;
-    MAP_SSIDataPut(SSI_BASE_ADDR, (uint32_t) dataTx);
-    MAP_SSIDataGet(SSI_BASE_ADDR, &dataRx);
+    uint8_t dataRx;
+    MAP_SSIDataPut(SSI3_BASE, dataTx);
+    MAP_SSIDataGet(SSI3_BASE, &dataRx);
 
-    return (uint8_t) dataRx;
+    return dataRx;
 }
