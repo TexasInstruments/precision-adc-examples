@@ -1,0 +1,19 @@
+<map id="InitADC" name="InitADC">
+<area shape="rect" id="node2" href="$hal_8c.html#afe7a49ab9879bd7044b35eb779f30712" title="InitGPIO" alt="" coords="127,31,198,57"/>
+<area shape="rect" id="node4" href="$hal_8c.html#a23c7094e31707b24fc3094961bd5f189" title="InitSPI" alt="" coords="133,107,193,133"/>
+<area shape="rect" id="node5" href="$ads131a04_8c.html#a54b2058be64bee68c87b0103dc5897bc" title="adcStartup" alt="" coords="120,208,205,235"/>
+<area shape="rect" id="node3" href="$hal_8c.html#a6aee4dc5db1188e28367b5572e9e657b" title="GPIO_DRDY_IRQHandler" alt="" coords="253,5,424,32"/>
+<area shape="rect" id="node6" href="$hal_8c.html#adc5028a111121aefb6deb1d19b322e2a" title="delay_ms" alt="" coords="299,208,378,235"/>
+<area shape="rect" id="node7" href="$hal_8c.html#af03a85d6f018c77766120a006004209d" title="setRESET" alt="" coords="297,259,380,285"/>
+<area shape="rect" id="node8" href="$ads131a04_8c.html#ac4f76ae3a80f28d1aada3028b97d7f0f" title="restoreRegisterDefaults" alt="" coords="672,385,829,412"/>
+<area shape="rect" id="node9" href="$ads131a04_8c.html#a088f83118b69d2d7d3b91c8d1ac96b83" title="sendCommand" alt="" coords="493,309,603,336"/>
+<area shape="rect" id="node12" href="$ads131a04_8c.html#ac55df9c89809c0ad303815d61335ed20" title="unlockRegisters" alt="" coords="281,107,396,133"/>
+<area shape="rect" id="node14" href="$ads131a04_8c.html#a97cc958d76d9222d6bbffb8695bea961" title="writeSingleRegister" alt="" coords="272,309,405,336"/>
+<area shape="rect" id="node15" href="$hal_8c.html#acccf731ed5e4debaf68d26c5c3290d43" title="waitForDRDYinterrupt" alt="" coords="265,157,412,184"/>
+<area shape="rect" id="node16" href="$ads131a04_8c.html#a8fddc29e62dc612c42fcc17aa98170ae" title="readData" alt="" coords="511,208,585,235"/>
+<area shape="rect" id="node10" href="$hal_8c.html#a13b6835c7e9ed2dcd7f14cababef8004" title="setCS" alt="" coords="721,309,780,336"/>
+<area shape="rect" id="node11" href="$hal_8c.html#a27c2e023582f965ef6c147817bfefea5" title="spiSendReceiveByte" alt="" coords="680,259,821,285"/>
+<area shape="rect" id="node13" href="$hal_8c.html#aeedf09aeb5db930b2af96bf6569c4796" title="spiSendReceiveArrays" alt="" coords="472,259,624,285"/>
+<area shape="rect" id="node17" href="$ads131a04_8c.html#ac6c9f43c15b9f5590ab57971a0e91cb7" title="signExtend" alt="" coords="707,208,794,235"/>
+<area shape="rect" id="node18" href="$ads131a04_8c.html#aa3da137cfd0b2c940b7280adf1dac3c6" title="calculateCRC" alt="" coords="700,157,801,184"/>
+</map>

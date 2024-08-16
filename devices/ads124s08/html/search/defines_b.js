@@ -1,0 +1,23 @@
+var searchData=
+[
+  ['rdata_5fcommand_5flength',['RDATA_COMMAND_LENGTH',['../ads124s08_8h.html#a4dca9819eb55a1d395e3be4e43ebcd68',1,'ads124s08.h']]],
+  ['ref_5fdefault',['REF_DEFAULT',['../ads124s08_8h.html#a706fd76233d988db2e96a5ea6e1258ba',1,'ads124s08.h']]],
+  ['reg_5faddr_5fdatarate',['REG_ADDR_DATARATE',['../ads124s08_8h.html#a452dcbffbdd2e4aabbbdabc6f877073d',1,'ads124s08.h']]],
+  ['reg_5faddr_5ffscal0',['REG_ADDR_FSCAL0',['../ads124s08_8h.html#a290ecfdbc35bc083122d1bfb9668be32',1,'ads124s08.h']]],
+  ['reg_5faddr_5ffscal1',['REG_ADDR_FSCAL1',['../ads124s08_8h.html#a229d7623a70fa65143516594c6fd259a',1,'ads124s08.h']]],
+  ['reg_5faddr_5ffscal2',['REG_ADDR_FSCAL2',['../ads124s08_8h.html#afde1360401515a6ae6c8584745cf55ef',1,'ads124s08.h']]],
+  ['reg_5faddr_5fgpiocon',['REG_ADDR_GPIOCON',['../ads124s08_8h.html#adeb641ed470666b8dbccb619172e0aaf',1,'ads124s08.h']]],
+  ['reg_5faddr_5fgpiodat',['REG_ADDR_GPIODAT',['../ads124s08_8h.html#aa52362bfd9b65a703a582efdbcb90b7d',1,'ads124s08.h']]],
+  ['reg_5faddr_5fid',['REG_ADDR_ID',['../ads124s08_8h.html#aebd17fee5b639aa2a243c7afad33d4d8',1,'ads124s08.h']]],
+  ['reg_5faddr_5fidacmag',['REG_ADDR_IDACMAG',['../ads124s08_8h.html#ad8d19888d2eb95ad969bf822b02a1d44',1,'ads124s08.h']]],
+  ['reg_5faddr_5fidacmux',['REG_ADDR_IDACMUX',['../ads124s08_8h.html#ab4ebf5a352ff4ec7dc1a2d7d66aa9e6c',1,'ads124s08.h']]],
+  ['reg_5faddr_5finpmux',['REG_ADDR_INPMUX',['../ads124s08_8h.html#a3695fe2a707b147371e5e43e9dfa94db',1,'ads124s08.h']]],
+  ['reg_5faddr_5fofcal0',['REG_ADDR_OFCAL0',['../ads124s08_8h.html#a1c7c33680144ad532e09a86d4cba044b',1,'ads124s08.h']]],
+  ['reg_5faddr_5fofcal1',['REG_ADDR_OFCAL1',['../ads124s08_8h.html#a3a54efcb08ca734efc169837594d9ba5',1,'ads124s08.h']]],
+  ['reg_5faddr_5fofcal2',['REG_ADDR_OFCAL2',['../ads124s08_8h.html#a3be48ffbe7b8fc751a576c64706cc76b',1,'ads124s08.h']]],
+  ['reg_5faddr_5fpga',['REG_ADDR_PGA',['../ads124s08_8h.html#a5477d930eeba71909e21844b937cb206',1,'ads124s08.h']]],
+  ['reg_5faddr_5fref',['REG_ADDR_REF',['../ads124s08_8h.html#a924d9afc8c0f6376f335b0e4d9408f78',1,'ads124s08.h']]],
+  ['reg_5faddr_5fstatus',['REG_ADDR_STATUS',['../ads124s08_8h.html#a06ee2722544de6fa2c8584bcffd51fa9',1,'ads124s08.h']]],
+  ['reg_5faddr_5fsys',['REG_ADDR_SYS',['../ads124s08_8h.html#adf219bff450765257707968c722d843c',1,'ads124s08.h']]],
+  ['reg_5faddr_5fvbias',['REG_ADDR_VBIAS',['../ads124s08_8h.html#a32eab1f00a193e55e1f4b33939cfd685',1,'ads124s08.h']]]
+];

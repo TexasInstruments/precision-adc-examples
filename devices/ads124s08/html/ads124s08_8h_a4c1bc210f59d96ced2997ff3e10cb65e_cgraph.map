@@ -1,0 +1,10 @@
+<map id="startConversions" name="startConversions">
+<area shape="rect" id="node2" href="$hal_8c.html#ab5cd4635447272feeb1455e381ab8822" title="sendWakeup() Sends WAKEUP command through SPI " alt="" coords="172,5,271,32"/>
+<area shape="rect" id="node8" href="$hal_8c.html#a20df130ff412cedbab9f79c1b21b9bbe" title="setSTART() Sets the state of the MCU START GPIO pin " alt="" coords="333,107,414,133"/>
+<area shape="rect" id="node9" href="$hal_8c.html#a7d13623ba962f03c9d9aa02d2a8026ec" title="sendSTART() Sends START Command through SPI " alt="" coords="176,56,267,83"/>
+<area shape="rect" id="node3" href="$ads124s08_8c.html#a777e137eccc33d431b8ec2b69043b7ce" title="sendCommand() Sends the specified SPI command to the ADC " alt="" coords="319,56,428,83"/>
+<area shape="rect" id="node4" href="$hal_8c.html#ad2fc4dfee08394f20e17fee3818f6133" title="spiSendReceiveByte() Sends a single byte to ADC and returns a response " alt="" coords="484,5,625,32"/>
+<area shape="rect" id="node6" href="$hal_8c.html#a99dd54c5a2a9038400e78c330876961a" title="delay_us() Provides a timing delay with &#39;us&#39; resolution. " alt="" coords="517,107,592,133"/>
+<area shape="rect" id="node7" href="$ads124s08_8c.html#ac4f76ae3a80f28d1aada3028b97d7f0f" title="restoreRegisterDefaults() Updates the registerMap[] array to its default values NOTES: If the MCU kee..." alt="" coords="476,56,633,83"/>
+<area shape="rect" id="node5" href="$hal_8c.html#a90c0a951b9262b484c467fc22f4102a8" title="setCS() Sets the state of the &quot;/CS&quot; GPIO pin " alt="" coords="681,5,740,32"/>
+</map>

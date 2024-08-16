@@ -1,0 +1,38 @@
+<map id="run_self_tests" name="run_self_tests">
+<area shape="rect" id="node2" href="$hal_8c.html#adc5028a111121aefb6deb1d19b322e2a" title="delay_ms() Provides a timing delay with &#39;ms&#39; resolution. " alt="" coords="196,5,275,32"/>
+<area shape="rect" id="node3" href="$unit__tests_8c.html#ace1e45b061fb9c424a801b3b989f470d" title="test_RESET_pin() Performs test of the RESET pin " alt="" coords="598,107,717,133"/>
+<area shape="rect" id="node8" href="$unit__tests_8c.html#a52ba09246c3f135dca02bf560e840c68" title="test_START_SYNC_pin() Performs test of the START/SYNC pin " alt="" coords="156,157,315,184"/>
+<area shape="rect" id="node11" href="$unit__tests_8c.html#a12fd83828c761a6c1c8c24bc12b1ca13" title="test_CS_pin() Performs test of the CS pin " alt="" coords="189,1069,282,1096"/>
+<area shape="rect" id="node14" href="$unit__tests_8c.html#a96033614abe7b0c328ff4b2fd3366b1f" title="test_DRDY_interrupt() Performs test of the DRDY pin " alt="" coords="165,335,306,361"/>
+<area shape="rect" id="node18" href="$unit__tests_8c.html#a66202774f619647ce4e86d1bfa230fa8" title="test_read_register() Performs test of the communication for reading registers " alt="" coords="172,664,299,691"/>
+<area shape="rect" id="node22" href="$unit__tests_8c.html#acb9bc61a76e661f2b95b24069326deda" title="test_write_register() Performs test of the communications for writing registers " alt="" coords="171,765,299,792"/>
+<area shape="rect" id="node24" href="$unit__tests_8c.html#a3e69c8cf7b84b4efbfebaad93dc7e2ed" title="test_reset_command() Performs test of the RESET command " alt="" coords="163,841,307,868"/>
+<area shape="rect" id="node28" href="$unit__tests_8c.html#a8581411c4688781a3444b919b94e5a8f" title="test_noise() Performs test of the ADC functionality and performance " alt="" coords="194,512,277,539"/>
+<area shape="rect" id="node37" href="$unit__tests_8c.html#a8e40611f33faa8dbdab4c325166deed5" title="test_CRC() Performs test of the CRC functionality " alt="" coords="196,563,275,589"/>
+<area shape="rect" id="node4" href="$hal_8c.html#afc04e8d7d4f190ce15e84897959a5699" title="setRESET() Sets the state of the MCU ADC_RESET GPIO pin " alt="" coords="808,81,891,108"/>
+<area shape="rect" id="node5" href="$hal_8c.html#a270079df05342063316e1bdc2b3681aa" title="getRESET() Returns the state of the MCU&#39;s ADC_RESET GPIO pin " alt="" coords="808,132,891,159"/>
+<area shape="rect" id="node6" href="$hal_8c.html#a99dd54c5a2a9038400e78c330876961a" title="delay_us() Provides a timing delay with &#39;us&#39; resolution. " alt="" coords="812,373,887,400"/>
+<area shape="rect" id="node7" href="$ads124s08_8c.html#ac4f76ae3a80f28d1aada3028b97d7f0f" title="restoreRegisterDefaults() Updates the registerMap[] array to its default values NOTES: If the MCU kee..." alt="" coords="771,664,928,691"/>
+<area shape="rect" id="node9" href="$hal_8c.html#a20df130ff412cedbab9f79c1b21b9bbe" title="setSTART() Sets the state of the MCU START GPIO pin " alt="" coords="617,157,698,184"/>
+<area shape="rect" id="node10" href="$hal_8c.html#af628341eb33efdc20e4b17fcc21a01f3" title="getSTART() Returns the state of the MCU&#39;s ADC_START GPIO pin " alt="" coords="413,107,494,133"/>
+<area shape="rect" id="node12" href="$hal_8c.html#a90c0a951b9262b484c467fc22f4102a8" title="setCS() Sets the state of the &quot;/CS&quot; GPIO pin " alt="" coords="990,1095,1049,1121"/>
+<area shape="rect" id="node13" href="$hal_8c.html#a473ef17f23637d6ba8ed3f872c6c9b8a" title="getCS() Returns the state of the MCU&#39;s ADC_CS GPIO pin " alt="" coords="424,1069,483,1096"/>
+<area shape="rect" id="node15" href="$hal_8c.html#a16f98e37ad0981f793a560b68290b714" title="enableDRDYinterrupt() Enables or disables the nDRDY interrupt. " alt="" coords="382,360,525,387"/>
+<area shape="rect" id="node16" href="$hal_8c.html#abf94c0e8b122bf32e882fc912361543c" title="toggleSTART() Pulses the START GPIO pin low param[in] direction sets the toggle direction base on ini..." alt="" coords="608,208,707,235"/>
+<area shape="rect" id="node17" href="$hal_8c.html#a215d35b23f068323443ee071e41ed565" title="waitForDRDYHtoL() Waits for a nDRDY GPIO to go from High to Low or until a timeout condition occurs T..." alt="" coords="594,335,721,361"/>
+<area shape="rect" id="node19" href="$hal_8c.html#ab6ca614d6a3401c3148a4238ef403ad6" title="toggleRESET() Pulses the /RESET GPIO pin low " alt="" coords="403,512,503,539"/>
+<area shape="rect" id="node20" href="$ads124s08_8c.html#a1cdbdef391e2bfd5698a5733ce390f57" title="readSingleRegister() Reads contents of a single register at the specified address ..." alt="" coords="388,816,519,843"/>
+<area shape="rect" id="node21" href="$hal_8c.html#a691190cb0943cad01a1647ab1f77e95c" title="spiSendReceiveArrays() Sends SPI commands to ADC and returns a response in array format ..." alt="" coords="773,1095,925,1121"/>
+<area shape="rect" id="node23" href="$ads124s08_8c.html#a49358c7b7357b8c7f642896484a17244" title="writeSingleRegister() Write data to a single register at the specified address " alt="" coords="387,765,520,792"/>
+<area shape="rect" id="node25" href="$hal_8c.html#aead37b40b94629c92c5699d5ea4bafe6" title="sendRESET() Sends RESET Command through SPI, then waits 4096 tCLKs " alt="" coords="407,867,500,893"/>
+<area shape="rect" id="node26" href="$ads124s08_8c.html#a777e137eccc33d431b8ec2b69043b7ce" title="sendCommand() Sends the specified SPI command to the ADC " alt="" coords="603,664,712,691"/>
+<area shape="rect" id="node27" href="$hal_8c.html#ad2fc4dfee08394f20e17fee3818f6133" title="spiSendReceiveByte() Sends a single byte to ADC and returns a response " alt="" coords="779,1044,920,1071"/>
+<area shape="rect" id="node29" href="$hal_8c.html#a7d13623ba962f03c9d9aa02d2a8026ec" title="sendSTART() Sends START Command through SPI " alt="" coords="408,563,499,589"/>
+<area shape="rect" id="node30" href="$unit__tests_8c.html#a41a125e1cb07a46c8c53d974088dd894" title="readSingleChannelPPNoise() Reads channel data for noise analysis " alt="" coords="363,461,544,488"/>
+<area shape="rect" id="node36" href="$hal_8c.html#a335cf15484a78b8f069de580030ac8f2" title="sendSTOP() Sends STOP Command through SPI " alt="" coords="411,613,496,640"/>
+<area shape="rect" id="node31" href="$ads124s08_8c.html#aea4a8c318f545d20f780bfd44ab401d9" title="readConvertedData() Sends the read command and retrieves STATUS (if enabled) and data NOTE: Call this..." alt="" coords="592,1019,723,1045"/>
+<area shape="rect" id="node32" href="$crc_8c.html#aabc84b6e90496d21dee2d3cb5764c9f1" title="getCRC() Performs CRC lookup or calculation " alt="" coords="816,993,883,1020"/>
+<area shape="rect" id="node33" href="$crc_8c.html#aa3a11e6bf0fce3ce3c87d3d61b11cda0" title="calculateCRC() Calculates the CRC for the selected CRC polynomial " alt="" coords="1111,993,1212,1020"/>
+<area shape="rect" id="node34" href="$crc_8c.html#ac68450656226cf165811b2f7f0a3448d" title="initTable() Creates lookup table in memory using byte wide computation in a 256 element array ..." alt="" coords="984,943,1055,969"/>
+<area shape="rect" id="node35" href="$crc_8c.html#acf121e43dd850185e4d23220e48c5250" title="lookupCRC(() Performs CRC lookup operation in byte increments " alt="" coords="976,993,1063,1020"/>
+</map>

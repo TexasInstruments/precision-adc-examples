@@ -1,0 +1,80 @@
+// These arguments were used when this file was generated. They will be automatically applied on subsequent loads 
+// via the GUI or CLI invocations. Run CLI with '--help' for additional information on how to override these arguments.
+// @cliArgs --board "/ti/boards/MSP_EXP432E401Y" --product "simplelink_msp432e4_sdk@3.20.00.10"
+// @versions {"data":"2020022712","timestamp":"2020022712","tool":"1.3.1030","templates":"2020022712"}
+
+var RTOS = scripting.addModule("/ti/drivers/RTOS");
+var GPIO = scripting.addModule("/ti/drivers/GPIO");
+var GPIO1 = GPIO.addInstance();
+var GPIO2 = GPIO.addInstance();
+var SPI = scripting.addModule("/ti/drivers/SPI", {}, false);
+var SPI1 = SPI.addInstance();
+var GPIO3 = GPIO.addInstance();
+var GPIO4 = GPIO.addInstance();
+var UART = scripting.addModule("/ti/drivers/UART", {}, false);
+var UART1 = UART.addInstance();
+// name - Select the RTOS being used
+RTOS.name = "NoRTOS";
+var Power = scripting.addModule("/ti/drivers/Power", {}, false);
+var Board = scripting.addModule("/ti/drivers/Board", {}, false);
+// Name - The C/C++ identifier used in applications as the index parameter passed to GPIO runtime APIs
+GPIO1.$name = "ADC_nRESET";
+// Mode - Select the GPIO mode
+GPIO1.mode = "Output";
+// Assign pin
+GPIO1.gpioPin.$assign = "boosterpack2.39"; // PK4
+// Name - The C/C++ identifier used in applications as the index parameter passed to GPIO runtime APIs
+GPIO2.$name = "ADC_nDRDY";
+// Interrupt Trigger - Specifies when or if interrupts are triggered
+GPIO2.interruptTrigger = "Falling Edge";
+// Callback Function - The name of the callback function called when this GPIO pin triggers an interrupt, or 'NULL' if it's specified at runtime
+GPIO2.callbackFunction = "SPI_readData";
+// Assign pin
+GPIO2.gpioPin.$assign = "boosterpack2.37"; // PM0
+// Name - The C/C++ identifier used in applications as the index parameter passed to SPI runtime APIs
+SPI1.$name = "ADC_SPI3";
+// Min DMA Transfer Size - Specifies the minimum transfer size in bytes for which the DMA will be used. Otherwise a polling transfer will occur with some exceptions.
+SPI1.minDmaTransferSize = 2;
+// Mode - In three pin mode the SS signal is not used.
+SPI1.mode = "Four Pin SS Active Low";
+var DMA = scripting.addModule("/ti/drivers/DMA", {}, false);
+// Name
+SPI1.spi.$name = "MySSI1";
+// Use Peripheral
+SPI1.spi.$assign = "SSI3";
+// Assign pin
+SPI1.spi.sclkPin.$assign = "boosterpack2.7"; // PQ0
+// Assign pin
+SPI1.spi.misoPin.$assign = "boosterpack2.14"; // PQ3
+// Assign pin
+SPI1.spi.mosiPin.$assign = "boosterpack2.15"; // PQ2
+// Assign pin
+SPI1.spi.ssPin.$assign = "boosterpack2.12"; // PQ1
+// Use Hardware - Select the hardware to use, or 'None' to use available header pins
+GPIO3.$hardware = system.deviceData.board.components.D1;
+// Name - The C/C++ identifier used in applications as the index parameter passed to GPIO runtime APIs
+GPIO3.$name = "GPIO_LED0";
+// Assign pin
+GPIO3.gpioPin.$assign = "expansion.87"; // PN1
+// Name - The C/C++ identifier used in applications as the index parameter passed to GPIO runtime APIs
+GPIO4.$name = "GPIO_LED1_ERROR";
+// Use Hardware - Select the hardware to use, or 'None' to use available header pins
+GPIO4.$hardware = system.deviceData.board.components.D2;
+// Assign pin
+GPIO4.gpioPin.$assign = "expansion.85"; // PN0
+// Name - The C/C++ identifier used in applications as the index parameter passed to UART runtime APIs
+UART1.$name = "Board_UART0";
+// Use Hardware - Select the hardware to use, or 'None' to use available header pins
+UART1.$hardware = system.deviceData.board.components.xds110Uart;
+// Name
+UART1.uart.$name = "MyUART1";
+// Suggest solution
+SPI1.spi.dmaRxChannel.$suggestSolution = "UDMA_CH14";
+// Suggest solution
+SPI1.spi.dmaTxChannel.$suggestSolution = "UDMA_CH15";
+// Suggest solution
+UART1.uart.$suggestSolution = "UART0";
+// Suggest solution
+UART1.uart.txPin.$suggestSolution = "34";
+// Suggest solution
+UART1.uart.rxPin.$suggestSolution = "33";

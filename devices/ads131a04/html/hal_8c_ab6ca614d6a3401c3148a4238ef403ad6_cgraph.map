@@ -1,0 +1,5 @@
+<map id="toggleRESET" name="toggleRESET">
+<area shape="rect" id="node2" href="$hal_8c.html#adc5028a111121aefb6deb1d19b322e2a" title="delay_ms" alt="" coords="193,5,271,32"/>
+<area shape="rect" id="node3" href="$hal_8c.html#a99dd54c5a2a9038400e78c330876961a" title="delay_us" alt="" coords="195,56,269,83"/>
+<area shape="rect" id="node4" href="$ads131a04_8c.html#ac4f76ae3a80f28d1aada3028b97d7f0f" title="restoreRegisterDefaults" alt="" coords="153,107,311,133"/>
+</map>

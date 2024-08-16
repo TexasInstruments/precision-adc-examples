@@ -1,0 +1,282 @@
+/* tabs styles, based on http://www.alistapart.com/articles/slidingdoors */
+
+div.navigation {
+	display:block;
+	float:left;
+	clear:both;
+	width:100%;
+	padding-top:10px;
+	padding-bottom:30px;
+	border-bottom:1px dotted #E0E0E0;
+	height: 60px;
+	background:url(background_navigation.png);
+}
+
+/*
+address {
+	display:none;
+}*/
+
+div.tabs
+{
+   float            : left;
+   width            : 100%;
+}
+
+div.tabs ul
+{
+   margin           : 0px;
+   padding-left     : 0px;
+   list-style       : none;
+}
+
+div.tabs li, div.tabs form
+{
+   display          : inline;
+   margin           : 0px;
+   padding          : 0px;
+	background: #c00;
+   color: #fff;
+}
+
+div.tabs form
+{
+   float            : right;
+}
+
+div.tabs a
+{
+   float            : left;
+   font-size        : 80%;
+   font-weight      : bold;
+   text-decoration  : none;
+   color: #fff;
+}
+
+div.tabs a:hover
+{
+   /*background-position: 100% -150px;*/
+}
+
+div.tabs a:link, div.tabs a:visited,
+div.tabs a:active, div.tabs a:hover
+{
+      /* color: #1A419D;*/
+}
+
+div.tabs span
+{
+   float            : left;
+   display          : block;
+   padding          : 5px 9px;
+   white-space      : nowrap;
+}
+
+div.tabs #MSearchBox
+{
+   float            : right;
+   display          : inline;
+   font-size        : 1em;
+}
+
+div.tabs td
+{
+   font-size        : 80%;
+   font-weight      : bold;
+   text-decoration  : none;
+}
+
+
+div#nav-path {
+   position: relative;
+   clear: both;
+   padding: 1em 2rem;
+   /*background: #fff;*/
+   color: #c00;
+}
+    
+div#nav-path > ul {
+   margin: 0;
+   padding: 0;
+}
+
+div#nav-path > ul > li.navelem {
+   display: inline;
+   list-style-type: none;
+   padding: 0 2em 0 0;
+   list-style-type: none;
+   background: none;
+}
+
+div#nav-path > ul > li.navelem:last-child {
+   display: inline;
+   list-style-type: none;
+   padding: 0 2em 0 0;
+   list-style-type: none;
+   background: none;
+   background: no-repeat 100% 60%;
+   background-image: url(iconMore.svg);
+}
+
+div#nav-path > ul > li.navelem > a {
+   color: #c00;
+   font-size: 14px;
+   font-weight: 600;
+   padding: 0 12px 0 0;
+   display: inline;
+ /*  list-style-type: none;
+   background: no-repeat 100% 60%;
+   background-image: url(iconMore.svg);*/
+}
+
+
+/* Commented Backslash Hack hides rule from IE5-Mac \*/
+div.tabs span {float : none;}
+/* End IE5-Mac hack */
+
+div.tabs a:hover span
+{
+   background-position: 0% -150px;
+}
+
+div.tabs li.current a
+{
+   background: #fff;
+   color: #000;
+}
+
+div.tabs li.current span
+{
+   background-position: 0% -150px;
+}
+
+.tablist li span {
+   padding: 0px;
+}
+
+div#top div {
+   font-size: 14px;
+}
+
+/*
+div#top:after {
+   display:block;
+   content:"";
+   font-size:14px;
+   margin-bottom:1em;
+}*/
+
+div#top li {
+   padding:0;
+}
+
+div#top li.current a {
+   font-weight:600;
+}
+
+div#navrow3 a, div#navrow3 a:visited{
+   color: #333;
+}
+
+div#navrow1 {
+   background: #c00;
+}
+
+div#navrow1.tabs {
+   clear: both;
+}
+
+div#navrow1.tabs ul.tablist {
+   padding: 0 2rem;
+   margin-left: -0.5rem;
+}
+
+div#navrow1.tabs li a {
+   text-decoration: none;
+   padding: 0.8em 1em;
+   display: block;
+   font-weight: 600;
+   font-size: 14px;
+   font-weight: 600;
+   list-style-type: none;
+   outline-color: rgb(255, 255, 255);
+   outline-style: none;
+   outline-width: 0px;
+}
+
+div#navrow2.tabs2 {
+   position: relative;
+   clear: both;
+   padding: 1em 2rem;
+   /*background: #fff;*/
+   color: #c00;
+}
+
+div#navrow3.tabs2 {
+   position: relative;
+   clear: both;
+   padding: 0.2em 2rem;
+   /*background: #fff;*/
+   color: #555;
+}
+
+div#navrow2.tabs2 ul.tablist {
+   margin: 0;
+   padding: 0;
+}
+
+div#navrow2.tabs2 ul.tablist li {
+   display: inline;
+   list-style-type: none;
+   background: none;
+   padding: 0 2em 0 0;
+}
+
+div#navrow2.tabs2 ul.tablist li a {
+   color: #c00;
+   font-size: 14px;
+   font-weight: 600;
+   padding: 0 12px 0 0;
+}
+
+div#navrow2.tabs2 ul.tablist li.current {
+   display: inline;
+   list-style-type: none;
+   background: none;
+   /*border-left: 1px dotted #e0e0e0;
+   border-right: 1px dotted #e0e0e0;*/
+}
+
+div#navrow2.tabs2 ul.tablist li.current a {
+   background: no-repeat 100% 60%;
+   background-image: url(iconMore.svg);
+}
+
+div#navrow3.tabs2 {
+   background: -moz-linear-gradient(top, #fff 0%, #f9f9f9 100%);
+   background: -webkit-linear-gradient(top, #fff 0%, #f9f9f9 100%);
+   background: -ms-linear-gradient(top, #fff 0%, #f9f9f9 100%);
+   border: 1px solid #e0e0e0;
+   border-top: 0;
+}
+/*
+div#top:last-child {
+   background: -moz-linear-gradient(top, #fff 0%, #f9f9f9 100%);
+   background: -webkit-linear-gradient(top, #fff 0%, #f9f9f9 100%);
+   background: -ms-linear-gradient(top, #fff 0%, #f9f9f9 100%);
+   border: 1px solid #e0e0e0;
+   border-top: 0;
+}
+*/
+div#navrow3.tabs2 ul.tablist {
+   font-size: 0.9em;
+   list-style-type: none;
+   padding: 0;
+   margin: 0;
+   background-image: none;
+}
+
+div#navrow3.tabs2 ul li {
+   margin: 0 0 0.5em 0;
+   background-image: none;
+}

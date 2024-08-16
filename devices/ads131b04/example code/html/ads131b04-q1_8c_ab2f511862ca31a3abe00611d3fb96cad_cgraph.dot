@@ -1,0 +1,15 @@
+digraph "buildSPIarray"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="buildSPIarray",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="getWordByteLength",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$ads131b04-q1_8c.html#a692618db664dfbd1a3cf72c79a4ba92e"];
+  Node1 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="upperByte",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$ads131b04-q1_8c.html#ae22ba9edbcb89f0397f691e5df4ebf5e"];
+  Node1 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="lowerByte",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$ads131b04-q1_8c.html#a2ab715b48990b41aeb27e1dcc139faca"];
+  Node1 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="calculateCRC",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$ads131b04-q1_8c.html#aa3da137cfd0b2c940b7280adf1dac3c6"];
+}

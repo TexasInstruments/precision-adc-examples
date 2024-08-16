@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?ccsproject version="1.0"?>
+<projectOptions>
+	<ccsVersion value="9.3.0"/>
+	<deviceVariant value="MSP432E401Y"/>
+	<deviceFamily value="MSP432"/>
+	<deviceEndianness value="little"/>
+	<codegenToolVersion value="18.12.4.LTS"/>
+	<isElfFormat value="true"/>
+	<connection value="common/targetdb/connections/TIXDS110_Connection.xml"/>
+	<rts value=""/>
+	<createSlaveProjects value=""/>
+	<ignoreDefaultDeviceSettings value="true"/>
+	<ignoreDefaultCCSSettings value="true"/>
+	<templateProperties value="id=gpiointerrupt_MSP_EXP432E401Y_nortos_ccs_syscfg.projectspec.gpiointerrupt_MSP_EXP432E401Y_nortos_ccs_syscfg,buildProfile=release,isHybrid=true"/>
+	<origin value="C:\ti\simplelink_msp432e4_sdk_3_20_00_10\examples\syscfg_preview\nortos\MSP_EXP432E401Y\drivers\gpiointerrupt\ccs\gpiointerrupt_MSP_EXP432E401Y_nortos_ccs_syscfg.projectspec"/>
+	<filesToOpen value=""/>
+	<isTargetManual value="false"/>
+</projectOptions>

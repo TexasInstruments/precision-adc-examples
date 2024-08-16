@@ -1,0 +1,8 @@
+<map id="test_read_register" name="test_read_register">
+<area shape="rect" id="node2" href="$hal_8c.html#ab6ca614d6a3401c3148a4238ef403ad6" title="toggleRESET() Pulses the /RESET GPIO pin low " alt="" coords="209,5,309,32"/>
+<area shape="rect" id="node3" href="$hal_8c.html#a99dd54c5a2a9038400e78c330876961a" title="delay_us() Provides a timing delay with &#39;us&#39; resolution. " alt="" coords="424,31,499,57"/>
+<area shape="rect" id="node4" href="$ads124s08_8c.html#ac4f76ae3a80f28d1aada3028b97d7f0f" title="restoreRegisterDefaults() Updates the registerMap[] array to its default values NOTES: If the MCU kee..." alt="" coords="180,107,337,133"/>
+<area shape="rect" id="node5" href="$ads124s08_8c.html#a1cdbdef391e2bfd5698a5733ce390f57" title="readSingleRegister() Reads contents of a single register at the specified address ..." alt="" coords="193,157,324,184"/>
+<area shape="rect" id="node6" href="$hal_8c.html#a691190cb0943cad01a1647ab1f77e95c" title="spiSendReceiveArrays() Sends SPI commands to ADC and returns a response in array format ..." alt="" coords="385,157,537,184"/>
+<area shape="rect" id="node7" href="$hal_8c.html#a90c0a951b9262b484c467fc22f4102a8" title="setCS() Sets the state of the &quot;/CS&quot; GPIO pin " alt="" coords="585,157,644,184"/>
+</map>

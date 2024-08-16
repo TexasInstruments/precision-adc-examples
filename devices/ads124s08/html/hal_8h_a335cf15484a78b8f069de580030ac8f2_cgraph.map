@@ -1,0 +1,7 @@
+<map id="sendSTOP" name="sendSTOP">
+<area shape="rect" id="node2" href="$ads124s08_8c.html#a777e137eccc33d431b8ec2b69043b7ce" title="sendCommand() Sends the specified SPI command to the ADC " alt="" coords="139,56,248,83"/>
+<area shape="rect" id="node3" href="$hal_8c.html#ad2fc4dfee08394f20e17fee3818f6133" title="spiSendReceiveByte() Sends a single byte to ADC and returns a response " alt="" coords="304,5,445,32"/>
+<area shape="rect" id="node5" href="$hal_8c.html#a99dd54c5a2a9038400e78c330876961a" title="delay_us() Provides a timing delay with &#39;us&#39; resolution. " alt="" coords="337,56,412,83"/>
+<area shape="rect" id="node6" href="$ads124s08_8c.html#ac4f76ae3a80f28d1aada3028b97d7f0f" title="restoreRegisterDefaults() Updates the registerMap[] array to its default values NOTES: If the MCU kee..." alt="" coords="296,107,453,133"/>
+<area shape="rect" id="node4" href="$hal_8c.html#a90c0a951b9262b484c467fc22f4102a8" title="setCS() Sets the state of the &quot;/CS&quot; GPIO pin " alt="" coords="501,5,560,32"/>
+</map>

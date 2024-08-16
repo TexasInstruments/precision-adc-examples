@@ -1,0 +1,113 @@
+/**
+ * These arguments were used when this file was generated. They will be automatically applied on subsequent loads
+ * via the GUI or CLI. Run CLI with '--help' for additional information on how to override these arguments.
+ * @cliArgs --device "MSP432E" --package "128 Pin QFP|32x32" --part "MSP432E401YTPDT" --product "simplelink_msp432e4_sdk@4.20.00.12"
+ * @versions {"tool":"1.10.0+2163"}
+ */
+
+/**
+ * Import the modules used in this configuration.
+ */
+const GPIO   = scripting.addModule("/ti/drivers/GPIO", {}, false);
+const GPIO1  = GPIO.addInstance();
+const GPIO2  = GPIO.addInstance();
+const GPIO3  = GPIO.addInstance();
+const GPIO4  = GPIO.addInstance();
+const GPIO5  = GPIO.addInstance();
+const GPIO6  = GPIO.addInstance();
+const GPIO7  = GPIO.addInstance();
+const GPIO8  = GPIO.addInstance();
+const GPIO9  = GPIO.addInstance();
+const GPIO10 = GPIO.addInstance();
+const GPIO11 = GPIO.addInstance();
+const GPIO12 = GPIO.addInstance();
+const I2C    = scripting.addModule("/ti/drivers/I2C", {}, false);
+const I2C1   = I2C.addInstance();
+const Power  = scripting.addModule("/ti/drivers/Power");
+const RTOS   = scripting.addModule("/ti/drivers/RTOS");
+const SPI    = scripting.addModule("/ti/drivers/SPI", {}, false);
+const SPI1   = SPI.addInstance();
+const Timer  = scripting.addModule("/ti/drivers/Timer", {}, false);
+const Timer1 = Timer.addInstance();
+
+/**
+ * Write custom configuration values to the imported modules.
+ */
+GPIO1.mode            = "Output";
+GPIO1.$name           = "BOOST_EN";
+GPIO1.gpioPin.$assign = "ball.25";
+
+GPIO2.$name           = "LED1";
+GPIO2.mode            = "Output";
+GPIO2.gpioPin.$assign = "ball.108";
+
+GPIO3.$name           = "LED2";
+GPIO3.mode            = "Output";
+GPIO3.gpioPin.$assign = "ball.107";
+
+GPIO4.$name           = "LED3";
+GPIO4.mode            = "Output";
+GPIO4.gpioPin.$assign = "ball.46";
+
+GPIO5.$name           = "LED4";
+GPIO5.mode            = "Output";
+GPIO5.gpioPin.$assign = "ball.42";
+
+GPIO6.$name              = "WE";
+GPIO6.mode               = "Output";
+GPIO6.initialOutputState = "High";
+GPIO6.gpioPin.$assign    = "ball.32";
+
+GPIO7.$name           = "WD";
+GPIO7.mode            = "Output";
+GPIO7.gpioPin.$assign = "ball.24";
+
+GPIO8.$name           = "MUXSEL";
+GPIO8.mode            = "Output";
+GPIO8.gpioPin.$assign = "ball.95";
+
+GPIO9.$name           = "ULPI_nRESET";
+GPIO9.mode            = "Output";
+GPIO9.gpioPin.$assign = "ball.96";
+
+GPIO10.interruptTrigger = "Falling Edge";
+GPIO10.$name            = "ADC_nDRDY";
+GPIO10.callbackFunction = "nDRDYinterruptHandler";
+GPIO10.gpioPin.$assign  = "ball.77";
+
+GPIO11.$name           = "ADC_nPWDN";
+GPIO11.mode            = "Output";
+GPIO11.gpioPin.$assign = "ball.30";
+
+GPIO12.$name              = "EVM_CLKSEL";
+GPIO12.mode               = "Output";
+GPIO12.initialOutputState = "High";
+GPIO12.gpioPin.$assign    = "ball.61";
+
+I2C1.$name              = "CONFIG_I2C_0";
+I2C1.maxBitRate         = 400;
+I2C1.i2c.$assign        = "I2C2";
+I2C1.i2c.sdaPin.$assign = "ball.111";
+I2C1.i2c.sclPin.$assign = "ball.112";
+
+Power.enablePolicy = false;
+
+RTOS.name = "NoRTOS";
+
+SPI1.$name               = "CONFIG_SPI_0";
+SPI1.minDmaTransferSize  = 1;
+SPI1.spi.$assign         = "SSI3";
+SPI1.spi.sclkPin.$assign = "ball.5";
+SPI1.spi.misoPin.$assign = "ball.27";
+SPI1.spi.mosiPin.$assign = "ball.11";
+
+Timer1.$name = "CONFIG_TIMER_0";
+
+/**
+ * Pinmux solution for unlocked pins/peripherals. This ensures that minor changes to the automatic solver in a future
+ * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
+ * re-solve from scratch.
+ */
+SPI1.spi.dmaRxChannel.$suggestSolution = "UDMA_CH14";
+SPI1.spi.dmaTxChannel.$suggestSolution = "UDMA_CH15";
+Timer1.timer.$suggestSolution          = "Timer0";
