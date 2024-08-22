@@ -33,7 +33,7 @@ Device examples include the following products:
 - [ADS124S08](https://www.ti.com/product/ADS124S08) 24-bit, 4-kSPS, 12-ch delta-sigma ADC with PGA and voltage reference for sensor measurement
 - [ADS1258](https://www.ti.com/product/ADS1258) 24-bit, 125kSPS, 16-ch delta-sigma ADC with fast channel scan and automatic sequencer
 - [ADS1262](https://www.ti.com/product/ADS1262) 32-bit 38-kSPS 10-ch delta-sigma ADC with PGA and voltage reference for factory automation
-### Multi-Channel Simutanious ADCs:
+### Multi-Channel Simultaneous ADCs:
 - [ADS131A04](https://www.ti.com/product/ADS131A04) 24-bit 128-kSPS 4-channel simultaneous-sampling delta-sigma ADC
 - [ADS131B04-Q1](https://www.ti.com/product/ADS131B04-Q1) Automotive 24-bit, 32-kSPS, four-channel, simultaneous-sampling, delta-sigma ADC
 - [ADS131M08](https://www.ti.com/product/ADS131M08) 24-bit, 32-kSPS, 8-channel, simultaneous-sampling, delta-sigma ADC
@@ -45,7 +45,7 @@ Device examples include the following products:
 - [ADS1282](https://www.ti.com/product/ADS1282) Ultra-high-resolution 4-kSPS 2-channel delta-sigma ADC with PGA for seismic and energy exploration	
 
 ## Repo Organization
-This repository is organized by individual device name.  In the **/devices** directory, our entire catalog of example code can be found.  Inside each product directory will be a set of C example code files.  The`'device'.c`and`'device'.h` files will be specific to the ADC and can be used 'as is' in an embedded development environment.  The `hal.c` and `hal.h` files function as a **Hardware Abstraction Layer (HAL)** and should be edited to match your specific processor.  In some device directories there may be multiple `hal.c` and `hal.h` files which may provide the **HAL** functions for a variety of processors.  Additionally, some devices may include complete *Code Composer Studio* projects or example applications.  These self contained projects will have additonal support functions besides the **device** and **HAL** files.  
+This repository is organized by individual device name.  In the **/devices** directory, our entire catalog of example code can be found.  Inside each product directory will be a set of C example code files.  The`'device'.c`and`'device'.h` files will be specific to the ADC and can be used 'as is' in an embedded development environment.  The `hal.c` and `hal.h` files function as a **Hardware Abstraction Layer (HAL)** and should be edited to match your specific processor.  In some device directories there may be multiple `hal.c` and `hal.h` files which may provide the **HAL** functions for a variety of processors.  Additionally, some devices may include complete *Code Composer Studio* projects or example applications.  These self contained projects will have additional support functions besides the **device** and **HAL** files.  
 ## Usage
   `'device'.c` and `'device'.h` include processor agnostic functions which perform basic actions to the data converter.  The `'device'.c` file will include functions such as:
 - `initalize();`
@@ -74,9 +74,9 @@ void writeSingleRegister( SPI_Handle spiHdl, uint8_t address, uint8_t data )
 }
 ```
 ### Internal Memory
-An array of `registerMap[]` variables are generated in order to create and store a copy of the ADCs current register values.  These vairables are used in multiple ways in order to speed development and communication with the ADC.  
+An array of `registerMap[]` variables are generated in order to create and store a copy of the ADCs current register values.  These variables are used in multiple ways in order to speed development and communication with the ADC.  
 
-**Usage case #1:** When reading (or writing) register values, update the interal registerMap variable to contain the present value.  Because registers can hold the values of multiple fields, updating an entire register will overwrite all fields at `[address]` with a new value.  In order to preserve the values already present in the register, use the registerMap[] object to *or* the the current register value with the changing field value. 
+**Usage case #1:** When reading (or writing) register values, update the internal registerMap variable to contain the present value.  Because registers can hold the values of multiple fields, updating an entire register will overwrite all fields at `[address]` with a new value.  In order to preserve the values already present in the register, use the registerMap[] object to *or* the the current register value with the changing field value. 
 ```c
 // Update register value  
     registerMap[address] = DataTx[COMMAND_LENGTH];
@@ -119,7 +119,7 @@ The `'device'.h` file will include device specific `#define`c statements to enum
 
 ```
 
-These functions should be included in an embedded project by including the `'device'.c` and `'device'.h` files.  Once imported, these functions can be used inline in your main appplication to assist in the development of higher level functions or complete applications.
+These functions should be included in an embedded project by including the `'device'.c` and `'device'.h` files.  Once imported, these functions can be used inline in your main application to assist in the development of higher level functions or complete applications.
  
 ### Contributing to the project
 - Currently we are not accepting contributions, but if you have feedback for us based upon the examples provided, feel free to email [us](mailto:github_ADC_Examples@ti.com)
