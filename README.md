@@ -122,4 +122,4 @@ The `'device'.h` file will include device specific `#define`c statements to enum
 These functions should be included in an embedded project by including the `'device'.c` and `'device'.h` files.  Once imported, these functions can be used inline in your main application to assist in the development of higher level functions or complete applications.
  
 ### Contributing to the project
-- Currently we are not accepting contributions, but if you have feedback for us based upon the examples provided, feel free to email [us](mailto:github_ADC_Examples@ti.com)
+- Currently we are not accepting contributions but if you have feedback for us based upon the examples provided feel free to email [us](mailto:precision-adc-examples-github@list.ti.com)
