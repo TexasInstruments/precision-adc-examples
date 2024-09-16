@@ -2,7 +2,7 @@
 
 # Precision Analog to Digital Converters Example Code
 
-[Introduction](#introduction) | [Devices](#devices) | [Repo Organization](#repo-organization) | [Usage](#usage) | [Contribute](#contributing-to-the-project)
+[Introduction](#introduction) | [Devices](#devices) | [Precision ADC Homepage](https://www.ti.com/precisionadc) | [Repo Organization](#repo-organization) | [Usage](#usage) | [Contribute](#contributing-to-the-project) 
 
 
 <img src="https://github.com/TexasInstruments/precision-adc-examples/blob/main/docs/media/ADC.jpg"><br/>
