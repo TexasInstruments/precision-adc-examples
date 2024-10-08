@@ -1,4 +1,4 @@
-![IC Image](http://www.ti.com/graphics/folders/partimages/ADS122U04.jpg)ADS122U04 Example Code
+![IC Image](http://www.ti.com/graphics/folders/partimages/ADS122U04.jpg)ADS122U04 Example C Code
 =====================
 
 The [ADS122U04](http://www.ti.com/product/ADS122U04) precision delta-sigma (ΔΣ) analog-to-digital converter (ADC) communicates using an UART peripheral interface to allow for device configuration, control, and data retrieval. To interface the ADS122U04 with a microcontroller (MCU), the firmware or software engineer needs to know how to correctly configure their MCU's serial peripheral, sequence commands, and control the UART timing of command bytes to the ADC. To assist in this process, this example code is intended to show how to initialize communication with the ADS122U04 at a high-level.

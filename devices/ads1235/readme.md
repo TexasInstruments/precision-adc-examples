@@ -1,4 +1,4 @@
-# ADS1235 Example Code
+# ADS1235 Example C Code
 
 Reference this code as an example to help to you get started writing your own ADS1235 code.
 

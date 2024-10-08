@@ -1,4 +1,4 @@
-![IC Image](http://www.ti.com/graphics/folders/partimages/ADS1258.jpg)ADS1258 Example Code
+![IC Image](http://www.ti.com/graphics/folders/partimages/ADS1258.jpg)ADS1258 Example C Code
 =====================
 
 The [ADS1258](http://www.ti.com/product/ADS1258) precision delta-sigma (ΔΣ) analog-to-digital converter (ADC) communicates using a serial peripheral interface (SPI) to allow for device configuration, control, and data retrieval. To interface with the ADS1258 with a microcontroller (MCU), the firmware or software engineer needs to know how to correctly configure their MCU's serial peripheral, sequence serial commands, and control the SPI timing of command bytes to the ADC. To assist in this process, this example code is intended to show how to initialize communication with the ADS1258 at a high-level.

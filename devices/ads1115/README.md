@@ -1,4 +1,4 @@
-![IC Image](http://www.ti.com/graphics/folders/partimages/ADS1115.jpg)ADS1115 Example Code
+![IC Image](http://www.ti.com/graphics/folders/partimages/ADS1115.jpg)ADS1115 Example C Code
 =====================
 
 The ADS1115 example code can be used for all devices in the family including ADS1114, ADS1113, ADS1015, ADS1014, ADS1013, and TLA2024 variants.  To assist in expediting the code development process, this example code is intended to show how to initialize and communicate with the ADS1115 at a high-level.
