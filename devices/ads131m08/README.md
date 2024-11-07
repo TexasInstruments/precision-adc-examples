@@ -88,11 +88,7 @@ Release History
 | 1.0.1       | 6/19/2019   | Fixed bug in WLENGTH macro |
 | 1.0.2       | 7/13/2020   | Corrected CRC polynomials |
 
-License
--------
 
-**BSD-3-Clause**  
-Refer to *manifest.html* for license text...
 
 ![TI Logo](http://www.ti.com/assets/images/ic-logo.png)  
 *Copyright (C) 2019 Texas Instruments Incorporated - http://www.ti.com/*

@@ -1,7 +1,0 @@
-<map id="hal.h" name="hal.h">
-<area shape="rect" id="node2" href="$ads124s08_8c.html" title="ADS124S08 Low level routines using TI Drivers. " alt="" coords="5,155,101,181"/>
-<area shape="rect" id="node3" href="$ads124s08_8h.html" title="This header file contains all register map definitions for the ADS124S08 device family. " alt="" coords="87,80,183,107"/>
-<area shape="rect" id="node4" href="$hal_8c.html" title="Example of a hardware abstraction layer. " alt="" coords="132,155,183,181"/>
-<area shape="rect" id="node5" href="$unit__tests_8h.html" title="Header definition for implementations of unit tests. " alt="" coords="221,155,312,181"/>
-<area shape="rect" id="node6" href="$unit__tests_8c.html" title="Examples for implementation of unit tests. " alt="" coords="221,229,312,256"/>
-</map>

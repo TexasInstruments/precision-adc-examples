@@ -1,7 +1,0 @@
-<map id="unlockRegisters" name="unlockRegisters">
-<area shape="rect" id="node2" href="$hal_8c.html#aeedf09aeb5db930b2af96bf6569c4796" title="spiSendReceiveArrays" alt="" coords="168,5,320,32"/>
-<area shape="rect" id="node5" href="$ads131a04_8c.html#a088f83118b69d2d7d3b91c8d1ac96b83" title="sendCommand" alt="" coords="189,56,299,83"/>
-<area shape="rect" id="node3" href="$hal_8c.html#a13b6835c7e9ed2dcd7f14cababef8004" title="setCS" alt="" coords="417,56,476,83"/>
-<area shape="rect" id="node4" href="$hal_8c.html#a27c2e023582f965ef6c147817bfefea5" title="spiSendReceiveByte" alt="" coords="376,5,517,32"/>
-<area shape="rect" id="node6" href="$ads131a04_8c.html#ac4f76ae3a80f28d1aada3028b97d7f0f" title="restoreRegisterDefaults" alt="" coords="368,107,525,133"/>
-</map>

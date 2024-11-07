@@ -1,6 +1,0 @@
-<map id="readSingleRegister" name="readSingleRegister">
-<area shape="rect" id="node2" href="$ads1282_8c.html#a2bbd0d3b1ee15cbbc110bc89a20a9784" title="sendCommand" alt="" coords="184,56,293,83"/>
-<area shape="rect" id="node3" href="$hal_8c.html#abf0fc6387a35d63895d11e16df2b308c" title="spiSendReceive" alt="" coords="366,5,481,32"/>
-<area shape="rect" id="node5" href="$hal_8c.html#a99dd54c5a2a9038400e78c330876961a" title="delay_us" alt="" coords="201,107,276,133"/>
-<area shape="rect" id="node4" href="$ads1282_8c.html#ae15e5894a0188f89af38ccf7328eaf70" title="_restoreRegisterDefaults" alt="" coords="341,56,505,83"/>
-</map>

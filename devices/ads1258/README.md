@@ -80,16 +80,9 @@ For questions or issues, visit the [TI E2E Forums](https://e2e.ti.com/).
 
 ![E2E Logo](http://e2e.ti.com/resized-image/__size/75x0/__key/CommunityServer-Wikis-Components-Files/00-00-00-01-27/2234.ti_2D00_e2e_2D00_Pos_2D00_no_2D00_text_2D00_150.jpg)
 
+
 Release History
 ---------------
 
 `v1.0.0` [11-7-2018] - Initial release
 `v1.0.1` [12-21-2018] - Updated comments and fixed bug in unit_tests.c where "=" was used in place of "&=" when checking multiple test conditions.
-
-License
--------
-
-**BSD-3-Clause**\
-Refer to *manifest.html* for license text...
-
-![TI Logo](http://www.ti.com/assets/images/ic-logo.png)

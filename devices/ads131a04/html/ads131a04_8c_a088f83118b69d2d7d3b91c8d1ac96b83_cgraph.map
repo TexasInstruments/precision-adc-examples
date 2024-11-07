@@ -1,5 +1,0 @@
-<map id="sendCommand" name="sendCommand">
-<area shape="rect" id="node2" href="$hal_8c.html#a13b6835c7e9ed2dcd7f14cababef8004" title="setCS" alt="" coords="212,5,271,32"/>
-<area shape="rect" id="node3" href="$hal_8c.html#a27c2e023582f965ef6c147817bfefea5" title="spiSendReceiveByte" alt="" coords="171,56,312,83"/>
-<area shape="rect" id="node4" href="$ads131a04_8c.html#ac4f76ae3a80f28d1aada3028b97d7f0f" title="restoreRegisterDefaults" alt="" coords="163,107,320,133"/>
-</map>

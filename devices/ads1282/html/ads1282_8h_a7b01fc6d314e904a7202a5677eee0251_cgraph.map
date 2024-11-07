@@ -1,7 +1,0 @@
-<map id="adcStartupRoutine" name="adcStartupRoutine">
-<area shape="rect" id="node2" href="$hal_8c.html#a99dd54c5a2a9038400e78c330876961a" title="delay_us" alt="" coords="335,75,409,102"/>
-<area shape="rect" id="node3" href="$hal_8c.html#a9bb195f3672a25af15d16766139f3ef2" title="setPWDN" alt="" coords="193,126,273,153"/>
-<area shape="rect" id="node4" href="$ads1282_8c.html#ae15e5894a0188f89af38ccf7328eaf70" title="_restoreRegisterDefaults" alt="" coords="461,126,625,153"/>
-<area shape="rect" id="node5" href="$hal_8c.html#af03a85d6f018c77766120a006004209d" title="setRESET" alt="" coords="331,25,413,51"/>
-<area shape="rect" id="node6" href="$hal_8c.html#ab6ca614d6a3401c3148a4238ef403ad6" title="toggleRESET" alt="" coords="183,25,283,51"/>
-</map>

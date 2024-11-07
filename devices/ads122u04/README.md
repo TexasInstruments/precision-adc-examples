@@ -83,14 +83,5 @@ For questions or issues, visit the [TI E2E Forums](https://e2e.ti.com/).
 
 Release History
 ---------------
-
 `v1.0.0` [11-15-2021] - Initial release
 
-
-License
--------
-
-**BSD-3-Clause**\
-Refer to *manifest.html* for license text...
-
-![TI Logo](http://www.ti.com/assets/images/ic-logo.png)

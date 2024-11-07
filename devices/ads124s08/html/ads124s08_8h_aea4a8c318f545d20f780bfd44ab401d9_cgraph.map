@@ -1,8 +1,0 @@
-<map id="readConvertedData" name="readConvertedData">
-<area shape="rect" id="node2" href="$hal_8c.html#a691190cb0943cad01a1647ab1f77e95c" title="spiSendReceiveArrays() Sends SPI commands to ADC and returns a response in array format ..." alt="" coords="184,19,336,45"/>
-<area shape="rect" id="node4" href="$crc_8c.html#aabc84b6e90496d21dee2d3cb5764c9f1" title="getCRC() Performs CRC lookup or calculation " alt="" coords="227,95,293,121"/>
-<area shape="rect" id="node3" href="$hal_8c.html#a90c0a951b9262b484c467fc22f4102a8" title="setCS() Sets the state of the &quot;/CS&quot; GPIO pin " alt="" coords="398,5,457,32"/>
-<area shape="rect" id="node5" href="$crc_8c.html#aa3a11e6bf0fce3ce3c87d3d61b11cda0" title="calculateCRC() Calculates the CRC for the selected CRC polynomial " alt="" coords="519,81,620,108"/>
-<area shape="rect" id="node6" href="$crc_8c.html#ac68450656226cf165811b2f7f0a3448d" title="initTable() Creates lookup table in memory using byte wide computation in a 256 element array ..." alt="" coords="392,107,463,133"/>
-<area shape="rect" id="node7" href="$crc_8c.html#acf121e43dd850185e4d23220e48c5250" title="lookupCRC(() Performs CRC lookup operation in byte increments " alt="" coords="384,157,471,184"/>
-</map>

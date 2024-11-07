@@ -1,6 +1,0 @@
-<map id="test_DRDY_interrupt" name="test_DRDY_interrupt">
-<area shape="rect" id="node2" href="$hal_8c.html#a16f98e37ad0981f793a560b68290b714" title="enableDRDYinterrupt() Enables or disables the nDRDY interrupt. " alt="" coords="195,5,337,32"/>
-<area shape="rect" id="node3" href="$hal_8c.html#abf94c0e8b122bf32e882fc912361543c" title="toggleSTART() Pulses the START GPIO pin low param[in] direction sets the toggle direction base on ini..." alt="" coords="217,56,315,83"/>
-<area shape="rect" id="node5" href="$hal_8c.html#a215d35b23f068323443ee071e41ed565" title="waitForDRDYHtoL() Waits for a nDRDY GPIO to go from High to Low or until a timeout condition occurs T..." alt="" coords="203,107,329,133"/>
-<area shape="rect" id="node4" href="$hal_8c.html#a99dd54c5a2a9038400e78c330876961a" title="delay_us() Provides a timing delay with &#39;us&#39; resolution. " alt="" coords="385,56,460,83"/>
-</map>

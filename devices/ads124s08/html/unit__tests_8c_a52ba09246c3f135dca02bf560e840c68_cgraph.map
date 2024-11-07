@@ -1,5 +1,0 @@
-<map id="test_START_SYNC_pin" name="test_START_SYNC_pin">
-<area shape="rect" id="node2" href="$hal_8c.html#a20df130ff412cedbab9f79c1b21b9bbe" title="setSTART() Sets the state of the MCU START GPIO pin " alt="" coords="212,5,293,32"/>
-<area shape="rect" id="node4" href="$hal_8c.html#af628341eb33efdc20e4b17fcc21a01f3" title="getSTART() Returns the state of the MCU&#39;s ADC_START GPIO pin " alt="" coords="212,56,293,83"/>
-<area shape="rect" id="node3" href="$hal_8c.html#a99dd54c5a2a9038400e78c330876961a" title="delay_us() Provides a timing delay with &#39;us&#39; resolution. " alt="" coords="341,5,416,32"/>
-</map>

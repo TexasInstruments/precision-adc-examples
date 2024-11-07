@@ -1,6 +1,0 @@
-<map id="test_RESET_pin" name="test_RESET_pin">
-<area shape="rect" id="node2" href="$hal_8c.html#afc04e8d7d4f190ce15e84897959a5699" title="setRESET() Sets the state of the MCU ADC_RESET GPIO pin " alt="" coords="209,5,292,32"/>
-<area shape="rect" id="node3" href="$hal_8c.html#a270079df05342063316e1bdc2b3681aa" title="getRESET() Returns the state of the MCU&#39;s ADC_RESET GPIO pin " alt="" coords="209,56,292,83"/>
-<area shape="rect" id="node4" href="$hal_8c.html#a99dd54c5a2a9038400e78c330876961a" title="delay_us() Provides a timing delay with &#39;us&#39; resolution. " alt="" coords="213,107,288,133"/>
-<area shape="rect" id="node5" href="$ads124s08_8c.html#ac4f76ae3a80f28d1aada3028b97d7f0f" title="restoreRegisterDefaults() Updates the registerMap[] array to its default values NOTES: If the MCU kee..." alt="" coords="172,157,329,184"/>
-</map>

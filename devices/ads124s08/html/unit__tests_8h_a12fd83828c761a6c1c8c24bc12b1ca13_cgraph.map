@@ -1,4 +1,0 @@
-<map id="test_CS_pin" name="test_CS_pin">
-<area shape="rect" id="node2" href="$hal_8c.html#a90c0a951b9262b484c467fc22f4102a8" title="setCS() Sets the state of the &quot;/CS&quot; GPIO pin " alt="" coords="147,5,205,32"/>
-<area shape="rect" id="node3" href="$hal_8c.html#a473ef17f23637d6ba8ed3f872c6c9b8a" title="getCS() Returns the state of the MCU&#39;s ADC_CS GPIO pin " alt="" coords="147,56,205,83"/>
-</map>

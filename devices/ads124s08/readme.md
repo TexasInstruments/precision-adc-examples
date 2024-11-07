@@ -64,9 +64,3 @@ For questions or issues, visit the [TI E2E Forums](https://e2e.ti.com/).
 
 # Release History {#history}
 `v1.0.0` - Initial release (4-04-2022)
-
-<br>
-
-# License {#license}
-**BSD-3-Clause** <br>
-Refer to the *ADS124S08 Example C Code_1.0.0_manifest.html* file for license text...

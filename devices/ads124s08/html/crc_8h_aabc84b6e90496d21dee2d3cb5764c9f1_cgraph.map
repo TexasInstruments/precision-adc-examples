@@ -1,5 +1,0 @@
-<map id="getCRC" name="getCRC">
-<area shape="rect" id="node2" href="$crc_8c.html#aa3a11e6bf0fce3ce3c87d3d61b11cda0" title="calculateCRC() Calculates the CRC for the selected CRC polynomial " alt="" coords="255,5,356,32"/>
-<area shape="rect" id="node3" href="$crc_8c.html#ac68450656226cf165811b2f7f0a3448d" title="initTable() Creates lookup table in memory using byte wide computation in a 256 element array ..." alt="" coords="128,31,199,57"/>
-<area shape="rect" id="node4" href="$crc_8c.html#acf121e43dd850185e4d23220e48c5250" title="lookupCRC(() Performs CRC lookup operation in byte increments " alt="" coords="120,81,207,108"/>
-</map>
