@@ -1,4 +1,4 @@
-![IC Image](http://www.ti.com/graphics/folders/partimages/ADS131M04.jpg)ADS131M08 Example C Code
+ADS131M08 Example C Code
 =====================
 
 The ADS131M0x family of simultaneously-sampling, 24-bit, delta-sigma (ΔΣ), analog-to-digital converters (ADC) communicate using a serial peripheral interface (SPI) to allow for device configuration, control, and data retrieval. To interface the ADS131M0x devices with a microcontroller (MCU), the firmware or software engineer needs to know how to correctly configure their MCU's serial peripheral, sequence the serial commands, and control the SPI timing of command bytes to the ADC. To assist in expediting this process, this example code is intended to show how to initialize and communicate with the ADS131M0x at a high-level.

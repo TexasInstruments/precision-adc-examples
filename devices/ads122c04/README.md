@@ -1,4 +1,4 @@
-![IC Image](http://www.ti.com/graphics/folders/partimages/ADS122C04.jpg)ADS122C04 Example C Code
+ADS122C04 Example C Code
 =====================
 
 The [ADS122C04](http://www.ti.com/product/ADS122C04) precision delta-sigma (ΔΣ) analog-to-digital converter (ADC) communicates using an I2C peripheral interface to allow for device configuration, control, and data retrieval. To interface with the ADS122C04 with a microcontroller (MCU), the firmware or software engineer needs to know how to correctly configure their MCU's serial peripheral, sequence commands, and control the I2C timing of command bytes to the ADC. To assist in this process, this example code is intended to show how to initialize communication with the ADS122C04 at a high-level.

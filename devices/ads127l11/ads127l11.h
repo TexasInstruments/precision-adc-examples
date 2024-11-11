@@ -116,11 +116,11 @@ int32_t     signExtend(const uint8_t dataBytes[]);
  */
 
     /* DEV_ID register */
-    #define DEV_ID_ADDRESS												((uint8_t) 0x00)
-    #define DEV_ID_DEFAULT												((uint8_t) 0x00)
+    #define DEV_ID_ADDRESS                                              ((uint8_t) 0x00)
+    #define DEV_ID_DEFAULT                                              ((uint8_t) 0x00)
 
     /* DEV_ID field */
-    #define DEV_ID_ADS127L11										    ((uint8_t) 0x00)    // DEFAULT
+    #define DEV_ID_ADS127L11                                            ((uint8_t) 0x00)    // DEFAULT
 
 
 /* Register 0x01 (REV_ID) definition
@@ -132,7 +132,7 @@ int32_t     signExtend(const uint8_t dataBytes[]);
  */
 
     /* REV_ID register */
-    #define REV_ID_ADDRESS												((uint8_t) 0x01)
+    #define REV_ID_ADDRESS                                              ((uint8_t) 0x01)
 
     /* REV_ID field */
     // The die revision ID can change during device production without notice
@@ -147,49 +147,49 @@ int32_t     signExtend(const uint8_t dataBytes[]);
  */
 
     /* STATUS register */
-    #define STATUS_ADDRESS												((uint8_t) 0x02)
-    #define STATUS_DEFAULT												((uint8_t) 0x00)
+    #define STATUS_ADDRESS                                              ((uint8_t) 0x02)
+    #define STATUS_DEFAULT                                              ((uint8_t) 0x00)
     #define STATUS_CLEAR_ERRORS                                         ((uint8_t) 0x70)
 
     /* CS Mode field */
-    #define STATUS_CS_MODE_MASK    										((uint8_t) 0x80)
-    #define STATUS_CS_MODE_0											((uint8_t) 0x00)    // DEFAULT
-    #define STATUS_CS_MODE_1											((uint8_t) 0x80)
+    #define STATUS_CS_MODE_MASK                                         ((uint8_t) 0x80)
+    #define STATUS_CS_MODE_0                                            ((uint8_t) 0x00)    // DEFAULT
+    #define STATUS_CS_MODE_1                                            ((uint8_t) 0x80)
 
     /* Analog Supply Low Voltage field */
-    #define STATUS_ALV_FLAG_MASK										((uint8_t) 0x40)
-    #define STATUS_ALV_FLAG_0											((uint8_t) 0x00)    // DEFAULT
-    #define STATUS_ALV_FLAG_1											((uint8_t) 0x40)
+    #define STATUS_ALV_FLAG_MASK                                        ((uint8_t) 0x40)
+    #define STATUS_ALV_FLAG_0                                           ((uint8_t) 0x00)    // DEFAULT
+    #define STATUS_ALV_FLAG_1                                           ((uint8_t) 0x40)
 
     /* POR Flag field */
-    #define STATUS_POR_FLAG_MASK										((uint8_t) 0x20)
-    #define STATUS_POR_FLAG_0											((uint8_t) 0x00)    // DEFAULT
-    #define STATUS_POR_FLAG_1											((uint8_t) 0x20)
+    #define STATUS_POR_FLAG_MASK                                        ((uint8_t) 0x20)
+    #define STATUS_POR_FLAG_0                                           ((uint8_t) 0x00)    // DEFAULT
+    #define STATUS_POR_FLAG_1                                           ((uint8_t) 0x20)
 
     /* SPI CRC Error field */
-    #define STATUS_SPI_ERR_MASK								    		((uint8_t) 0x10)
-    #define STATUS_SPI_ERR_0									    	((uint8_t) 0x00)    // DEFAULT
-    #define STATUS_SPI_ERR_1									    	((uint8_t) 0x10)
+    #define STATUS_SPI_ERR_MASK                                         ((uint8_t) 0x10)
+    #define STATUS_SPI_ERR_0                                            ((uint8_t) 0x00)    // DEFAULT
+    #define STATUS_SPI_ERR_1                                            ((uint8_t) 0x10)
 
     /* Register Map CRC Error field */
-    #define STATUS_REG_ERR_MASK										    ((uint8_t) 0x08)
-    #define STATUS_REG_ERR_0											((uint8_t) 0x00)    // DEFAULT
-    #define STATUS_REG_ERR_1											((uint8_t) 0x08)
+    #define STATUS_REG_ERR_MASK                                         ((uint8_t) 0x08)
+    #define STATUS_REG_ERR_0                                            ((uint8_t) 0x00)    // DEFAULT
+    #define STATUS_REG_ERR_1                                            ((uint8_t) 0x08)
 
     /* Internal ADC Error field */
-    #define STATUS_ADC_ERR_MASK								    		((uint8_t) 0x04)
-    #define STATUS_ADC_ERR_0									    	((uint8_t) 0x00)    // DEFAULT
-    #define STATUS_ADC_ERR_1									    	((uint8_t) 0x04)
+    #define STATUS_ADC_ERR_MASK                                         ((uint8_t) 0x04)
+    #define STATUS_ADC_ERR_0                                            ((uint8_t) 0x00)    // DEFAULT
+    #define STATUS_ADC_ERR_1                                            ((uint8_t) 0x04)
 
     /* Modulator Overload Flag */
-    #define STATUS_MOD_FLAG_MASK								    	((uint8_t) 0x02)
-    #define STATUS_MOD_FLAG_0									    	((uint8_t) 0x00)    // DEFAULT
-    #define STATUS_MOD_FLAG_1									    	((uint8_t) 0x02)
+    #define STATUS_MOD_FLAG_MASK                                        ((uint8_t) 0x02)
+    #define STATUS_MOD_FLAG_0                                           ((uint8_t) 0x00)    // DEFAULT
+    #define STATUS_MOD_FLAG_1                                           ((uint8_t) 0x02)
 
     /* Data Ready Bit */
-    #define STATUS_DRDY_MASK									    	((uint8_t) 0x01)
-    #define STATUS_DRDY_0										    	((uint8_t) 0x00)    // DEFAULT
-    #define STATUS_DRDY_1									    		((uint8_t) 0x01)
+    #define STATUS_DRDY_MASK                                            ((uint8_t) 0x01)
+    #define STATUS_DRDY_0                                               ((uint8_t) 0x00)    // DEFAULT
+    #define STATUS_DRDY_1                                               ((uint8_t) 0x01)
 
 
 /* Register 0x03 (CONTROL) definition
@@ -228,12 +228,12 @@ int32_t     signExtend(const uint8_t dataBytes[]);
  */
 
     /* MUX register */
-    #define MUX_ADDRESS									    			((uint8_t) 0x04)
-    #define MUX_DEFAULT									    			((uint8_t) 0x00)
+    #define MUX_ADDRESS                                                 ((uint8_t) 0x04)
+    #define MUX_DEFAULT                                                 ((uint8_t) 0x00)
 
     /* MUX field */
-    #define MUX_MUX_MASK								        		((uint8_t) 0x03)
-    #define MUX_MUX_NORMAL				       							((uint8_t) 0x00)    // DEFAULT
+    #define MUX_MUX_MASK                                                ((uint8_t) 0x03)
+    #define MUX_MUX_NORMAL                                              ((uint8_t) 0x00)    // DEFAULT
     #define MUX_MUX_INVERTED                                            ((uint8_t) 0x01)
     #define MUX_MUX_OFFSET_TEST                                         ((uint8_t) 0x02)
     #define MUX_MUX_CM_TEST                                             ((uint8_t) 0x03)
@@ -248,13 +248,13 @@ int32_t     signExtend(const uint8_t dataBytes[]);
  */
 
     /* CONFIG1 register */
-    #define CONFIG1_ADDRESS												((uint8_t) 0x05)
-    #define CONFIG1_DEFAULT												((uint8_t) 0x00)
+    #define CONFIG1_ADDRESS                                             ((uint8_t) 0x05)
+    #define CONFIG1_DEFAULT                                             ((uint8_t) 0x00)
 
     /* Voltage Reference Range field */
-    #define CONFIG1_REF_RNG_MASK										((uint8_t) 0x40)
-    #define CONFIG1_REF_RNG_0											((uint8_t) 0x00)    // DEFAULT
-    #define CONFIG1_REF_RNG_1											((uint8_t) 0x40)
+    #define CONFIG1_REF_RNG_MASK                                        ((uint8_t) 0x40)
+    #define CONFIG1_REF_RNG_0                                           ((uint8_t) 0x00)    // DEFAULT
+    #define CONFIG1_REF_RNG_1                                           ((uint8_t) 0x40)
 
     /* Input Range field */
     #define CONFIG1_INP_RNG_MASK                                        ((uint8_t) 0x20)
@@ -336,12 +336,12 @@ int32_t     signExtend(const uint8_t dataBytes[]);
  */
 
     /* CONFIG3 register */
-    #define CONFIG3_ADDRESS										    	((uint8_t) 0x07)
-    #define CONFIG3_DEFAULT										    	((uint8_t) 0x00)
+    #define CONFIG3_ADDRESS                                             ((uint8_t) 0x07)
+    #define CONFIG3_DEFAULT                                             ((uint8_t) 0x00)
 
     /* Conversion-Start Delay Time field */
-    #define CONFIG3_DELAY_MASK											((uint8_t) 0xE0)
-    #define CONFIG3_DELAY_0	    										((uint8_t) 0x00)    // DEFAULT
+    #define CONFIG3_DELAY_MASK                                          ((uint8_t) 0xE0)
+    #define CONFIG3_DELAY_0                                             ((uint8_t) 0x00)    // DEFAULT
     #define CONFIG3_DELAY_4                                             ((uint8_t) 0x20)
     #define CONFIG3_DELAY_8                                             ((uint8_t) 0x40)
     #define CONFIG3_DELAY_16                                            ((uint8_t) 0x60)
@@ -352,7 +352,7 @@ int32_t     signExtend(const uint8_t dataBytes[]);
 
 
     /* Filter field */
-    #define CONFIG3_FILTER_MASK								    			((uint8_t) 0x1F)
+    #define CONFIG3_FILTER_MASK                                         ((uint8_t) 0x1F)
 
 
 /* Register 0x08 (CONFIG4) definition
@@ -412,8 +412,8 @@ int32_t     signExtend(const uint8_t dataBytes[]);
  */
 
     /* OFFSET2 register */
-    #define OFFSET2_ADDRESS											    ((uint8_t) 0x09)
-    #define OFFSET2_DEFAULT											    ((uint8_t) 0x00)
+    #define OFFSET2_ADDRESS                                             ((uint8_t) 0x09)
+    #define OFFSET2_DEFAULT                                             ((uint8_t) 0x00)
 
 
 /* Register 0x0A (OFFSET1) definition
@@ -517,7 +517,7 @@ int32_t     signExtend(const uint8_t dataBytes[]);
 #define SPI_CRC_ENABLED         ((bool) MASKED_REG_DATA(CONFIG4_ADDRESS, CONFIG4_SPI_CRC_1))
 
 /** Returns true if REG_CRC bit is set in CONFIG4 shadow register */
-#define REG_CRC_ENABLED      ((bool) MASKED_REG_DATA(CONFIG4_ADDRESS, CONFIG4_REG_CRC_MASK))
+#define REG_CRC_ENABLED         ((bool) MASKED_REG_DATA(CONFIG4_ADDRESS, CONFIG4_REG_CRC_MASK))
 
 
 #endif /* ADS127L11_H_ */

@@ -93,26 +93,26 @@ void adcStartup(void)
     // Initial CRC module
     initCRC8(CRC8_POLYNOMIAL);
 
-	// (OPTIONAL) Provide additional delay time for power supply settling
-	delay_ms(50);
+    // (OPTIONAL) Provide additional delay time for power supply settling
+    delay_ms(50);
 
-	// (REQUIRED) Set nRESET pin high for ADC operation
-	setRESET(HIGH);
+    // (REQUIRED) Set nRESET pin high for ADC operation
+    setRESET(HIGH);
 
     // (REQUIRED) Set START pin high to begin conversions 
     setSTART(HIGH);
 
-	// (OPTIONAL) Toggle nRESET pin to ensure default register settings
-	toggleRESET();
+    // (OPTIONAL) Toggle nRESET pin to ensure default register settings
+    toggleRESET();
 
     // (REQUIRED) Initialize shadow register array with device defaults
-	restoreRegisterDefaults();
+    restoreRegisterDefaults();
 
     // (OPTIONAL) Read Revision ID
-	readSingleRegister(REV_ID_ADDRESS);
+    readSingleRegister(REV_ID_ADDRESS);
 
     // (OPTIONAL) Clears any error flags triggered during power-up (e.g. POR_FLAG)
-	clearSTATUSflags();
+    clearSTATUSflags();
 
     /* (REQUIRED) Configure CONFIG4 register settings
      * NOTE: This function call is required here for this particular code implementation to work.
@@ -122,8 +122,8 @@ void adcStartup(void)
      */
     writeSingleRegister(CONFIG4_ADDRESS, CONFIG4_DEFAULT);
 
-	// (OPTIONAL) Define your initial register settings here
-	// Example: Enable input buffers and VCM
+    // (OPTIONAL) Define your initial register settings here
+    // Example: Enable input buffers and VCM
     writeSingleRegister(CONFIG1_ADDRESS, (CONFIG1_DEFAULT | ((uint8_t) 0x13)));
     
     // (OPTIONAL) Enable main memory map CRC
@@ -191,22 +191,22 @@ void writeSingleRegister(uint8_t address, uint8_t data)
 //*****************************************************************************
 uint8_t readSingleRegister(uint8_t address)
 {
-	/* Check that the register address is in range */
-	assert(address < NUM_REGISTERS);
+    /* Check that the register address is in range */
+    assert(address < NUM_REGISTERS);
 
     // [FRAME 1] Send RREG command
     sendRREGcommand(address);
 
-	// [FRAME 2] Send NOP command to retrieve the register data
+    // [FRAME 2] Send NOP command to retrieve the register data
     sendNOPcommand();
 
     // Parse dataRx for register value
     uint8_t registerValue = dataRx[(STATUS_ENABLED ? 1 : 0)];
 
     // Update shadow register
-	registerMap[address] = registerValue;
+    registerMap[address] = registerValue;
 
-	return registerValue;
+    return registerValue;
 }
 
 

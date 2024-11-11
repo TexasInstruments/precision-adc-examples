@@ -1,4 +1,4 @@
-![IC Image](http://www.ti.com/graphics/folders/partimages/ADS131B04-Q1.jpg)ADS131B04-Q1 Example C Code
+ADS131B04-Q1 Example C Code
 =====================
 
 The ADS131B04-Q1 is a simultaneously-sampling, 24-bit, delta-sigma (ΔΣ), analog-to-digital converter (ADC) that communicates using a serial peripheral interface (SPI) to allow for device configuration, control, and data retrieval. To interface the ADS131B04-Q1 with a microcontroller (MCU), the firmware or software engineer needs to know how to correctly configure their MCU's serial peripheral, sequence the serial commands, and control the SPI timing of command bytes to the ADC. To assist in expediting this process, this example code is intended to show how to initialize and communicate with the ADS131B04-Q1 at a high-level.

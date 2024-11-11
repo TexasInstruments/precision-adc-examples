@@ -1,4 +1,4 @@
-![IC Image](http://www.ti.com/graphics/folders/partimages/ADS1118.jpg)ADS1118 Example C Code
+ADS1118 Example C Code
 =====================
 
 The ADS1118 code can be adapted for use with the ADS1018 (12-bit version). This example code is intended to show how to initialize and communicate with the ADS1118 at a high-level.

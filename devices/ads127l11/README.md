@@ -1,4 +1,4 @@
-![IC Image](https://www.ti.com/graphics/folders/partimages/ADS127L11.jpg)ADS127L11 Example C Code
+ADS127L11 Example C Code
 =====================
 
 The ADS127L11 is a 24-bit delta-sigma (ΔΣ), analog-to-digital converter (ADC) which communicates using a serial peripheral interface (SPI) to allow for device configuration, control, and data retrieval. To interface the ADS127L11 with a microcontroller (MCU), the firmware or software engineer needs to know how to correctly configure their MCU's serial peripheral, sequence the serial commands, and control the SPI timing of command bytes to the ADC. To assist in expediting this process, this example code is intended to show how to initialize and communicate with the ADS127L11 at a high-level.
@@ -22,11 +22,11 @@ There are three modules included in this example code:
 	
 	**IMPORTANT**: This module will need to be modified to work with your hardware!
 	
-2.  **`CRC Calculation`**
+3.  **`CRC Calculation`**
 
 	*Description:* The CRC calculation module provides CRC related functions called by the `ADS127L11` module.
 	
-	*Files: crc.h, crc.c*
+	*Files: crc8.h, crc8.c*
 
 
 How to use this code
@@ -77,28 +77,6 @@ Copy and paste the example code into your project, and update the files as neede
 
  5. Include a reference to *ads127l11.h* in your application (from *main.c* or wherever ADC communication is handled). You should now be able to begin calling the `ADS127L11` module functions in your code.
  
- 5. Configure definitions in *ads127l11.h* to match your desired `ADS127L11` operating modes.
-	```c
-	//****************************************************************************
-	//
-	// Select the SPI mode and desired CONFIG4 register settings...
-	// NOTE: These settings will be enforced and not modifiable during runtime!
-	//
-	//****************************************************************************
-
-	/* Enable this to use 3 wire SPI mode*/
-	//#define SPI_3_WIRE
-
-	/* Enable this to use 24-bit resolution mode*/
-	#define RES_24_BIT_MODE
-
-	/* Enable this define statement to enable SPI_CRC */
-	//#define SPI_CRC_MODE
-
-	/* Enable this define statement to enable SPI STATUS bytes */
-	//#define STATUS_BYTE_MODE
-	```
-	NOTE 1: 3 WIRE SPI mode is not currently supported in this release of example code.
 
 > **DISCLAIMER**: This code was tested on an MSP432E401Y 32-bit ARM® Cortex®-M4F based MCU using TI Code Composer Studio's 20.2.5.LTS ARM compiler. This code is provided as example to aid in the creation of your own software implementation and should not be considered to be fully verified and production ready. This example code was written for readability and has not been optimized for performance.
 

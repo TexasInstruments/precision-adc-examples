@@ -105,29 +105,29 @@ void adcStartup(void)
     initCRC8(CRC8_POLYNOMIAL);
 
     // (OPTIONAL) Provide additional delay time for power supply settling
-	delay_ms(50);
+    delay_ms(50);
 
-	// (REQUIRED) Set nRESET pin high for ADC operation
-	setRESET(HIGH);
+    // (REQUIRED) Set nRESET pin high for ADC operation
+    setRESET(HIGH);
 
     // (REQUIRED) Set START pin high to begin conversions
     setSTART(HIGH);
 
-	// (OPTIONAL) Toggle nRESET pin to ensure default register settings
-	toggleRESET();
+    // (OPTIONAL) Toggle nRESET pin to ensure default register settings
+    toggleRESET();
 
     // (REQUIRED) Initialize shadow register array with device defaults
-	restoreRegisterDefaults();
+    restoreRegisterDefaults();
 
-	// (OPTIONAL) Read Revision ID
-	readSingleRegister(REV_ID_ADDRESS);
+    // (OPTIONAL) Read Revision ID
+    readSingleRegister(REV_ID_ADDRESS);
 
-	// (OPTIONAL) Clears any error flags triggered during power-up (e.g. POR_FLAG)
-	clearSTATUSflags();
+    // (OPTIONAL) Clears any error flags triggered during power-up (e.g. POR_FLAG)
+    clearSTATUSflags();
 
-	// (OPTIONAL) Define your initial register settings here
-	// Example: Enable input & reference buffers and VCM output
-	uint8_t regVal = CONFIG1_VCM_MASK | CONFIG1_REFP_BUF_MASK | CONFIG1_AINP_BUF_MASK | CONFIG1_AINN_BUF_MASK;
+    // (OPTIONAL) Define your initial register settings here
+    // Example: Enable input & reference buffers and VCM output
+    uint8_t regVal = CONFIG1_VCM_MASK | CONFIG1_REFP_BUF_MASK | CONFIG1_AINP_BUF_MASK | CONFIG1_AINN_BUF_MASK;
     writeSingleRegister(CONFIG1_ADDRESS, regVal);
 
     // (OPTIONAL) Enable main memory map CRC
