@@ -1,0 +1,11 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "H_M0_L18_code",
+            "type": "ccs-debug",
+            "request": "launch",
+            "project": "H_M0_L18_code"
+        }
+    ]
+}

@@ -55,6 +55,7 @@
 uint8_t     readSingleRegister(uint8_t address);
 void        writeSingleRegister(uint8_t address, uint8_t data);
 void        sendCommand(uint8_t opcode[]);
+void        initalizeRegisters (uint16_t OSR, uint8_t speed_mode, int DP_TDM, int DCLK_DIV, int ADC_CLK_SEL, int ADC_CLK_DIV);
 
 // Getter functions
 uint16_t    getRegisterValue(uint8_t address);

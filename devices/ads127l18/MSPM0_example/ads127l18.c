@@ -188,6 +188,192 @@ void sendCommand(uint8_t opcode[])
     DL_GPIO_setPins(GPIO_SPI_PORT, GPIO_SPI_CS_PIN);
 }
 
+void initalizeRegisters (uint16_t OSR, uint8_t speed_mode, int DP_TDM, int DCLK_DIV, int ADC_CLK_SEL, int ADC_CLK_DIV)
+{
+    /*** CHn_CFG1 Registers (Address = Channel Number × 08h + 11h) ***/ 
+    // Writes to the CHn_MUX bits to enable FS tests [0x60: +FS test; 0x50: -FS test; 0x00: Normal Input Polarity]
+    writeSingleRegister(CH0_CFG1_REG_ADDRESS, 0x50); 
+    writeSingleRegister(CH1_CFG1_REG_ADDRESS, 0x60);
+    writeSingleRegister(CH2_CFG1_REG_ADDRESS, 0x50);
+    writeSingleRegister(CH3_CFG1_REG_ADDRESS, 0x60);
+    writeSingleRegister(CH4_CFG1_REG_ADDRESS, 0x50); 
+    writeSingleRegister(CH5_CFG1_REG_ADDRESS, 0x60);
+    writeSingleRegister(CH6_CFG1_REG_ADDRESS, 0x50);
+    writeSingleRegister(CH7_CFG1_REG_ADDRESS, 0x60);
+
+
+/*** CHn_CFG2 Registers (Address = Channel Number x 08h + 12h) ***/
+/*** CH0, CH1, CH2, CH3, CH4, CH5, CH6, CH7 all set to same OSR and Wideband Filter Settings***/  
+
+    uint8_t CHx_CFG2_REG_VALUE = 0x00;
+
+
+    // OSR selection. These bits program the OSR and Filter type (bit 4-0)
+    switch (OSR) 
+    {
+        case 32:
+            CHx_CFG2_REG_VALUE = CH0_CFG2_REG_CH0_FLTR_0;
+            break;
+
+        case 64:
+            CHx_CFG2_REG_VALUE =  CH0_CFG2_REG_CH0_FLTR_1;
+            break;
+
+        case 128:
+            CHx_CFG2_REG_VALUE =  CH0_CFG2_REG_CH0_FLTR_2;
+            break;
+
+        case 256:
+            CHx_CFG2_REG_VALUE =  CH0_CFG2_REG_CH0_FLTR_3;
+            break;
+
+        case 512:
+            CHx_CFG2_REG_VALUE =  CH0_CFG2_REG_CH0_FLTR_4;
+            break;
+        
+        case 1024:
+            CHx_CFG2_REG_VALUE =  CH0_CFG2_REG_CH0_FLTR_5;
+            break;
+        
+        case 2048:
+            CHx_CFG2_REG_VALUE =  CH0_CFG2_REG_CH0_FLTR_6;
+            break;
+        
+        case 4096:
+            CHx_CFG2_REG_VALUE =  CH0_CFG2_REG_CH0_FLTR_7;
+            break;
+
+        default:  //OSR32 Wideband
+            CHx_CFG2_REG_VALUE =  CH0_CFG2_REG_CH0_FLTR_0;
+            break;
+    }
+
+    writeSingleRegister(CH0_CFG2_REG_ADDRESS, CHx_CFG2_REG_VALUE);
+    writeSingleRegister(CH1_CFG2_REG_ADDRESS, CHx_CFG2_REG_VALUE);
+    writeSingleRegister(CH2_CFG2_REG_ADDRESS, CHx_CFG2_REG_VALUE);
+    writeSingleRegister(CH3_CFG2_REG_ADDRESS, CHx_CFG2_REG_VALUE);
+    writeSingleRegister(CH4_CFG2_REG_ADDRESS, CHx_CFG2_REG_VALUE);
+    writeSingleRegister(CH5_CFG2_REG_ADDRESS, CHx_CFG2_REG_VALUE);
+    writeSingleRegister(CH6_CFG2_REG_ADDRESS, CHx_CFG2_REG_VALUE);
+    writeSingleRegister(CH7_CFG2_REG_ADDRESS, CHx_CFG2_REG_VALUE);
+
+/*** GEN_CFG2 Register (Address = 09h) ***/  
+    uint8_t GEN_CFG2_REG_VALUE = 0x00;
+
+    // Speed mode selection. These bits program the device speed mode (bit 2-1)
+    switch (speed_mode) 
+    {
+        case 0:
+            GEN_CFG2_REG_VALUE = GEN_CFG2_REG_VALUE | GEN_CFG2_REG_SPEED_MODE_0;
+            break;
+
+        case 1:
+            GEN_CFG2_REG_VALUE = GEN_CFG2_REG_VALUE | GEN_CFG2_REG_SPEED_MODE_1;
+            break;
+
+        case 2:
+            GEN_CFG2_REG_VALUE = GEN_CFG2_REG_VALUE | GEN_CFG2_REG_SPEED_MODE_2;
+            break;
+
+        default:
+            GEN_CFG2_REG_VALUE = GEN_CFG2_REG_VALUE | GEN_CFG2_REG_SPEED_MODE_3;
+            break;
+    }
+
+    writeSingleRegister(GEN_CFG2_REG_ADDRESS, GEN_CFG2_REG_VALUE);
+
+
+     /*** DP_CFG1 Register (Address = 0Bh) ***/ 
+    uint8_t DP_CFG1_REG_VALUE = 0x00;
+
+    // Writes to the DP_TDM bits to enable the number of data output pins (bit 5-4)
+    switch (DP_TDM)
+    {
+        case 1:
+            DP_CFG1_REG_VALUE = DP_CFG1_REG_VALUE | DP_CFG1_REG_DP_TDM_0;
+            break;
+
+        case 2:
+            DP_CFG1_REG_VALUE = DP_CFG1_REG_VALUE | DP_CFG1_REG_DP_TDM_1;
+            break;
+
+        case 4:
+            DP_CFG1_REG_VALUE = DP_CFG1_REG_VALUE | DP_CFG1_REG_DP_TDM_2;
+            break;
+
+        default:
+            DP_CFG1_REG_VALUE = DP_CFG1_REG_VALUE | DP_CFG1_REG_DP_TDM_3;
+            break;    
+    }
+
+    writeSingleRegister(DP_CFG1_REG_ADDRESS, DP_CFG1_REG_VALUE);
+
+    /*** DP_CFG2 Register (Address = 0Ch) ***/ 
+    uint8_t DP_CFG2_REG_VALUE = 0x00;
+
+    // Data port DCLK frequency divider DCLK_DIV[1:0] (bit 6-5)
+    switch (DCLK_DIV) 
+    {
+        case 1:
+            DP_CFG2_REG_VALUE = DP_CFG2_REG_VALUE | DP_CFG2_REG_DCLK_DIV_0;
+            break;
+
+        case 2:
+            DP_CFG2_REG_VALUE = DP_CFG2_REG_VALUE | DP_CFG2_REG_DCLK_DIV_1;
+            break;
+
+        case 4:
+            DP_CFG2_REG_VALUE = DP_CFG2_REG_VALUE | DP_CFG2_REG_DCLK_DIV_2;
+            break;
+
+        default:
+            DP_CFG2_REG_VALUE = DP_CFG2_REG_VALUE | DP_CFG2_REG_DCLK_DIV_3;
+            break;    
+    }
+
+    writeSingleRegister(DP_CFG2_REG_ADDRESS, DP_CFG2_REG_VALUE);
+
+    /*** CLK_CFG Register (Address = 0Dh) ***/ 
+    uint8_t CLK_CFG_REG_VALUE = 0x00;
+
+    // ADC clock selection 
+    switch (ADC_CLK_SEL) 
+    {
+        case 0:
+            CLK_CFG_REG_VALUE = CLK_CFG_REG_VALUE | CLK_CFG_REG_CLK_SEL_0;
+            break;
+
+        default:
+            CLK_CFG_REG_VALUE = CLK_CFG_REG_VALUE | CLK_CFG_REG_CLK_SEL_1;
+            break;    
+    }
+
+    // ADC clock divider
+    switch (ADC_CLK_DIV) 
+    {
+        case 1:
+            CLK_CFG_REG_VALUE = CLK_CFG_REG_VALUE | CLK_CFG_REG_CLK_DIV_0;
+            break;
+
+        case 2:
+            CLK_CFG_REG_VALUE = CLK_CFG_REG_VALUE | CLK_CFG_REG_CLK_DIV_1;
+            break;
+
+        case 3:
+            CLK_CFG_REG_VALUE = CLK_CFG_REG_VALUE | CLK_CFG_REG_CLK_DIV_2;
+            break;
+
+        case 4:
+            CLK_CFG_REG_VALUE = CLK_CFG_REG_VALUE | CLK_CFG_REG_CLK_DIV_3;
+            break;
+
+        default:
+            CLK_CFG_REG_VALUE = CLK_CFG_REG_VALUE | CLK_CFG_REG_CLK_DIV_4;
+            break;    
+    }
+
+    writeSingleRegister(CLK_CFG_REG_ADDRESS, CLK_CFG_REG_VALUE);
+}
 
 
 //****************************************************************************
