@@ -275,14 +275,32 @@ The MSPM0G3507 operates at 3.3V while the ADS127L18 operates at 1.8V. Both devic
 To solve this issue, a voltage translator board was built that connects to the debug header (J101) on the MSPM0G3507 LaunchPad. This translator board employs a simple LDO to reduce the MSPM0 operating voltage from 3.3V to 1.8V. The figure below shows the voltage translator board (green PCB) connected to the MSMP0 Launchpad (red PCB)
 
 ![Alt text](https://github.com/TexasInstruments/precision-adc-examples/blob/main/devices/ads127l18/MSPM0_example/docs/image-23.png?raw=true)
+![Alt text](https://github.com/TexasInstruments/precision-adc-examples/blob/main/devices/ads127l18/MSPM0_example/docs/image-26.JPG)
 
+
+  
 ## 4.2 Connecting the ADS127L18EVM to the MSPM0 Launchpad
 The following image shows how the MSMP0 Launchpad is connected to the ADS127L18 EVM using the connections described in the “SYSCFG_DL_init” section
 
-## 4.3 ADS127L18 $\overline{RESET}$ Pin
-The EVM includes a pulldown resistor connected to the $\overline{RESET}$ (Not RESET) pin. This holds the ADC in reset until the EVM GUI takes control and brings this pin high. However, the RESET pin is not controlled by the MSMP0 code described in this document and therefore must be manually forced high on the ADS127L18 EVM
+![Alt text](https://github.com/TexasInstruments/precision-adc-examples/blob/main/devices/ads127l18/MSPM0_example/docs/image-25.png?raw=true)
 
-One possible solution is to connect a jumper wire between the RESET pin and IOVDD. The schematic connections are shown in the image below
+|EVM Signal| M0 Launchpad Pin|
+|----------|-----------------|
+|/Reset    |PA8              |
+|START     |PA25             |
+|MODE      |+VDD ( 1.8V)     |
+|DCLK      |PA12 AND PA17    |
+|DOUT1     |PB15             |
+|DOUT0     |PB17             |
+|SDO       |PB7              |
+|SDI       |PB8              |
+|SCLK      |PB9              |
+|/CS       |PB6              |
+|GROUND    |GROUND           |
+
+
+## 4.3 ADS127L18 $\overline{RESET}$ Pin
+The EVM includes a pulldown resistor connected to the $\overline{RESET}$ (Not RESET) pin. This holds the ADC in reset until the EVM GUI takes control and brings this pin high. The schematic connections are shown in the image below
 
 ![Alt text](https://github.com/TexasInstruments/precision-adc-examples/blob/main/devices/ads127l18/MSPM0_example/docs/image-24.png?raw=true)
 
