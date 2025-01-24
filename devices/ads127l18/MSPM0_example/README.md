@@ -142,7 +142,7 @@ This section highlights the registers used in this project, and the specific bit
   - The CLK_SEL bit chooses to use either the internal oscillator (default) or an external oscillator. The external oscillator must be a high-accuracy, low-jitter clock provided by the user
   - Use the correct CLK_DIV bits to scale the 25.6 MHz clock frequency to the desired speed mode when the internal oscillator is used. The CLK_DIV bits also further reduce the clock frequency when an external oscillator is used. Choosing a faster clock speed results in faster output data on the DOUT pins, but also increases the ADC current 
 
-![Alt text]([image-12.png](https://github.com/TexasInstruments/precision-adc-examples/blob/main/devices/ads127l18/MSPM0_example/docs/image-12.png?raw=true))
+![Alt text](https://github.com/TexasInstruments/precision-adc-examples/blob/main/devices/ads127l18/MSPM0_example/docs/image-12.png?raw=true)
   
 # 3 MSPM0 x ADS127L18
 This section discusses the code that enables the communication and data collection between the MSPM0 and ADS127L18. 
