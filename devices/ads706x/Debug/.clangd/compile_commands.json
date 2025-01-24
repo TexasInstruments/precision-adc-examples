@@ -1,0 +1,7 @@
+[
+   {
+      "directory" : "C:/Users/a0226508/Desktop/TO PUBLISH/New folder/ads706x_lp-mspm0g3507_example_code/Debug",
+      "command"   : "clang++ -I\"C:/Users/a0226508/Desktop/TO PUBLISH/New folder/ads706x_lp-mspm0g3507_example_code\" -I\"C:/Users/a0226508/Desktop/TO PUBLISH/New folder/ads706x_lp-mspm0g3507_example_code/Debug\" -I\"C:/ti/mspm0_sdk_2_02_00_05/source/third_party/CMSIS/Core/Include\" -I\"C:/ti/mspm0_sdk_2_02_00_05/source\" -isystem\"C:/ti/ccstheia131/ccs/tools/compiler/ti-cgt-armllvm_4.0.0.LTS/include/armv7em-ti-none-eabihf/c++/v1\" -isystem\"C:/ti/ccstheia131/ccs/tools/compiler/ti-cgt-armllvm_4.0.0.LTS/include/c++/v1\" -isystem\"C:/ti/ccstheia131/ccs/tools/compiler/ti-cgt-armllvm_4.0.0.LTS/lib/clang/18/include\" -isystem\"C:/ti/ccstheia131/ccs/tools/compiler/ti-cgt-armllvm_4.0.0.LTS/include/c\"",
+      "file"      : "C:/Users/a0226508/Desktop/TO PUBLISH/New folder/ads706x_lp-mspm0g3507_example_code/ads706x.c"
+   }
+]

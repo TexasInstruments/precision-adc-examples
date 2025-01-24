@@ -1,0 +1,75 @@
+/**
+ * These arguments were used when this file was generated. They will be automatically applied on subsequent loads
+ * via the GUI or CLI. Run CLI with '--help' for additional information on how to override these arguments.
+ */
+//@cliArgs --device "MSPM0G350X" --package "LQFP-64(PM)" --part "Default"
+//@v2CliArgs --device "MSPM0G3507" --package "LQFP-64(PM)"
+// @cliArgs --board /ti/boards/LP_MSPM0G3507 --rtos nortos
+
+/**
+ * Import the modules used in this configuration.
+ */
+const GPIO   = scripting.addModule("/ti/driverlib/GPIO", {}, false);
+const GPIO1  = GPIO.addInstance();
+const SPI    = scripting.addModule("/ti/driverlib/SPI", {}, false);
+const SPI1   = SPI.addInstance();
+const SYSCTL = scripting.addModule("/ti/driverlib/SYSCTL");
+const TIMER  = scripting.addModule("/ti/driverlib/TIMER", {}, false);
+const TIMER1 = TIMER.addInstance();
+const Board = scripting.addModule("/ti/driverlib/Board", {}, false);
+
+/**
+ * Write custom configuration values to the imported modules.
+ */
+GPIO1.$name                                 = "GPIO_LEDS";
+GPIO1.port                                  = "PORTA";
+GPIO1.associatedPins.create(2);
+GPIO1.associatedPins[0].$name               = "USER_LED_1";
+GPIO1.associatedPins[0].assignedPortSegment = "Lower";
+GPIO1.associatedPins[0].assignedPin         = "0";
+GPIO1.associatedPins[0].initialValue        = "SET";
+GPIO1.associatedPins[1].$name               = "USER_TEST";
+GPIO1.associatedPins[1].assignedPortSegment = "Lower";
+GPIO1.associatedPins[1].assignedPin         = "15";
+GPIO1.associatedPins[1].initialValue        = "SET";
+
+SPI1.$name                          = "SPI_0";
+SPI1.targetBitRate                  = 500000;
+SPI1.rxFifoThreshold                = "DL_SPI_RX_FIFO_LEVEL_ONE_FRAME";
+SPI1.txFifoThreshold                = "DL_SPI_TX_FIFO_LEVEL_ONE_FRAME";
+SPI1.enabledInterrupts              = ["DMA_DONE_RX","DMA_DONE_TX","TX_EMPTY"];
+SPI1.enabledDMAEvent1Triggers       = "DL_SPI_DMA_INTERRUPT_RX";
+SPI1.enabledDMAEvent2Triggers       = "DL_SPI_DMA_INTERRUPT_TX";
+SPI1.peripheral.$assign             = "SPI1";
+SPI1.chipSelect                     = ["1"];
+SPI1.peripheral.sclkPin.$assign     = "PB9";
+SPI1.peripheral.mosiPin.$assign     = "PB8";
+SPI1.peripheral.misoPin.$assign     = "PB7";
+SPI1.peripheral.cs1Pin.$assign      = "PB17";
+SPI1.cs1PinConfig.enableConfig      = true;
+SPI1.cs1PinConfig.internalResistor  = "PULL_UP";
+
+SPI1.DMA_CHANNEL_EVENT2.$name       = "DMA_CH0";
+SPI1.DMA_CHANNEL_EVENT2.addressMode = "b2f";
+SPI1.DMA_CHANNEL_EVENT2.srcLength   = "BYTE";
+SPI1.DMA_CHANNEL_EVENT2.dstLength   = "BYTE";
+SPI1.DMA_CHANNEL_EVENT2.peripheral.$assign   = "DMA_CH0";
+SPI1.DMA_CHANNEL_EVENT1.$name       = "DMA_CH1";
+SPI1.DMA_CHANNEL_EVENT1.peripheral.$assign   = "DMA_CH1";
+SPI1.DMA_CHANNEL_EVENT1.addressMode = "f2b";
+SPI1.DMA_CHANNEL_EVENT1.srcLength   = "BYTE";
+SPI1.DMA_CHANNEL_EVENT1.dstLength   = "BYTE";
+SPI1.DMA_CHANNEL_EVENT2.$name       = "DMA_CH0";
+
+SYSCTL.validateClkStatus = true;
+SYSCTL.forceDefaultClkConfig = true;
+SYSCTL.clockTreeEn        = true;
+
+TIMER1.$name              = "TIMER_0";
+TIMER1.timerClkDiv        = 8;
+TIMER1.timerClkSrc        = "LFCLK";
+TIMER1.timerMode          = "PERIODIC";
+TIMER1.interrupts         = ["ZERO"];
+TIMER1.timerPeriod        = "1000 ms";
+TIMER1.timerStartTimer    = true;
+TIMER1.peripheral.$assign = "TIMG0";
