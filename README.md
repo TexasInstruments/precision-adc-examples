@@ -13,7 +13,9 @@
 
 Precision Analog to Digital Converters from Texas Instruments are specialized mixed signal products mainly used in signal acquisition and sensor applications.  Generally, these products communicate with a micro-controller or FPGA as an SPI or I2C peripheral to configure internal settings and transmit digitized analog signals.  
 
-This repository is a collection of firmware examples for controlling, configuring, reading, and interacting with these products.  You will find examples of micro-controller firmware applications which configure and operate these ADCs.     
+This repository is a collection of firmware examples for controlling, configuring, reading, and interacting with these products.  You will find examples of micro-controller firmware applications which configure and operate these ADCs.
+
+Find more information about precision ADC device selection [here](https://content.ti.com/ls/9f37f889-9ac5-4ed2-8f85-d28a7d7c0631/N7KG5rNwX6Uaws6h)
 
 ## Devices
 
