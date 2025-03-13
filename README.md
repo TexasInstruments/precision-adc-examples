@@ -28,8 +28,8 @@ Device examples include the following products:
 - [ADS7128](https://www.ti.com/product/ADS7128) Small 8-ch 12-bit analog-to-digital converter (ADC) with I2C interface, GPIOs, CRC and RMS module
 ### Multi-Channel Sensor Measurement:
 - [ADS1220](https://www.ti.com/product/ADS1220) 24-bit, 2-kSPS, four-channel, low-power, delta-sigma ADC with PGA, VREF, SPI and two IDACs
-- [ADS122C04](https://www.ti.com/product/ADS122C04) **upcoming release**
-- [ADS122S14](https://www.ti.com/product/ADS122S14)	**upcoming release**
+- [ADS122C04](https://www.ti.com/product/ADS122C04) **upcoming release** Engineering Samples availble today contact - email: dcc-padc-marketing@list.ti.com
+- [ADS122S14](https://www.ti.com/product/ADS122S14)	**upcoming release** Engineering Samples availble today contact - email: dcc-padc-marketing@list.ti.com
 - [ADS122U04](https://www.ti.com/product/ADS122U04) 24-bit, 2-kSPS, 4-ch, low-power, small-size delta-sigma ADC w/ PGA, VREF, 2x IDACs & UART interface
 - [ADS1235](https://www.ti.com/product/ADS1235) 24-bit, 7.2-kSPS, 3-ch differential, delta-sigma ADC with PGA and AC excitation for bridge sensors
 - [ADS124S08](https://www.ti.com/product/ADS124S08) 24-bit, 4-kSPS, 12-ch delta-sigma ADC with PGA and voltage reference for sensor measurement
