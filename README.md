@@ -30,8 +30,8 @@ Device examples include the following products:
 - [ADS1220](https://www.ti.com/product/ADS1220) 24-bit, 2-kSPS, four-channel, low-power, delta-sigma ADC with PGA, VREF, SPI and two IDACs
 - [ADS122C14](https://www.ti.com/product/ADS122C14) **upcoming release** Engineering Samples available today contact dcc-padc-marketing@list.ti.com
 - [ADS122S14](https://www.ti.com/product/ADS122S14) **upcoming release** Engineering Samples available today contact dcc-padc-marketing@list.ti.com
-- [ADS122U04](https://www.ti.com/product/ADS122U04) 24-bit, 2-kSPS, 4-ch, low-power, small-size delta-sigma ADC w/ PGA, VREF, 2x IDACs with UART 
-- [ADS122C04](https://www.ti.com/product/ADS122C04) 24-bit, 2-kSPS, 4-ch, low-power, small-size delta-sigma ADC w/ PGA, VREF, 2x IDACs & I2C interface
+- [ADS122U04](https://www.ti.com/product/ADS122U04) 24-bit, 2-kSPS, 4-ch, low-power, small-size delta-sigma ADC w/ PGA, VREF, 2x IDACs & UART 
+- [ADS122C04](https://www.ti.com/product/ADS122C04) 24-bit, 2-kSPS, 4-ch, low-power, small-size delta-sigma ADC w/ PGA, VREF, 2x IDACs & I2C 
 - [ADS1235](https://www.ti.com/product/ADS1235) 24-bit, 7.2-kSPS, 3-ch differential, delta-sigma ADC with PGA and AC excitation for bridge sensors
 - [ADS124S08](https://www.ti.com/product/ADS124S08) 24-bit, 4-kSPS, 12-ch delta-sigma ADC with PGA and voltage reference for sensor measurement
 - [ADS1258](https://www.ti.com/product/ADS1258) 24-bit, 125kSPS, 16-ch delta-sigma ADC with fast channel scan and automatic sequencer
