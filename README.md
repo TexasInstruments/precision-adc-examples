@@ -38,6 +38,7 @@ Device examples include the following products:
 - [ADS1262](https://www.ti.com/product/ADS1262) 32-bit 38-kSPS 10-ch delta-sigma ADC with PGA and voltage reference for factory automation
 ### Multi-Channel Simultaneous ADCs:
 - [ADS127L18](https://www.ti.com/product/ADS127L18) 24-bit, 512/1365-ksps, 8-channel, simultaneous-sampling, wideband delta-sigma ADC
+- [ADS127L14](https://www.ti.com/product/ADS127L14) 24-bit, 512/1365-ksps, 4-channel, simultaneous-sampling, wideband delta-sigma ADC
 - [ADS131A04](https://www.ti.com/product/ADS131A04) 24-bit 128-kSPS 4-channel simultaneous-sampling delta-sigma ADC
 - [ADS131B04-Q1](https://www.ti.com/product/ADS131B04-Q1) Automotive 24-bit, 32-kSPS, four-channel, simultaneous-sampling, delta-sigma ADC
 - [ADS131M08](https://www.ti.com/product/ADS131M08) 24-bit, 32-kSPS, 8-channel, simultaneous-sampling, delta-sigma ADC
