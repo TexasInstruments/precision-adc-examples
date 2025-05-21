@@ -108,10 +108,10 @@ void adcStartupRoutine(void)
 	/* (OPTIONAL) Write to all registers */
 	uint8_t startIndex = REG_ADDR_STATUS;
 	uint8_t count = NUM_REGISTERS - startIndex;
-	writeMultipleRegisters(startIndex, count, &initRegisterMap[startIndex]);
+	writeMultipleRegisters(startIndex, count, &initRegisterMap);
 
 	/* (OPTIONAL) Read back all registers */
-	readMultipleRegisters(startIndex, count, &ADC_RegisterMap[startIndex]);
+	readMultipleRegisters(startIndex, count, &ADC_RegisterMap);
 
 	/* (OPTIONAL) Check STATUS register for faults */
 	pollForDRDY(50);    /* Avoids data not new STATUS flag */
@@ -176,11 +176,12 @@ uint8_t readSingleRegister(uint8_t addr)
  *
  * \param addr register address from which we start reading
  * \param count is the number of registers we want to read
- * \param *data points to a location in memory to store the register data
+ * \param *data memory location for storing register map data (1:1 mapping with device registers) 
  */
 void readMultipleRegisters(uint8_t addr, uint8_t count, uint8_t data[])
 {
 	/* Validate input parameters */
+	assert(data);
 	assert(count > 0);
 	assert((addr + count) <= NUM_REGISTERS);
 
@@ -243,17 +244,18 @@ void writeSingleRegister(uint8_t addr, uint8_t data)
  *
  * \param addr starting register address byte
  * \param count total number of register to write
- * \param *data pointer to array of values to write (array must map 1-to-1 with the device registers)
+ * \param *data memory location for loading register map data (1:1 mapping with device registers) 
  */
 void writeMultipleRegisters(uint8_t addr, uint8_t count, const uint8_t data[])
 {
-	/* Check that register map address range is not exceeded */
-	assert( (addr + count) <= NUM_REGISTERS );
+	/* Validate input parameters */
+	assert(data);
+	assert((addr + count) <= NUM_REGISTERS);
 
 	uint8_t i;
 	for (i = addr; i < (addr + count); i++)
 	{
-		writeSingleRegister(addr + i, data[i]);
+		writeSingleRegister(i, data[i]);
 	}
 }
 
