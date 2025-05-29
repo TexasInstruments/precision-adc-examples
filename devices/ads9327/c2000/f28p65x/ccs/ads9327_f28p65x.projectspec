@@ -1,0 +1,116 @@
+<projectSpec>
+  <project
+        name="ads9327_F28P65x"
+        device="TMS320F28P650DK9"
+        cgtVersion="21.6.0.LTS"
+        products="C2000WARE"
+        outputFormat="ELF"
+        launchWizard="False"
+        linkerCommandFile=""
+        enableSysConfigTool="true"
+        sysConfigBuildOptions="--product ${C2000WARE_ROOT}/.metadata/sdk.json --device F28P65x"
+        >
+
+    <configuration name="CPU1_RAM"
+      compilerBuildOptions="--opt_level=3 --opt_for_speed=5 
+                      -I${CG_TOOL_ROOT}/include 
+                      -I${PROJECT_ROOT}/device
+                      -I${C2000WARE_DLIB_ROOT}
+                      -I${PROJECT_ROOT}/libraries/CLAmath                                                    
+                      --define=_DEBUG --define=_TI_EABI_ --define=CLA_DEBUG=0 --define=F28x_DEVICE --define=CPU1 --define=LARGE_MODEL 
+                      -ml -mt -v28 
+                      --float_support=fpu64 --cla_support=cla2 --vcu_support=vcu2 --tmu_support=tmu0 --fp_mode=relaxed
+                      --cla_background_task=on
+                      --diag_warning=225 --quiet --diag_suppress=10063 --diag_suppress=173 --display_error_number  
+                      -g -k --asm_listing" 
+        linkerBuildOptions="
+              --stack_size=0x3F8 
+              --heap_size=0x200 
+              --entry_point=code_start
+              --define=RAM    
+              --warn_sections 
+              -i${CG_TOOL_ROOT}/lib
+              -i${PROJECT_ROOT}/device/driverlib/ccs/Release                           
+              -i${PROJECT_ROOT}/libraries/CLAmath 
+              -i${CG_TOOL_ROOT}/include
+              -l driverlib.lib 
+              -l cla1_math_library_datarom_fpu32_eabi.lib
+              -l rts2800_fpu32_fast_supplement_eabi.lib
+              -l libc.a
+              --reread_libs --diag_wrap=off --display_error_number 
+              --xml_link_info=${ProjName}_linkInfo.xml  
+              --rom_model" />
+
+    <configuration name="CPU1_FLASH"
+      compilerBuildOptions="--opt_level=3 --opt_for_speed=5 
+                      -I${CG_TOOL_ROOT}/include 
+                      -I${PROJECT_ROOT}/device
+                      -I${C2000WARE_DLIB_ROOT}
+                      -I${PROJECT_ROOT}/libraries/CLAmath
+                      --define=_FLASH                                                        
+                      --define=_DEBUG --define=_TI_EABI_ --define=CLA_DEBUG=0 --define=F28x_DEVICE --define=CPU1 --define=LARGE_MODEL 
+                      -ml -mt -v28 
+                      --float_support=fpu64 --cla_support=cla2 --vcu_support=vcu2 --tmu_support=tmu0 --fp_mode=relaxed
+                      --cla_background_task=on
+                      --diag_warning=225 --quiet --diag_suppress=10063 --diag_suppress=173 --display_error_number  
+                      -g -k --asm_listing" 
+        linkerBuildOptions="--stack_size=0x3F8 
+              --heap_size=0x200 
+              --entry_point=code_start
+              --define=RAM           
+              --warn_sections 
+              -i${CG_TOOL_ROOT}/lib
+              -i${PROJECT_ROOT}/device/driverlib/ccs/Release                           
+              -i${PROJECT_ROOT}/libraries/CLAmath 
+              -i${CG_TOOL_ROOT}/include
+              -l driverlib.lib 
+              -l cla1_math_library_datarom_fpu32_eabi.lib
+              -l rts2800_fpu32_fast_supplement_eabi.lib
+              -l libc.a
+              --reread_libs --diag_wrap=off --display_error_number 
+              --xml_link_info=${ProjName}_linkInfo.xml  
+              --rom_model" />      
+
+    <pathVariable name="C2000WARE_DLIB_ROOT" path="../../../../../driverlib/f28p65x/driverlib" scope="project" />
+    <pathVariable name="C2000WARE_ROOT" path="../../../../../" scope="project" />
+
+    <file action="copy" path="${C2000WARE_ROOT}/driverlib/f28p65x/driverlib/" targetDirectory="device/" excludeFromBuild="True"/>
+
+    <file action="copy" path="${C2000WARE_ROOT}/libraries/math/CLAmath/c28/include/CLAmath.h" 
+	                    targetDirectory="libraries/CLAmath" />
+    <file action="copy" path="${C2000WARE_ROOT}/libraries/math/CLAmath/c28/lib/cla1_math_library_datarom_fpu32_eabi.lib" 
+                        targetDirectory="libraries/CLAmath" />
+    <file action="copy" path="${C2000WARE_ROOT}/libraries/math/FPUfastRTS/c28/lib/rts2800_fpu32_fast_supplement_eabi.lib" 
+                        targetDirectory="libraries/CLAmath" />  
+
+    <file action="copy" path="../../f28p65x/drivers/device.h" targetDirectory="device" />
+    <file action="copy" path="../../f28p65x/drivers/device.c" targetDirectory="device" />
+    <file action="copy" path="../../f28p65x/drivers/driverlib.h" targetDirectory="device" />
+    <file action="copy" path="../../f28p65x/drivers/ads9327_hal.c" targetDirectory="" />
+    <file action="copy" path="../../f28p65x/drivers/ads9327_hal.h" targetDirectory="" />
+    <file action="copy" path="../../f28p65x/drivers/f28p65x_codestartbranch.asm" targetDirectory="device" />
+
+
+    <file action="copy" path="../../f28p65x/targetConfigs/TMS320F28P650DK9.ccxml" targetDirectory="targetConfigs" />
+    
+
+    
+    <file action="copy" path="../../f28p65x/cmd/28p65x_flash_lnk_shared_cpu1.cmd" targetDirectory="cmd" applicableConfigurations="CPU1_FLASH"/>
+    <file action="copy" path="../../f28p65x/cmd/28p65x_generic_ram_lnk_cpu1.cmd" targetDirectory="cmd" applicableConfigurations="CPU1_RAM"/>
+    <file action="copy" path="../../f28p65x/cmd/device.cmd" targetDirectory="cmd" applicableConfigurations="CPU1_RAM2"/>
+
+    <file action="copy" path="../../f28p65x/ads9327_settings.h" targetDirectory="" />
+    <file action="copy" path="../../f28p65x/ads9327_main.c" targetDirectory="" />
+
+
+    <file action="copy" path="../../source/ads9327.h" targetDirectory="" />
+    <file action="copy" path="../../source/ads9327.c" targetDirectory="" />
+
+    <file action="copy" path="../../source/ads9327_regmap.h" targetDirectory="" />
+
+    <file action="copy" path="../../f28p65x/debug/setupdebugenv.js" targetDirectory="" />
+
+    <file action="copy" path="../../README.md" targetDirectory="" />
+
+  </project>
+</projectSpec>
