@@ -43,29 +43,37 @@ This module is used to compute the calibration coefficients for the PGA3xx tempe
 
 import numpy as np
 
+__version__ = "1.1.0"
+
 
 class PGACoeffCalculator:
     """
-    This class implements polynomial regression using Z-score normalization and least squares regression
-    to calculate calibration coefficients for PGA3xx.
+    This class implements least squares regression to calculate calibration coefficients for PGA3xx pressure sensors.
 
-    Inputs: Temperature, Pressure, DAC Output
-    Outputs: Coefficients, Model Fit Error, Predicted DAC Outputs
+    Inputs: Temperature ADC, Pressure ADC, DAC Output matrices
+    Outputs: Polynomial coefficients, EEPROM hex values, calibration settings, model fit statistics
 
     Mathematical Foundation:
-    Uses polynomial feature engineering where DAC = Σᵢⱼ cᵢⱼ * T^i * P^j
-    - T, P: Z-score normalized temperature and pressure data
+    Uses polynomial features where DAC = Σᵢⱼ cᵢⱼ * T^i * P^j
+    - T, P: Normalized temperature and pressure data
     - cᵢⱼ: Polynomial coefficients (computed via least squares)
-    - Normalization prevents matrix conditioning issues with higher-order terms
+    - Normalization factor: 2^(adc_resolution-2)
+
+    Features:
+    - Input validation (matrix dimensions, ADC value ranges)
+    - Support for both 16-bit and 24-bit ADC resolutions
+    - Two's complement conversion for hex literals and strings
+    - Automatic gain/offset calculation with configurable offset enable
+    - Detailed calibration summary with settings table and error statistics
     """
 
     def __init__(
         self,
         cal_point: tuple[int, int],
         adc_resolution: int,
-        tad_matrix: list[list],
-        pad_matrix: list[list],
-        dac_matrix: list[list],
+        tad_matrix: list[list[int | str]],
+        pad_matrix: list[list[int | str]],
+        dac_matrix: list[list[int | str]],
     ):
         """
         Initialize the PGACoeffCalculator class.
@@ -73,113 +81,167 @@ class PGACoeffCalculator:
         Args:
             cal_point: Calibration configuration as (number temperature points, number pressure points).
             adc_resolution: ADC resolution in bits (e.g., 16, 24).
-            tad_matrix: Temperature ADC readings as hex strings.
-            pad_matrix: Pressure ADC readings as hex strings.
-            dac_matrix: DAC output values as hex strings.
+            tad_matrix: Temperature ADC readings as hex strings or integers.
+            pad_matrix: Pressure ADC readings as hex strings or integers.
+            dac_matrix: DAC output values as hex strings or integers.
 
         Raises:
-            ValueError: If cal_point exceeds 4T4P configuration limits.
-            ZeroDivisionError: If temperature or pressure data has zero range.
+            ValueError: If cal_point exceeds 4T4P configuration limits, matrix dimensions
+                       don't match cal_point, or ADC values exceed resolution range.
 
         Note:
-            Input matrices are automatically converted from hex to signed integers
-            using 24-bit word length for proper two's complement interpretation.
+            - Input matrices are validated for proper dimensions matching cal_point
+            - ADC values are validated to fit within the specified adc_resolution range
+            - Automatic two's complement conversion applied to both hex strings and integer literals
+            - Matrix elements can be hex strings ("0xFF00") or integer literals (0xFF00)
         """
         if cal_point[0] > 4 or cal_point[1] > 4:
             raise ValueError(
                 f"Device doesn't support more than 4T4P calibration. Received {cal_point[0]}T{cal_point[1]}P."
             )
 
-        # Calculate internal constants
+        # Internal constants
         self.cal_point = cal_point
+        """Calibration point configuration as (number temperature points, number pressure points)"""
         self.adc_resolution = adc_resolution
+        """ADC resolution in bits (e.g., 16, 24)"""
         self.min_code = -1 * (2 ** (adc_resolution - 1))
+        """Minimum ADC code value for given ADC resolution"""
         self.max_code = (2 ** (adc_resolution - 1)) - 1
+        """Maximum ADC code value for given ADC resolution"""
         self.normalization_factor = 2 ** (adc_resolution - 2)
-        self.eeprom_normalization_factor = self.normalization_factor * (
-            2**8 if adc_resolution == 24 else 1
-        )
+        """Normalization factor for ADC and Coefficient values"""
 
-        # Format input matrices
-        self.tad_matrix = self.convert_matrix_to_signed(tad_matrix, self.adc_resolution)
-        self.pad_matrix = self.convert_matrix_to_signed(pad_matrix, self.adc_resolution)
-        self.dac_matrix = self.convert_matrix_to_signed(dac_matrix, self.adc_resolution)
+        # Calibration settings
+        self.tadc_offset: int = 0
+        """Integer offset added to temperature ADC readings"""
+        self.tadc_gain: int = 1
+        """Integer gain applied to temperature ADC readings"""
+        self.padc_offset: int = 0
+        """Integer offset added to pressure ADC readings"""
+        self.padc_gain: int = 1
+        """Integer gain applied to pressure ADC readings"""
 
-        # Setup output matrix formatting
-        # NOTE: PGA devices require minimum of 16 coefficients (4x4 matrix) for cal_point <= 4T4P.
-        #       Output matrices >4T4P (future improvement) will still be square matrices
-        #       i.e. (1...5)T(1...5)P,...,(1...26)T(1...26)P has output matrix dimensions 5x5...26x26
-        self.output_matrix_width = np.max((4, np.max(self.cal_point)))
-        self.output_matrix_size = self.output_matrix_width**2
-        self.coefficient_map = self.generate_coefficient_map(self.output_matrix_width)
+        # Import data with validation
+        self.tadc_matrix = self.import_integer_matrix(tad_matrix, "tadc_matrix")
+        """Signed integer matrix of temperature ADC readings"""
+        self.padc_matrix = self.import_integer_matrix(pad_matrix, "padc_matrix")
+        """Signed integer matrix of pressure ADC readings"""
+        self.dac_matrix = self.import_integer_matrix(dac_matrix, "dac_matrix")
+        """Signed integer matrix of DAC output values"""
 
-        # Setup error validators
-        self.T = self.P = None
-        self.coefficients = None
-        self.rounded_eeprom_coefficients = None
+        # Initialize attributes for regression
+        self.tadc_norm: np.ndarray | None = None
+        """Normalized temperature ADC matrix (after applying offset and gain scaling)"""
+        self.padc_norm: np.ndarray | None = None
+        """Normalized pressure ADC matrix (after applying offset and gain scaling)"""
+        self.dac_norm: np.ndarray | None = None
+        """Normalized DAC matrix"""
+
+    def recommend_calibration(self, offset_enabled: bool = True) -> None:
+        """
+        Calculate optimal gain and offset values for ADC calibration based on input data range.
+
+        Args:
+            offset_enabled: Whether to enable offset correction (OFF_EN bit).
+                           If True: apply offset first, then gain (offset before gain)
+                           If False: apply gain first, then offset (gain before offset)
+
+        Sets:
+            self.offset_enabled: Stores the offset enable setting
+            self.tadc_gain, self.padc_gain: Optimal gain values to maximize ADC range usage
+            self.tadc_offset, self.padc_offset: Optimal offset values to center data
+
+        Algorithm:
+            - offset_enabled=True: Center data around zero, then apply max gain within ADC limits
+            - offset_enabled=False: Apply max gain to raw data, then center the gained data
+
+        Note:
+            All calculated values are converted to integers for hardware compatibility.
+            The optimal settings maximize the use of the available ADC range while preventing overflow.
+        """
+        self.offset_enabled = offset_enabled
+
+        tadc_max = np.max(self.tadc_matrix)
+        tadc_min = np.min(self.tadc_matrix)
+        padc_max = np.max(self.padc_matrix)
+        padc_min = np.min(self.padc_matrix)
+
+        if offset_enabled:
+            # Compute the offset value that centers the min and max values around 0
+            self.tadc_offset = -np.floor((tadc_max + tadc_min) / 2).astype(int)
+            self.padc_offset = -np.floor((padc_max + padc_min) / 2).astype(int)
+
+            # Compute the max gain that keeps the data within hardware limits
+            tadc_max_adj = np.max([np.abs(tadc_max + self.tadc_offset), np.abs(tadc_min + self.tadc_offset)])
+            self.tadc_gain = np.floor((self.max_code / tadc_max_adj)).astype(int)
+
+            padc_max_adj = np.max([np.abs(padc_max + self.padc_offset), np.abs(padc_min + self.padc_offset)])
+            self.padc_gain = np.floor((self.max_code / padc_max_adj)).astype(int)
+
+        else:
+            # Compute the max gain that keeps the data within hardware limits
+            tadc_abs_max = np.max([np.abs(tadc_max), np.abs(tadc_min)])
+            self.tadc_gain = np.floor((self.max_code / tadc_abs_max)).astype(int)
+
+            padc_abs_max = np.max([np.abs(padc_max), np.abs(padc_min)])
+            self.padc_gain = np.floor((self.max_code / padc_abs_max)).astype(int)
+
+            # Compute the offset value that centers the (gained) min and max values around 0
+            self.tadc_offset = -np.floor(self.tadc_gain * (tadc_max + tadc_min) / 2).astype(int)
+            self.padc_offset = -np.floor(self.padc_gain * (padc_max + padc_min) / 2).astype(int)
+
+        # print("-" * 80)
+        # print(f"Recommended calibration settings for OFF_EN={int(self.offset_enabled)}:")
+        # print(f"PADC Offset: {self.padc_offset}")
+        # print(f"PADC Gain: {self.padc_gain}")
+        # print(f"TADC Offset: {self.tadc_offset}")
+        # print(f"TADC Gain: {self.tadc_gain}")
 
     def normalize_data(self) -> None:
         """
-        Performs Z-score normalization on temperature and pressure data matrices.
+        Apply gain and offset scaling to input data and normalize for polynomial regression.
 
-        Flattens the 4x4 input matrices and applies Z-score normalization to temperature
-        and pressure data to prevent numerical instability during polynomial regression.
-        DAC values are normalized by the ADC full-scale range for consistent scaling.
+        Applies the calibration settings (gain/offset) determined by recommend_calibration()
+        and normalizes the data by the ADC resolution-based normalization factor.
 
-        The Z-score transformation (z = (x - mean) / std) ensures all variables have
-        mean=0 and std=1, preventing higher-order polynomial terms from dominating
-        the regression matrix and causing numerical conditioning issues.
+        Processing Steps:
+        1. Apply gain and offset scaling based on offset_enabled setting:
+           - offset_enabled=True: (data + offset) * gain
+           - offset_enabled=False: (data * gain) + offset
+        2. Validate scaled data is within ADC hardware limits
+        3. Normalize by dividing by normalization_factor (2^(adc_resolution-2))
 
-        Attributes Set:
-            T (ndarray): Z-score normalized temperature data (mean=0, std=1)
-            P (ndarray): Z-score normalized pressure data (mean=0, std=1)
-            dac_normalized (ndarray): DAC values scaled by ADC normalization factor
-            t_mean (float): Temperature mean for denormalization
-            t_std (float): Temperature standard deviation for denormalization
-            p_mean (float): Pressure mean for denormalization
-            p_std (float): Pressure standard deviation for denormalization
-            tad (ndarray): Flattened temperature ADC readings
-            pad (ndarray): Flattened pressure ADC readings
-            dac_actual (ndarray): Flattened DAC output values
+        Sets:
+            self.tadc_norm: Normalized temperature ADC data
+            self.padc_norm: Normalized pressure ADC data
+            self.dac_norm: Normalized DAC output data
 
         Raises:
-            ZeroDivisionError: If temperature or pressure data has zero standard
-                             deviation (indicating constant values across matrix)
+            ValueError: If scaled data exceeds ADC hardware limits
 
-        Notes:
-            Z-score normalization prevents matrix ill-conditioning in polynomial
-            regression by ensuring feature magnitudes are comparable across terms.
-
-        References:
-            Z-score normalization: https://spotintelligence.com/2025/02/14/z-score-normalization/
+        Note:
+            Must be called after recommend_calibration() and before calculate_regression().
+            The normalization prevents numerical issues in polynomial regression.
         """
+        if self.offset_enabled:
+            tadc_matrix_scaled = (self.tadc_matrix + self.tadc_offset) * self.tadc_gain  # type: ignore
+            padc_matrix_scaled = (self.padc_matrix + self.padc_offset) * self.padc_gain  # type: ignore
+        else:
+            tadc_matrix_scaled = (self.tadc_matrix * self.tadc_gain) + self.tadc_offset  # type: ignore
+            padc_matrix_scaled = (self.padc_matrix * self.padc_gain) + self.padc_offset  # type: ignore
 
-        # Flatten matrices
-        self.tad = np.array(
-            [val for row in self.tad_matrix for val in row], dtype=float
-        )
-        self.pad = np.array(
-            [val for row in self.pad_matrix for val in row], dtype=float
-        )
-        self.dac_actual = np.array(
-            [val for row in self.dac_matrix for val in row], dtype=float
-        )
+        # Check if any values are out of bounds
+        if np.any(tadc_matrix_scaled > self.max_code) or np.any(tadc_matrix_scaled < -self.max_code):
+            raise ValueError("TADC data exceeds hardware limits")
+        if np.any(padc_matrix_scaled > self.max_code) or np.any(padc_matrix_scaled < -self.max_code):
+            raise ValueError("PADC data exceeds hardware limits")
+        if np.any(self.dac_matrix > self.max_code) or np.any(self.dac_matrix < -self.max_code):
+            raise ValueError("DAC data exceeds hardware limits")
 
-        # calculate z-score constants
-        self.t_mean = np.mean(self.tad)
-        self.t_std = np.std(self.tad)
-        self.p_mean = np.mean(self.pad)
-        self.p_std = np.std(self.pad)
-
-        if self.t_std == 0 or self.p_std == 0:
-            raise ZeroDivisionError(
-                "Standard Deviation of TADC or PADC input matrices is 0."
-            )
-
-        self.T = (self.tad - self.t_mean) / self.t_std
-        self.P = (self.pad - self.p_mean) / self.p_std
-
-        self.dac_normalized = self.dac_actual / self.normalization_factor
+        self.tadc_norm = tadc_matrix_scaled / self.normalization_factor
+        self.padc_norm = padc_matrix_scaled / self.normalization_factor
+        self.dac_norm = self.dac_matrix / self.normalization_factor
 
     def calculate_regression(self) -> None:
         """
@@ -191,16 +253,13 @@ class PGACoeffCalculator:
         3. Formats coefficients into structured output matrix
 
         The regression model: DAC = Σᵢⱼ cᵢⱼ * T^i * P^j where:
-        - T, P are Z-score normalized temperature/pressure data
+        - T, P are normalized temperature/pressure data
         - cᵢⱼ are polynomial coefficients (computed via least squares)
         - i ∈ [0, t_deg-1], j ∈ [0, p_deg-1] based on cal_point configuration
 
         Attributes Set:
             features (list[ndarray]): Polynomial feature arrays for regression
-            feature_names (list[str]): Feature identifiers (e.g., 'T0P0', 'T1P2')
-            A_list_inputs_feature_stack (ndarray): Feature matrix for regression
             coefficients (ndarray): Raw regression coefficients (floating-point)
-            coefficients_formatted (ndarray): Coefficients arranged in output matrix
 
         Raises:
             ValueError: If normalized data is not available (normalize_data() not called)
@@ -209,7 +268,7 @@ class PGACoeffCalculator:
         Mathematical Foundation:
             Uses numpy.linalg.lstsq which solves: coefficients = (A^T A)^(-1) A^T b
             where A is the feature matrix and b is the target DAC values.
-            Z-score normalization prevents numerical instability from disparate
+            Normalization prevents numerical instability from disparate
             feature magnitudes in higher-order polynomial terms.
 
         References:
@@ -217,449 +276,330 @@ class PGACoeffCalculator:
             NumPy Least Squares: https://www.pythontutorials.net/blog/numpylinalglstsq/
         """
 
-        if self.T is None or self.P is None:
+        if self.tadc_norm is None or self.padc_norm is None or self.dac_norm is None:
             raise ValueError("Normalized data not available for regression.")
 
-        self.features, self.feature_names = self.create_polynomial_features(
-            self.T, self.P
-        )
+        # Flatten the matrices for regression
+        tadc_flat = self.tadc_norm.flatten()
+        padc_flat = self.padc_norm.flatten()
+        dac_flat = self.dac_norm.flatten()
 
-        self.A_list_inputs_feature_stack = np.column_stack(self.features)
+        # Generate polynomial features inline
+        t_deg, p_deg = self.cal_point
+        features = []
+        for i in range(t_deg):
+            for j in range(p_deg):
+                feature = (tadc_flat**i) * (padc_flat**j)
+                features.append(feature)
 
-        coefficients, residuals, rank, s = np.linalg.lstsq(
-            a=self.A_list_inputs_feature_stack, b=self.dac_normalized, rcond=None
-        )
+        # Create feature matrix and perform least squares regression
+        feature_stack = np.column_stack(features)
+        coefficients, residuals, rank, s = np.linalg.lstsq(a=feature_stack, b=dac_flat, rcond=None)
 
-        self.coefficients = coefficients
-        self.coefficients_formatted = self.format_into_matrix(
-            coefficients, self.feature_names
-        )
+        self.coeff_norm = coefficients
 
-    def calculate_eeprom_coefficients(self) -> None:
+        # Create EEPROM dictionary with integer values scaled by normalization factor as hex strings
+        eeprom_values = []
+        for coeff in coefficients:
+            scaled_coeff = int(round(coeff * self.normalization_factor))
+            hex_val = self.signed_int_to_hex(scaled_coeff)
+            eeprom_values.append(hex_val)
+
+        # Create coefficient dictionary with proper names (h0, h1, g0, g1, m0, m1, n0, n1, etc.)
+        coeff_names = []
+        coeff_vars = ["h", "g", "m", "n"]  # Standard PGA coefficient naming for up to 4P4T
+
+        for i in range(t_deg):
+            for j in range(p_deg):
+                coeff_names.append(f"{coeff_vars[j]}{i}")
+
+        self.coeff_dict_norm = dict(zip(coeff_names, coefficients))
+        self.coeff_dict_eeprom = dict(zip(coeff_names, eeprom_values))
+
+    def compute_dac_value(self, tadc_value: str | int, padc_value: str | int) -> int:
         """
-        Converts floating-point regression coefficients to fixed-point integers for EEPROM storage.
-
-        Transforms regression coefficients from floating-point to fixed-point format
-        suitable for embedded device storage and computation. The scaling factor is
-        determined by ADC resolution to maintain precision while fitting within
-        the device's integer arithmetic capabilities.
-
-        The conversion process:
-        1. Scales coefficients by eeprom_normalization_factor
-        2. Converts to 32-bit signed integers
-        3. Formats into structured output matrix
-        4. Generates hex representations for device programming
-        5. Creates internal scaled coefficients for validation
-
-        Attributes Set:
-            eeprom_coefficients_formatted (ndarray): Integer coefficients in matrix format
-            eeprom_coefficients_hex (list[str]): Hex strings for device programming
-            _eeprom_coefficients_adc_scaled (ndarray): Internal scaled coefficients for validation
-
-        Raises:
-            ValueError: If regression coefficients are not available (calculate_regression() not called)
-            OverflowError: If scaled coefficients exceed 32-bit signed integer range
-
-        Notes:
-            The EEPROM coefficients preserve the polynomial relationship while enabling
-            efficient integer arithmetic in the embedded device firmware. The hex format
-            is directly programmable into the PGA3xx device EEPROM registers.
-
-            Internal validation coefficients undergo additional hex/signed conversion
-            to simulate the exact device behavior including potential precision loss.
-        """
-        if self.coefficients is None:
-            raise ValueError("Regression data not available for conversion.")
-
-        raw_eeprom_coefficients = (
-            self.coefficients * self.eeprom_normalization_factor
-        ).astype(np.int32)
-
-        eeprom_coefficients_hex = [
-            self.signed_int_to_hex(val, self.adc_resolution)
-            for val in raw_eeprom_coefficients
-        ]
-
-        self.eeprom_hex_coefficients = self.format_into_matrix(
-            eeprom_coefficients_hex, self.feature_names
-        )
-
-        # Recalculate floating-point coefficients from truncated
-        # (24-bit) values to use for prediction + error analysis.
-        self.rounded_eeprom_coefficients = (
-            np.array(
-                [
-                    self.hex_to_signed_int(val, self.adc_resolution)
-                    for val in eeprom_coefficients_hex
-                ]
-            ).astype(np.float32)
-            / self.eeprom_normalization_factor
-        )
-
-    def validate_regression(self) -> None:
-        """
-        Validates regression accuracy using EEPROM coefficients and computes prediction error metrics.
-
-        Performs comprehensive validation of the calibration by:
-        1. Converting EEPROM coefficients back to normalized floating-point scale
-        2. Computing predicted DAC values using the polynomial model
-        3. Validating predictions are within ADC full-scale range
-        4. Calculating prediction errors in parts-per-million of full-scale range
-        5. Generating hex representations for comparison with target values
-
-        This validation simulates the exact device behavior by using integer EEPROM
-        coefficients (including any quantization effects) rather than the original
-        floating-point regression coefficients.
-
-        Error Calculation:
-            prediction_error_ppm_fsr = |DAC_actual - DAC_predicted| * 10^6 / FSR
-            where FSR = normalization_factor (half of ADC full-scale range)
-
-        Attributes Set:
-            eeprom_coefficients_adc_scaled_normalized (ndarray): EEPROM coefficients scaled back to regression units
-            dac_theoretical (ndarray): Predicted DAC values using EEPROM coefficients
-            prediction_error_ppm_fsr (ndarray): Prediction error per calibration point (ppm FSR)
-            dac_theoretical_hex (list[str]): Predicted DAC values as hex strings
-            dac_actual_hex (list[str]): Target DAC values as hex strings
-
-        Raises:
-            ValueError: If EEPROM coefficients are not available (calculate_eeprom_coefficients() not called)
-                       or if predicted values exceed ADC range (indicating poor calibration or invalid data)
-
-        Notes:
-            Range validation ensures calibration coefficients produce physically realizable
-            DAC outputs. Values outside the ADC range indicate either poor model fit,
-            invalid input data, or numerical issues in the regression calculation.
-
-            The ppm FSR metric provides a normalized error measurement independent of
-            ADC resolution, enabling comparison across different device configurations.
-        """
-        if self.rounded_eeprom_coefficients is None:
-            raise ValueError("EEPROM coefficients not available for validation.")
-
-        # calculate predicted DAC values using normalized EEPROM coefficients
-        self.dac_theoretical = (
-            self.A_list_inputs_feature_stack @ self.rounded_eeprom_coefficients
-        ) * self.normalization_factor
-
-        # check if predicted values are within ADC full-scale range
-        if np.any(self.dac_theoretical > self.max_code) or np.any(
-            self.dac_theoretical < self.min_code
-        ):
-            raise ValueError("Predicted values out of range.")
-
-        # calculate prediction error
-        prediction_error = self.dac_actual.astype(
-            np.int32
-        ) - self.dac_theoretical.astype(int)
-        self.prediction_error_ppm_fsr = (
-            np.abs(prediction_error) * 1e6 / self.normalization_factor
-        )
-
-        # create hex lists for dac values
-        self.dac_theoretical_hex = [
-            self.signed_int_to_hex(val, self.adc_resolution)
-            for val in self.dac_theoretical.astype(np.int32)
-        ]
-
-        self.dac_actual_hex = [
-            self.signed_int_to_hex(val, self.adc_resolution)
-            for val in self.dac_actual.astype(np.int32)
-        ]
-
-    def approximate_dac_value(self, temperature: str | int, pressure: str | int) -> int:
-        """
-        Predicts DAC output for a single temperature-pressure measurement pair.
-
-        Applies the calibrated polynomial model to predict the required DAC output
-        for given temperature and pressure ADC readings. Uses the same Z-score
-        normalization parameters computed during calibration to ensure consistent
-        feature scaling.
-
-        The prediction process:
-        1. Converts hex inputs to signed integers
-        2. Applies Z-score normalization using calibration statistics
-        3. Generates polynomial features for the single measurement
-        4. Computes prediction using EEPROM coefficients
-        5. Scales result back to DAC units and returns as integer
+        Compute the expected DAC value for given TADC and PADC inputs using the calibrated coefficients.
 
         Args:
-            temperature: Single temperature value (integer or hex string)
-            pressure: Single pressure value (integer or hex string)
+            tadc_value: Temperature ADC value (hex string or integer)
+            padc_value: Pressure ADC value (hex string or integer)
 
         Returns:
-            int: Predicted DAC value as signed integer
+            int: Computed DAC value as signed integer
 
         Raises:
-            ValueError: If regression coefficients are not available (regression not calculated)
-            TypeError: If temperature or pressure inputs are not valid hex strings
-
-        Examples:
-            >>> cc.approximate_dac_value("3243B3", "F585B6")
-            1638
-
-        Notes:
-            This method simulates the embedded device's calibration calculation,
-            using the same EEPROM coefficients that would be programmed into the device.
-            The prediction accuracy depends on how well the polynomial model fits
-            the calibration data and the measurement's proximity to calibration points.
+            ValueError: If coefficients are not available (calculate_regression() not called)
         """
-        if self.rounded_eeprom_coefficients is None:
-            raise ValueError("Regression coefficients not available for approximation.")
+        if self.coeff_dict_norm is None:
+            raise ValueError("Regression coefficients not available. Call calculate_regression() first.")
 
-        temperature = self.hex_to_signed_int(temperature, self.adc_resolution)
-        pressure = self.hex_to_signed_int(pressure, self.adc_resolution)
+        # Convert hex inputs to signed integers (or pass through if already integers)
+        tadc_int = self.hex_to_signed_int(tadc_value)
+        padc_int = self.hex_to_signed_int(padc_value)
 
-        # Apply same Z-score normalization used during coefficient calculation
-        T = (temperature - self.t_mean) / self.t_std
-        P = (pressure - self.p_mean) / self.p_std
+        # Apply gain and offset scaling based on offset_enabled
+        if self.offset_enabled:
+            # OFF_EN=1: apply offset first, then gain
+            tadc_scaled = (tadc_int + self.tadc_offset) * self.tadc_gain
+            padc_scaled = (padc_int + self.padc_offset) * self.padc_gain
+        else:
+            # OFF_EN=0: apply gain first, then offset
+            tadc_scaled = tadc_int * self.tadc_gain + self.tadc_offset
+            padc_scaled = padc_int * self.padc_gain + self.padc_offset
 
-        features, _ = self.create_polynomial_features(T, P)
+        # Normalize the scaled values
+        tadc_norm = tadc_scaled / self.normalization_factor
+        padc_norm = padc_scaled / self.normalization_factor
 
-        A_single_TP_feature_stack = np.array(features)
+        # Compute polynomial using coefficients
+        t_deg, p_deg = self.cal_point
+        dac_result = 0.0
 
-        dac_single_approximation = (
-            A_single_TP_feature_stack @ self.rounded_eeprom_coefficients
-        ) * self.normalization_factor
+        for i in range(t_deg):
+            for j in range(p_deg):
+                coeff_name = f"{'hgmn'[j]}{i}"
+                if coeff_name in self.coeff_dict_norm:
+                    term_value = (tadc_norm**i) * (padc_norm**j) * self.coeff_dict_norm[coeff_name]
+                    dac_result += term_value
 
-        return int(dac_single_approximation.astype(np.int32))
+        # Scale back to DAC units and return as integer
+        return int(round(dac_result * self.normalization_factor))
 
     def summarize_results(self) -> None:
         """
-        Prints a comprehensive, formatted summary of calibration results to console.
+        Print a comprehensive summary of calibration results including calibration settings,
+        polynomial coefficients, calibration point comparison, and error statistics.
+
+        Output includes:
+        - Calibration Settings table: OFF_EN, TADC/PADC gain and offset values with hex representation
+        - Coefficients table: Polynomial coefficients (h, g, n, m series) with float and EEPROM hex values
+        - Calibration Point Comparison: Expected vs computed DAC values for each calibration point
+        - Error Statistics: Maximum and mean error with ppm FSR calculations
+
+        Raises:
+            ValueError: If regression coefficients are not available (call calculate_regression() first)
+
+        Note:
+            Hex values that exceed the ADC resolution range are displayed as "OVERFLOW".
+            Coefficients are printed in ordered groups: h0-h3, g0-g3, n0-n3, m0-m3.
         """
+        if self.coeff_dict_norm is None:
+            raise ValueError("Regression must be calculated first.")
 
-        # ----------------------------------------------------------------------------
-        ## utility methods for summarize_results()
-        def print_in_chunks(
-            data, format_specifier: str = "12.3f", chunk_size: int = 4
-        ) -> None:
-            for i in range(0, len(data), chunk_size):
-                chunk = data[i : i + chunk_size]
-                formatted_chunk = [f"{x:^{format_specifier}}" for x in chunk]
-                print(" ".join(formatted_chunk))
+        print("\n" + "=" * 80)
+        print(f"CALIBRATION SUMMARY - {self.cal_point[0]}T{self.cal_point[1]}P Configuration")
+        print("=" * 80)
 
-        def format_polynomial_equation(coeffs):
-            """Format polynomial coefficients with Unicode superscripts"""
-            terms = []
-            powers = ["", "T", f"T{superscript_two}", f"T{superscript_three} "]
+        # Print calibration settings table
+        print("\nCalibration Settings:")
+        print(f"{'Setting':<20} {'Value':<12} {'EEPROM (Hex)':>14}")
+        print("-" * 48)
 
-            for i, coeff in enumerate(coeffs):
-                if coeff != 0:
-                    if i == 0:
-                        # First term: add space for positive, keep - for negative
-                        if coeff >= 0:
-                            terms.append(f" {coeff:.3e}")
-                        else:
-                            terms.append(f"{coeff:.3e}")
-                    else:
-                        # Subsequent terms: always show sign
-                        sign = " + " if coeff >= 0 else " - "
-                        terms.append(f"{sign}{abs(coeff):.3e}{middle_dot}{powers[i]}")
+        # OFF_EN setting
+        off_en_value = 1 if hasattr(self, "offset_enabled") and self.offset_enabled else 0
+        off_en_hex = f"0x{off_en_value:02X}"
+        print(f"{'OFF_EN':<20} {off_en_value:<12} {off_en_hex:>14}")
 
-            return "".join(terms) if terms else "0"
+        # TADC settings
+        try:
+            tadc_gain_hex = f"0x{self.signed_int_to_hex(self.tadc_gain)}"
+        except ValueError:
+            tadc_gain_hex = "OVERFLOW"
 
-        # ----------------------------------------------------------------------------
+        try:
+            tadc_offset_hex = f"0x{self.signed_int_to_hex(self.tadc_offset)}"
+        except ValueError:
+            tadc_offset_hex = "OVERFLOW"
 
-        print("Results:\n")
-        formatted_eeprom_coefficients = self.format_into_matrix(
-            self.rounded_eeprom_coefficients, self.feature_names
-        ).tolist()
+        print(f"{'TADC_GAIN':<20} {self.tadc_gain:<12} {tadc_gain_hex:>14}")
+        print(f"{'TADC_OFFSET':<20} {self.tadc_offset:<12} {tadc_offset_hex:>14}")
 
-        # Print table header
-        print(f"{'Coeff':<5} {'Rounded Float':>16} {'EEPROM (Hex)':>16}")
-        print("-" * 40)
+        # PADC settings
+        try:
+            padc_gain_hex = f"0x{self.signed_int_to_hex(self.padc_gain)}"
+        except ValueError:
+            padc_gain_hex = "OVERFLOW"
 
-        # Print coefficient table in grouped order (h0-h3, g0-g3, m0-m3, n0-n3)
-        coeff_groups = ["h", "g", "m", "n"]
-        for group in coeff_groups:
-            for i in range(4):
-                coeff_name = f"{group}{i}"
-                feature_name = f"T{i}P{coeff_groups.index(group)}"
-                if feature_name in self.coefficient_map:
-                    idx = self.coefficient_map[feature_name]["index"]
-                    coeff_val = formatted_eeprom_coefficients[idx]
-                    hex_val = self.eeprom_hex_coefficients[idx]
-                    print(f"{coeff_name:<5} {coeff_val:>16.3e} {'0x' + hex_val:>16}")
+        try:
+            padc_offset_hex = f"0x{self.signed_int_to_hex(self.padc_offset)}"
+        except ValueError:
+            padc_offset_hex = "OVERFLOW"
 
-        print("\nRegression Equation: DAC =")
-        superscript_two = "\u00b2"
-        superscript_three = "\u00b3"
-        middle_dot = "\u00b7"
-        h_str = format_polynomial_equation(formatted_eeprom_coefficients[0::4])
-        g_str = format_polynomial_equation(formatted_eeprom_coefficients[1::4])
-        m_str = format_polynomial_equation(formatted_eeprom_coefficients[2::4])
-        n_str = format_polynomial_equation(formatted_eeprom_coefficients[3::4])
-        max_width = max(len(h_str), len(g_str), len(m_str), len(n_str))
+        print(f"{'PADC_GAIN':<20} {self.padc_gain:<12} {padc_gain_hex:>14}")
+        print(f"{'PADC_OFFSET':<20} {self.padc_offset:<12} {padc_offset_hex:>14}")
+
+        # Print coefficients table
+        print("\nCoefficients:")
+        print(f"{'Name':<6} {'Float Value':>16} {'EEPROM (Hex)':>14}")
+        print("-" * 38)
+
+        # Print coefficients in specific order: h0,h1,h2,h3, g0,g1,g2,g3, n0,n1,n2,n3, m0,m1,m2,m3
+        coeff_order = ["h0", "h1", "h2", "h3", "g0", "g1", "g2", "g3", "n0", "n1", "n2", "n3", "m0", "m1", "m2", "m3"]
+
+        for name in coeff_order:
+            if name in self.coeff_dict_norm:
+                float_val = self.coeff_dict_norm[name]
+                hex_val = self.coeff_dict_eeprom[name]
+                print(f"{name:<6} {float_val:>16.6e}     0x{hex_val}")
+
+        # Create comprehensive comparison table
+        print("\nCalibration Point Comparison:")
+        header = f"{'Point':<7} {'TADC (Hex)':<12} {'PADC (Hex)':<12} {'Expected':<10} {'Computed':<10} {'Error':<6}"
+        print(header)
+        print("-" * len(header))
+
+        # Flatten arrays and create point labels
+        tadc_flat = self.tadc_matrix.flatten()
+        padc_flat = self.padc_matrix.flatten()
+        dac_expected_flat = self.dac_matrix.flatten()
+
+        errors = []
+        point_index = 0
+        for t in range(self.cal_point[0]):
+            for p in range(self.cal_point[1]):
+                if point_index < len(tadc_flat):
+                    point_label = f"T{t}P{p}"
+                    tadc_val = tadc_flat[point_index]
+                    padc_val = padc_flat[point_index]
+                    expected_val = dac_expected_flat[point_index]
+
+                    # Use the dedicated compute_dac_value function (uses rounded coefficients)
+                    computed_val = self.compute_dac_value(int(tadc_val), int(padc_val))
+
+                    tadc_hex = f"0x{self.signed_int_to_hex(tadc_val)}"
+                    padc_hex = f"0x{self.signed_int_to_hex(padc_val)}"
+                    expected_hex = f"0x{self.signed_int_to_hex(expected_val)}"
+                    computed_hex = f"0x{self.signed_int_to_hex(computed_val)}"
+                    error = abs(expected_val - computed_val)
+                    errors.append(error)
+
+                    print(
+                        f"{point_label:<7} {tadc_hex:<12} {padc_hex:<12} {expected_hex:<10} {computed_hex:<10} {error:<6}"
+                    )
+                    point_index += 1
+
+        # Calculate and print error statistics
+        max_error = max(errors) if errors else 0
+        mean_error = sum(errors) / len(errors) if errors else 0
+
+        print("\nError Statistics:")
+        print(f"  Max Error:   {max_error:>6} codes  ({max_error * 1e6 / self.normalization_factor:>6.1f} ppm FSR)")
         print(
-            f" ({h_str:<{max_width}}) +\n ({g_str:<{max_width}}) {middle_dot} P +\n ({m_str:<{max_width}}) {middle_dot} P{superscript_two} +\n ({n_str:<{max_width}}) {middle_dot} P{superscript_three}"
+            f"  Mean Error:  {mean_error:>6.2f} codes  ({mean_error * 1e6 / self.normalization_factor:>6.1f} ppm FSR)"
         )
-
-        print("\nRequested DAC Values (0x):")
-        print_in_chunks(
-            self.dac_actual_hex, format_specifier="12", chunk_size=self.cal_point[1]
-        )
-
-        print("\nPredicted DAC Values (0x):")
-        print_in_chunks(
-            self.dac_theoretical_hex,
-            format_specifier="12",
-            chunk_size=self.cal_point[1],
-        )
-
-        print("\nPrediction Error: (ppmFSR)")
-        print_in_chunks(
-            self.prediction_error_ppm_fsr.tolist(),
-            format_specifier="12.3f",
-            chunk_size=self.cal_point[1],
-        )
-
-    #### COEFF CALC HELPERS ####
-    def generate_coefficient_map(self, max_size: int) -> dict:
-        """
-        Generates a mapping between polynomial feature names and coefficient variables.
-
-        This method creates a structured mapping that associates polynomial terms
-        (e.g., "T0P0", "T1P2") with their corresponding coefficient variable names
-        (e.g., "h0", "n2") and matrix indices. This mapping is essential for
-        formatting coefficients into the expected output matrix structure.
-
-        The coefficient naming follows the convention:
-        - First 4 columns: h, g, n, m (traditional PGA naming)
-        - Additional columns: remaining alphabet letters (excluding h, g, n, m)
-        - Rows indicated by subscript numbers (e.g., h0, h1, h2, h3)
-
-        Args:
-            max_size (int): Maximum matrix dimension (supports up to 26x26 due to alphabet limit)
-
-        Returns:
-            dict: Mapping of feature names to coefficient info containing:
-                - 'index': Linear index in flattened output matrix
-                - 'var': Coefficient variable name (e.g., "h0", "g2", "n1")
-
-        Note:
-            Maximum supported matrix size is 26x26 i.e. 26T,26P due to alphabet constraints.
-        """
-        excluded = {"h", "g", "m", "n"}
-        available_vars = [
-            chr(i) for i in range(ord("a"), ord("z") + 1) if chr(i) not in excluded
-        ]
-        # Use traditional h,g,n,m for first 4 columns, then remaining letters
-        coeff_vars = ["h", "g", "m", "n"] + available_vars[
-            : self.output_matrix_width - 4
-        ]
-
-        formatted_matrix_map: dict = {}
-        t_max, p_max = max_size, max_size
-
-        for i in range(t_max):
-            for j in range(p_max):
-                feature_name = f"T{i}P{j}"
-                index = i * t_max + j
-                coeff_var = f"{coeff_vars[j]}{i}"
-                formatted_matrix_map[feature_name] = {"index": index, "var": coeff_var}
-        return formatted_matrix_map
-
-    def format_into_matrix(self, values_to_format, feature_names) -> np.ndarray:
-        """
-        Formats coefficient values into a structured output matrix.
-
-        This method takes coefficient values and their corresponding feature names
-        and arranges them into the required output matrix format using the
-        coefficient mapping. Unused positions in the matrix are filled with zeros.
-
-        Args:
-            values_to_format (array-like): Coefficient values to be formatted
-            feature_names (list[str]): List of polynomial feature names corresponding to values
-
-        Returns:
-            ndarray: Formatted coefficient matrix with values placed according to
-                    the coefficient mapping and unused positions filled with zeros
-        """
-        # Preserve input dtype instead of forcing float
-        input_array = np.asarray(values_to_format)
-        formatted = np.zeros(self.output_matrix_size, dtype=input_array.dtype)
-        for i, key in enumerate(feature_names):
-            index = self.coefficient_map[key]["index"]
-            formatted[index] = values_to_format[i]
-        return formatted
-
-    def create_polynomial_features(self, T, P) -> tuple[list, list]:
-        """
-        Creates polynomial features for multivariate regression based on calibration configuration.
-
-        This method generates polynomial terms of the form T^i * P^j where i ranges from
-        0 to t_deg-1 and j ranges from 0 to p_deg-1, based on the calibration point
-        configuration (t_deg, p_deg). Each combination creates a feature for the
-        regression model.
-
-        Args:
-            T (array-like): Normalized temperature data
-            P (array-like): Normalized pressure data
-
-        Returns:
-            tuple: Contains:
-                - features (list[ndarray]): List of polynomial feature arrays
-                - feature_names (list[str]): Corresponding feature names (e.g., "T0P0", "T1P2")
-
-        Example:
-            For cal_point=(2, 3), generates features:
-            T0P0 (1), T0P1 (P), T0P2 (P²), T1P0 (T), T1P1 (T*P), T1P2 (T*P²)
-
-        Note:
-            Features are generated in row-major order, matching the coefficient matrix organization.
-        """
-        t_deg, p_deg = self.cal_point
-        features = []
-        feature_names = []
-        for i in range(t_deg):
-            for j in range(p_deg):
-                feature_names.append(f"T{i}P{j}")
-                feature = (T**i) * (P**j)
-                features.append(feature)
-
-        return (features, feature_names)
+        print("")
 
     #### DATA CONVERSION HELPERS ####
-    def hex_to_signed_int(self, hex_value: str | int, word_length: int = 16) -> int:
-        # Convert hex value to integer
-        if isinstance(hex_value, str):
-            unsigned_int = int(hex_value, 16)
-        elif isinstance(hex_value, int):
-            unsigned_int = hex_value
-        else:
-            raise TypeError("hex_value must be a hex string or an integer.")
 
-        # Calculate the maximum value for the given word length
-        max_value = (1 << (word_length - 1)) - 1
+    def import_integer_matrix(self, matrix: list[list[int | str]], matrix_name: str) -> np.ndarray:
+        """
+        Convert list[list[int]] to np.ndarray with signed integers using two's complement conversion.
 
-        # Check if the most significant bit (MSB) is set
-        if unsigned_int > max_value:
-            # Subtract 2^word_length to get signed value
-            signed_int = unsigned_int - (1 << word_length)
-        else:
-            signed_int = unsigned_int
+        Args:
+            matrix: Input matrix as list of lists
+            matrix_name: Name of the matrix for error reporting
 
-        return signed_int
+        Returns:
+            np.ndarray: Validated signed integer matrix
 
-    def convert_matrix_to_signed(self, matrix, word_length=24) -> list:
+        Raises:
+            ValueError: If matrix dimensions don't match cal_point or values exceed ADC range
+        """
+        # Validate matrix dimensions match cal_point configuration
+        expected_rows = self.cal_point[0]  # Temperature points
+        expected_cols = self.cal_point[1]  # Pressure points
+
+        if len(matrix) != expected_rows:
+            raise ValueError(
+                f"{matrix_name} has {len(matrix)} rows but cal_point=({self.cal_point[0]}, {self.cal_point[1]}) requires {expected_rows} rows"
+            )
+
+        for i, row in enumerate(matrix):
+            if len(row) != expected_cols:
+                raise ValueError(
+                    f"{matrix_name} row {i} has {len(row)} columns but cal_point=({self.cal_point[0]}, {self.cal_point[1]}) requires {expected_cols} columns"
+                )
+
+        # Convert and validate ADC values
         signed_matrix = []
-        for row in matrix:
-            signed_row = [
-                self.hex_to_signed_int(hex_val, word_length) for hex_val in row
-            ]
-            signed_matrix.append(signed_row)
-        return signed_matrix
+        for i, row in enumerate(matrix):
+            signed_row = []
+            for j, val in enumerate(row):
+                signed_val = self.hex_to_signed_int(val)
 
-    def signed_int_to_hex(self, value, bits: int = 32) -> str:
-        padding = int(bits / 4)
+                # Only validate ADC range for TADC and PADC matrices (not DAC output)
+                if matrix_name in ["tadc_matrix", "padc_matrix"]:
+                    if signed_val < self.min_code or signed_val > self.max_code:
+                        raise ValueError(
+                            f"{matrix_name}[{i}][{j}] = {signed_val} exceeds {self.adc_resolution}-bit ADC range [{self.min_code}, {self.max_code}]"
+                        )
+
+                signed_row.append(signed_val)
+            signed_matrix.append(signed_row)
+
+        return np.asarray(signed_matrix, dtype=np.int32)
+
+    def hex_to_signed_int(self, hex_string_or_int: str | int) -> int:
+        """
+        Convert hex string or integer to signed integer using two's complement conversion.
+
+        Args:
+            hex_string_or_int: Hex string (e.g., "FF00") or integer value (e.g., 0xFF00)
+
+        Returns:
+            int: Signed integer value using the instance's adc_resolution for bit width
+
+        Note:
+            Uses self.adc_resolution to determine the bit width for two's complement conversion.
+            Both hex strings and integer literals are converted using the same bit width.
+        """
+        if isinstance(hex_string_or_int, str):
+            # Convert hex string and apply two's complement conversion
+            unsigned_int = int(hex_string_or_int, 16)
+            sign_bit = 1 << (self.adc_resolution - 1)
+            return unsigned_int - (1 << self.adc_resolution) if unsigned_int >= sign_bit else unsigned_int
+        elif isinstance(hex_string_or_int, int):
+            # Apply two's complement conversion for integers that might be unsigned
+            unsigned_int = hex_string_or_int
+            sign_bit = 1 << (self.adc_resolution - 1)
+            return unsigned_int - (1 << self.adc_resolution) if unsigned_int >= sign_bit else unsigned_int
+        else:
+            raise TypeError("hex_string_or_int must be a hex string or an integer.")
+
+    def signed_int_to_hex(self, value) -> str:
+        """
+        Convert a signed integer to hex string using the instance's ADC resolution.
+
+        Args:
+            value: Signed integer value to convert
+
+        Returns:
+            str: Hex string (without 0x prefix) with proper padding for adc_resolution
+
+        Raises:
+            ValueError: If value doesn't fit in the adc_resolution bit range
+
+        Note:
+            Uses self.adc_resolution to determine bit width and hex string padding.
+            Negative values are converted using two's complement representation.
+        """
+        # Check if value fits in the specified bit width
+        min_val = -(1 << (self.adc_resolution - 1))
+        max_val = (1 << (self.adc_resolution - 1)) - 1
+
+        if value < min_val or value > max_val:
+            raise ValueError(
+                f"Value {value} does not fit in {self.adc_resolution}-bit signed integer range [{min_val}, {max_val}]"
+            )
+
+        padding = int(self.adc_resolution / 4)
         if value < 0:
-            value = (1 << bits) + value  # convert to 2's complement
+            value = (1 << self.adc_resolution) + value  # convert to 2's complement
         return hex(value)[2:].upper().zfill(padding)
 
 
 if __name__ == "__main__":
-    # example 4T4P data
+    # 4T4P data format:
     #      P0     P1     P2     P3
     # T0  [T0P0   T0P1   T0P2   T0P3],
     # T1  [T1P0   T1P1   T1P2   T1P3],
@@ -688,21 +628,23 @@ if __name__ == "__main__":
     ]
 
     cc = PGACoeffCalculator(
-        cal_point=(4, 4),
-        adc_resolution=24,
+        cal_point=(4, 4),  # 4T4P
+        adc_resolution=24,  # Use 24 for PGA305, 16 for PGA300
         tad_matrix=tadc,
         pad_matrix=padc,
         dac_matrix=dac,
     )
+
+    cc.recommend_calibration(offset_enabled=False)
+
+    # (OPTIONAL) Override calibration settings here...
+    # cc.tadc_gain = 1
+    # cc.padc_gain = 1
+
     cc.normalize_data()
     cc.calculate_regression()
-    cc.calculate_eeprom_coefficients()
-    cc.validate_regression()
     cc.summarize_results()
 
-    print("\n === Example single value approximation ===")
-    T, P = 0x3243B3, 0xF585B6
-    dac_output = cc.approximate_dac_value(T, P)
-    print(
-        f"For T = 0x{T:06X} and P = 0x{P:06X}, the resulting DAC output = 0x{dac_output:06X}\n"
-    )
+    # To test the DAC output for different TADC and PADC values:
+    # dac_output = cc.compute_dac_value(tadc_value=0x3243B3, padc_value=0xF585B6)
+    # print(f"DAC output: {dac_output} (Hex: 0x{cc.signed_int_to_hex(dac_output)})")

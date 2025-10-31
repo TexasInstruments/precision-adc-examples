@@ -32,7 +32,7 @@ pipx run pga_coefficient_calculator.py
 ```
 
 ### Manual installation and execution:
-To install the depedencies into your enviromnment:
+To install the dependencies into your enviromnment:
 
 **Using pip:**
 It is recommended to first create a virtual environment. Refer to [Install packages in a virtual environment using pip and venv](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/) for instructions.
@@ -91,81 +91,93 @@ dac = [
     [0x666, 0x1FFF, 0x3998, 0x3FFF],
 ]
 
-# Compute coefficients  
 cc = PGACoeffCalculator(
-    cal_point=(4, 4),   # (T, P)
-    adc_resolution=24,
+    cal_point=(4, 4),  # 4T4P
+    adc_resolution=24,  # Use 24 for PGA305, 16 for PGA300
     tad_matrix=tadc,
     pad_matrix=padc,
     dac_matrix=dac,
 )
+cc.recommend_calibration(offset_enabled=False)
+
+# (OPTIONAL) Override calibration settings here...
+# cc.tadc_gain = 1
+# cc.padc_gain = 1
+
 cc.normalize_data()
 cc.calculate_regression()
-cc.validate_regression()
-cc.calculate_eeprom_coefficients()
 cc.summarize_results()
 
-# Testing other
-print("\n === Example single value approximation ===")
-T, P = 0x3243B3, 0xF585B6
-print(f"For T = 0x{T} and P = 0x{P}, DAC = 0x{cc.approximate_dac_value(T, P)}\n")
+# To test the DAC output for different TADC and PADC values:
+dac_output = cc.compute_dac_value(tadc_value=0x3243B3, padc_value=0xF585B6)
+print(f"DAC output: {dac_output} (Hex: 0x{cc.signed_int_to_hex(dac_output)})")
 ```
 
 #### Output example
 
-The algorithm solves the polynomial equation to find coefficients that result in output DAC values that closely match with the desired output values for the specified input temperature and pressure combinations. Additionally, the script shows the equivalent 24-bit hex values to write to the device's EEPROM and the estimated error after rounding.
+The algorithm solves the polynomial equation to find coefficients that result in output DAC values that closely match with the desired output values for the specified input temperature and pressure combinations and shows the equivalent hex values to write to the device's EEPROM.
 
 ```
-Results:
+================================================================================
+CALIBRATION SUMMARY - 4T4P Configuration
+================================================================================
 
-Coeff    Rounded Float     EEPROM (Hex)
-----------------------------------------
-h0           2.851e-03         0x2EB585
-h1           1.164e-04         0x01E85C
-h2           4.757e-05         0x00C787
-h3          -5.314e-06         0xFFE9B6
-g0           1.535e-03         0x1924F0
-g1           1.804e-04         0x02F4BD
-g2          -3.781e-05         0xFF616C
-g3          -2.751e-06         0xFFF476
-m0          -4.704e-04         0xF84B0B
-m1          -1.726e-04         0xFD2BE7
-m2          -2.948e-05         0xFF8455
-m3          -3.183e-06         0xFFF2A6
-n0          -6.533e-05         0xFEEDFC
-n1          -2.988e-05         0xFF82A9
-n2          -6.102e-06         0xFFE668
-n3          -1.756e-06         0xFFF8A2
+Calibration Settings:
+Setting              Value          EEPROM (Hex)
+------------------------------------------------
+OFF_EN               0                      0x00
+TADC_GAIN            1                  0x000001
+TADC_OFFSET          -4847760           0xB60770
+PADC_GAIN            1                  0x000001
+PADC_OFFSET          -2517601           0xD9959F
 
-Regression Equation: DAC =
- ( 2.851e-03 + 1.164e-04·T + 4.757e-05·T² - 5.314e-06·T³ ) +
- ( 1.535e-03 + 1.804e-04·T - 3.781e-05·T² - 2.751e-06·T³ ) · P +
- (-4.704e-04 - 1.726e-04·T - 2.948e-05·T² - 3.183e-06·T³ ) · P² +
- (-6.533e-05 - 2.988e-05·T - 6.102e-06·T² - 1.756e-06·T³ ) · P³
+Coefficients:
+Name        Float Value   EEPROM (Hex)
+--------------------------------------
+h0         2.997735e-03     0x00311D
+h1         4.607823e-04     0x00078D
+h2         4.627157e-04     0x000795
+h3        -2.018772e-04     0xFFFCB1
+g0         2.943026e-03     0x003038
+g1         9.340898e-04     0x000F4E
+g2        -9.722807e-04     0xFFF012
+g3        -2.447421e-04     0xFFFBFD
+n0        -5.561416e-04     0xFFF6E3
+n1        -8.377596e-04     0xFFF246
+n2        -5.881312e-04     0xFFF65D
+n3        -5.174212e-04     0xFFF786
+m0        -2.047170e-03     0xFFDE76
+m1        -2.499748e-03     0xFFD70B
+m2        -1.423864e-03     0xFFE8AC
+m3        -5.351629e-04     0xFFF73B
 
-Requested DAC Values (0x):
-   000666       001FFF       003998       003FFF
-   000666       001FFF       003998       003FFF
-   000666       001FFF       003998       003FFF
-   000666       001FFF       003998       003FFF
+Calibration Point Comparison:
+Point   TADC (Hex)   PADC (Hex)   Expected   Computed   Error
+--------------------------------------------------------------
+T0P0    0x3243B3     0xF585B6     0x000666   0x000666   0
+T0P1    0x324991     0x1146C8     0x001FFF   0x001FFF   0
+T0P2    0x324B34     0x397173     0x003998   0x003998   0
+T0P3    0x3247F2     0x574F0C     0x003FFF   0x003FFF   0
+T1P0    0x38C14B     0xF8434C     0x000666   0x000666   0
+T1P1    0x38CD8B     0x125217     0x001FFF   0x001FFF   0
+T1P2    0x38D8ED     0x38020D     0x003998   0x003998   0
+T1P3    0x38D326     0x5411B3     0x003FFF   0x003FFF   0
+T2P0    0x53A5DC     0xFE9E3E     0x000666   0x000666   0
+T2P1    0x53C289     0x1328D1     0x001FFF   0x001FFF   0
+T2P2    0x53E7A3     0x30FDB3     0x003998   0x003998   0
+T2P3    0x5408B2     0x474B08     0x003FFF   0x003FFF   0
+T3P0    0x619158     0xFFF43F     0x000666   0x000666   0
+T3P1    0x619E32     0x125D8A     0x001FFF   0x001FFF   0
+T3P2    0x61A6D2     0x2D2411     0x003998   0x003998   0
+T3P3    0x61AD6D     0x4134DA     0x003FFF   0x003FFF   0
 
-Predicted DAC Values (0x):
-   000665       001FFE       003997       003FFE
-   000665       001FFE       003997       003FFE
-   000665       001FFE       003997       003FFF
-   000665       001FFE       003998       003FFF
-
-Prediction Error: (ppmFSR)
-   0.238        0.238        0.238        0.238
-   0.238        0.238        0.238        0.238
-   0.238        0.238        0.238        0.000
-   0.238        0.238        0.000        0.000
-
- === Example single value approximation ===
-For T = 0x3243B3 and P = 0xF585B6, the resulting DAC output = 0x000665
+Error Statistics:
+  Max Error:        0 codes  (   0.0 ppm FSR)
+  Mean Error:    0.00 codes  (   0.0 ppm FSR)
 ```
 
 
 ## Troubleshooting
 
 - **Import errors**: Ensure python dependencies are installed and the virtual environment has been activated (if applicable)
+- **Data formatting**: Ensure that input matrices match the specified configuration (e.g. cal_point=(4, 4)) and that data does not exceed specifed ADC resolution.
