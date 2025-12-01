@@ -601,7 +601,7 @@ static uint8_t buildSPIarray(uint8_t byte1, uint8_t byte2)
     uint8_t i = 0;  // byte index
 
     if (STATUS_ENABLED) { dataTx[i++] = 0x00; }         // don't care
-    if (RESOLUTION_IS_16_BIT) { dataTx[i++] = 0x00; }   // don't care
+    if (!RESOLUTION_IS_16_BIT) { dataTx[i++] = 0x00; }   // don't care
     dataTx[i++] = byte1;    // command byte 1
     dataTx[i++] = byte2;    // command byte 2
     if (SPI_CRC_ENABLED)
