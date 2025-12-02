@@ -468,6 +468,10 @@ void enableRegisterMapCrc(bool enable)
     // Compute and update MAIN_CRC
     uint8_t crc = CRC8_INITIAL_SEED;
     crc = getCRC8(&registerMap[DEV_ID_ADDRESS], 2, crc);    // registers 0h and 1h
+
+    // pre-enable CONFIG3_REG_CRC_MASK, this reg 08h is used in CRC calculation. 
+    registerMap[CONFIG3_ADDRESS] |= CONFIG3_REG_CRC_MASK;
+    
     crc = getCRC8(&registerMap[MUX_ADDRESS], 13, crc);      // registers 5h to 11h (skip 2h to 4h)
     writeSingleRegister(MAIN_CRC_ADDRESS, crc);
 
