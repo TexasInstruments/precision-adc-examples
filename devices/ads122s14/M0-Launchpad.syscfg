@@ -1,0 +1,58 @@
+/**
+ * These arguments were used when this file was generated. They will be automatically applied on subsequent loads
+ * via the GUI or CLI. Run CLI with '--help' for additional information on how to override these arguments.
+ * @cliArgs --board "/ti/boards/LP_MSPM0L1306" --product "mspm0_sdk@2.08.00.03"
+ * @v2CliArgs --board "/ti/boards/LP_MSPM0L1306" --product "mspm0_sdk@2.08.00.03"
+ * @versions {"tool":"1.25.0+4268"}
+ */
+
+/**
+ * Import the modules used in this configuration.
+ */
+const I2C    = scripting.addModule("/ti/driverlib/I2C", {}, false);
+const I2C1   = I2C.addInstance();
+const SPI    = scripting.addModule("/ti/driverlib/SPI", {}, false);
+const SPI1   = SPI.addInstance();
+const SYSCTL = scripting.addModule("/ti/driverlib/SYSCTL");
+
+/**
+ * Write custom configuration values to the imported modules.
+ */
+I2C1.$name                     = "I2C_0";
+I2C1.profile                   = "CONFIG_PROFILE_1";
+I2C1.peripheral.$assign        = "I2C0";
+I2C1.peripheral.sdaPin.$assign = "boosterpack.10";
+I2C1.peripheral.sclPin.$assign = "boosterpack.9";
+I2C1.sdaPinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric4";
+I2C1.sclPinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric5";
+scripting.suppress("Actual bus speed differs from requested\\. Try using a                            different clock source or adjust bus speed if needed\\.                            See detailed help\\.", I2C1, "basicControllerBusSpeedArray");
+
+const Board                       = scripting.addModule("/ti/driverlib/Board", {}, false);
+Board.peripheral.$assign          = "DEBUGSS";
+Board.peripheral.swclkPin.$assign = "boosterpack.13";
+Board.peripheral.swdioPin.$assign = "boosterpack.17";
+
+SPI1.$name                      = "SPI_0";
+SPI1.phase                      = "1";
+SPI1.targetBitRate              = 4000000;
+SPI1.chipSelect                 = ["3"];
+SPI1.sclkPinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric0";
+SPI1.mosiPinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric1";
+SPI1.misoPinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric2";
+SPI1.cs3PinConfig.$name         = "ti_driverlib_gpio_GPIOPinGeneric8";
+SPI1.peripheral.sclkPin.$assign = "boosterpack.7";
+SPI1.peripheral.mosiPin.$assign = "boosterpack.15";
+SPI1.peripheral.misoPin.$assign = "boosterpack.14";
+SPI1.peripheral.cs3Pin.$assign  = "boosterpack.12";
+
+SYSCTL.clockTreeEn = true;
+
+const ProjectConfig              = scripting.addModule("/ti/project_config/ProjectConfig", {}, false);
+ProjectConfig.migrationCondition = true;
+
+/**
+ * Pinmux solution for unlocked pins/peripherals. This ensures that minor changes to the automatic solver in a future
+ * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
+ * re-solve from scratch.
+ */
+SPI1.peripheral.$suggestSolution = "SPI0";
