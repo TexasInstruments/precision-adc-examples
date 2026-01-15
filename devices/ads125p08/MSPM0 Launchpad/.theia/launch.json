@@ -1,0 +1,24 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "CCS Debug",
+            "type": "ccs-debug",
+            "request": "launch"
+        },
+        {
+            "name": "CCS Debug",
+            "type": "ccs-debug",
+            "request": "launch"
+        },
+        {
+            "name": "ADS125P08_MSPM0L1306_code_example",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ADS125P08_MSPM0L1306_code_example",
+                "resourceId": "/ADS125P08_MSPM0L1306_code_example"
+            }
+        }
+    ]
+}
