@@ -1,0 +1,22 @@
+{
+  "folders": [
+    {
+      "path": ""
+    }
+  ],
+  "settings": {},
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "ft_plat_TI_io-link",
+        "type": "ccs-debug",
+        "request": "launch",
+        "projectInfo": {
+          "name": "ft_plat_TI_io-link",
+          "resourceId": "/ft_plat_TI_io-link"
+        }
+      }
+    ]
+  }
+}
