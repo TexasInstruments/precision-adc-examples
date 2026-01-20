@@ -1,0 +1,30 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "ADS125P08_MSPM0L1306_code_example",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ADS125P08_MSPM0L1306_code_example",
+                "resourceId": "/ADS125P08_MSPM0L1306_code_example"
+            },
+            "debuggerSettings": {
+                "targetConfigs/MSPM0L1306.ccxml": {
+                    "Texas Instruments XDS110 USB Debug Probe/CORTEX_M0P": {
+                        "data": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n<PropertyValues/>\n"
+                    }
+                }
+            }
+        },
+        {
+            "name": "ADS125P08_MSPM0L1306_code_example (1)",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ADS125P08_MSPM0L1306_code_example",
+                "resourceId": "/ADS125P08_MSPM0L1306_code_example/main_nortos.c"
+            }
+        }
+    ]
+}

@@ -1,0 +1,66 @@
+/**
+ * These arguments were used when this file was generated. They will be automatically applied on subsequent loads
+ * via the GUI or CLI. Run CLI with '--help' for additional information on how to override these arguments.
+ * @cliArgs --device "MSPM0L130X" --part "Default" --package "VQFN-32(RHB)" --product "mspm0_sdk@2.08.00.03"
+ * @v2CliArgs --device "MSPM0L1306" --package "VQFN-32(RHB)" --product "mspm0_sdk@2.08.00.03"
+ * @versions {"tool":"1.25.0+4268"}
+ */
+
+/**
+ * Import the modules used in this configuration.
+ */
+const Board  = scripting.addModule("/ti/driverlib/Board");
+const GPIO   = scripting.addModule("/ti/driverlib/GPIO", {}, false);
+const GPIO1  = GPIO.addInstance();
+const GPIO2  = GPIO.addInstance();
+const SPI    = scripting.addModule("/ti/driverlib/SPI", {}, false);
+const SPI1   = SPI.addInstance();
+const SYSCTL = scripting.addModule("/ti/driverlib/SYSCTL");
+
+/**
+ * Write custom configuration values to the imported modules.
+ */
+
+GPIO1.$name                          = "GPIO_LEDS";
+GPIO1.associatedPins[0].$name        = "USER_LED_1";
+GPIO1.associatedPins[0].initialValue = "SET";
+GPIO1.associatedPins[0].pin.$assign  = "PA0";
+
+GPIO2.$name                               = "GPIO_GRP_0";
+GPIO2.port                                = "PORTA";
+GPIO2.associatedPins.create(2);
+GPIO2.associatedPins[0].$name             = "DRDYn";
+GPIO2.associatedPins[0].direction         = "INPUT";
+GPIO2.associatedPins[0].ioStructure       = "SD";
+GPIO2.associatedPins[0].interruptEn       = true;
+GPIO2.associatedPins[0].polarity          = "FALL";
+GPIO2.associatedPins[0].interruptPriority = "0";
+GPIO2.associatedPins[0].pin.$assign       = "PA22";
+GPIO2.associatedPins[1].$name             = "CSn";
+GPIO2.associatedPins[1].initialValue      = "SET";
+GPIO2.associatedPins[1].pin.$assign       = "PA23";
+
+SPI1.$name                      = "SPI_0";
+SPI1.phase                      = "1";
+SPI1.chipSelect                 = ["3"];
+SPI1.targetBitRate              = 16000000;
+SPI1.dataSize                   = 16;
+SPI1.frameFormat                = "MOTO3";
+SPI1.sclkPinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric0";
+SPI1.mosiPinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric1";
+SPI1.misoPinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric2";
+SPI1.peripheral.sclkPin.$assign = "PA6";
+SPI1.peripheral.mosiPin.$assign = "PA5";
+SPI1.peripheral.misoPin.$assign = "PA4";
+
+SYSCTL.clockTreeEn = true;
+
+/**
+ * Pinmux solution for unlocked pins/peripherals. This ensures that minor changes to the automatic solver in a future
+ * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
+ * re-solve from scratch.
+ */
+Board.peripheral.$suggestSolution          = "DEBUGSS";
+Board.peripheral.swclkPin.$suggestSolution = "PA20";
+Board.peripheral.swdioPin.$suggestSolution = "PA19";
+SPI1.peripheral.$suggestSolution           = "SPI0";
