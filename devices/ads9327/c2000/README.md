@@ -4,8 +4,8 @@ ADS9327-C2000-EXAMPLE-CODE
 This is an SPI communication example for the [ADS9327](https://www.ti.com/product/ADS9327) and [C2000&trade; MCU (F28P65x)](https://www.ti.com/product/TMS320F28P650DK). The code loads the test pattern register for ADC-A with 0xABCD and the test pattern register for ADC-B with 0xEF12. The test pattern data is then output by the ADC in either 1-lane mode or 4-lane mode, depending on user configured macro.
 
 ## Setup Instructions
-- To use this code, make sure you have installed [Code Composer Studio&trade; (CCS)](https://www.ti.com/tool/CCSTUDIO) v20.0.0 or later and [C2000Ware](https://www.ti.com/tool/C2000WARE) (5.04)
-- Create a new directory in `C2000Ware_5_04_00_00\examples\demos\`, we'll name it `ADS9327_F28P65X` for referene.
+- To use this code, make sure you have installed [Code Composer Studio&trade; (CCS)](https://www.ti.com/tool/CCSTUDIO) (v20.0.0 or later) and [C2000Ware](https://www.ti.com/tool/C2000WARE) (v5.04.00.00)
+- Create a new directory in `C2000Ware_5_04_00_00\examples\demos\`, we'll name it `ADS9327_F28P65X` for reference.
 - Copy the `f28p65x` and `source` folders to the new directory. e.g.
   - `C2000Ware_5_04_00_00\examples\demos\ADS9327_F28P65X\f28p65x`
   - `C2000Ware_5_04_00_00\examples\demos\ADS9327_F28P65X\source`
