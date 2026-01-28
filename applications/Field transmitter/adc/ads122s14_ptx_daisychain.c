@@ -752,7 +752,7 @@ uart_printf("Starting Manufacturing Test: \r\n Result:\r\n");
                         uart_printf("\nACTION: Communication test failed, rerun test\r\n\tIf test fails again discard unit\r\n");
                         }}
 
-
+		init_ADCs();
 
         return STATUS_OK;
     }
