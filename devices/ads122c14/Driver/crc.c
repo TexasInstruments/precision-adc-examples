@@ -1,5 +1,5 @@
 /**
- * \copyright Copyright (C) 2021 Texas Instruments Incorporated - http://www.ti.com/
+ * \copyright Copyright (C) 2025 Texas Instruments Incorporated - http://www.ti.com/
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
@@ -31,7 +31,7 @@
  *
  */
 
-#include <evm/crc.h>
+#include <Driver/crc.h>
 
 
 //*****************************************************************************

@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "ADS122S14_MSPM0L1306_code_example",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ADS122S14_MSPM0L1306_code_example",
+                "resourceId": "/ADS122S14_MSPM0L1306_code_example"
+            },
+            "connections": [
+                {
+                    "name": "Texas Instruments XDS110 USB Debug Probe"
+                }
+            ]
+        }
+    ]
+}

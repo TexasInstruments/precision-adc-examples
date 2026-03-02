@@ -42,7 +42,7 @@
 //  9) stop conversions and powerdown. 
 //---------------------------------------------------------------------------//
 
-#include "evm/ads122y1x.h"
+#include "evm/ads122s1x.h"
 #include "ti/driverlib/m0p/dl_core.h"
 #include "ti_msp_dl_config.h"
 #include "evm/hal.h"

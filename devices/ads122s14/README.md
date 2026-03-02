@@ -11,7 +11,6 @@ The following example configures the SPI as a Controller and communicates with a
   6) Collect adcNumSamples # of samples
   7) Stop conversions and powerdown. 
 
-note: additional product family variants are supported to enable useage with I2C and 16-bit product variants. eg. ADS122C14, ADS112S14, ADS112C14, etc. 
 
 ## Project structure
 ```
@@ -61,7 +60,7 @@ void              enableRegisterMapCrc(bool enable);
 bool              isValidCrcOut(void); 
 ```
 ## Launchpads and EMVs used
-This example uses the [MSPM0L1306](https://www.ti.com/tool/LP-MSPM0L1306) Launchpad along with the [ADS122S14 EMV](https://www.ti.com/tool/ADS122S14EVM).  The EVM has been designed to be booster pack compatable, and connects to the MSPM0 Launchpad as a standard boosterpack. 
+This example uses the [MSPM0L1306](https://www.ti.com/tool/LP-MSPM0L1306) Launchpad along with the [ADS122S14 EMV](https://www.ti.com/tool/ADS122S14EVM-PDK).  The EVM has been designed to be booster pack compatable, and connects to the MSPM0 Launchpad as a standard boosterpack. 
 
 ## MSPM0 Peripherals & Pin Assignments
 

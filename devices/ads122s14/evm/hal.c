@@ -22,73 +22,41 @@
 //
 //****************************************************************************
 
-void spiSendReceiveArrays(const uint8_t dataTx[], uint8_t dataRx[], const uint8_t bufferLength)
+void spiSendReceiveArrays(uint8_t dataTx[], uint8_t dataRx[], uint8_t bufferLength)
+// this funciton will operate the MSPM0 SPI port.  Because the SPI FIFO on M0 is 16-bit,
+// the dataTX and dataRX buffers are packed into 16-bit elements before being tranfered to/from the SPI FIFO. 
+// this transformation improves data readback when SPI frames include SPI and CRC words ( 6-byte frame )
+
 {
-    
-    int i = 0;
-    for (i = 0; i < bufferLength; i++) {
+    DL_SPI_drainRXFIFO8(SPI_0_INST, dataRx, 4);
+
+
+    uint8_t i = 0;
+    uint8_t j = 0;
+
+
+    DL_GPIO_clearPins(GPIOA, GPIO_GRP_0_CSn_PIN);
+
+    while (i < bufferLength) {
         
-        DL_SPI_transmitData8(SPI_0_INST, dataTx[i]);
+        if(!DL_SPI_isTXFIFOFull(SPI_0_INST)) {      // add to fifo if not full
+            DL_SPI_transmitData8(SPI_0_INST, dataTx[i++]);
+        }
+        if(!DL_SPI_isRXFIFOEmpty(SPI_0_INST)) {     // read from fifo if not empty
+            dataRx[j++] = DL_SPI_receiveData8(SPI_0_INST);    
+        }
+            
     }
     
-    for (i = 0; i < bufferLength; i++) {
+    while (i != j)  {
+        if(!DL_SPI_isRXFIFOEmpty(SPI_0_INST)) {
+            dataRx[j++] = DL_SPI_receiveData8(SPI_0_INST);    
+        }
         
-        dataRx[i] = DL_SPI_receiveDataBlocking8(SPI_0_INST);
     }
 
+    DL_GPIO_setPins(GPIOA, GPIO_GRP_0_CSn_PIN);
 
-}
 
-//*****************************************************************************
-//
-//                   I2C Communications
-//
-//*****************************************************************************
-
-void I2C_Write ( uint8_t dataTx[], uint8_t wLength) 
-{     
-    DL_I2C_resetControllerTransfer(I2C_0_INST);    // reset I2C controller settings  
-    DL_I2C_fillControllerTXFIFO(I2C_0_INST, dataTx, wLength);        // fill the Tx FIFO
-
-    DL_I2C_startControllerTransferAdvanced(I2C_0_INST, I2C_ADDRESS, DL_I2C_CONTROLLER_DIRECTION_TX,
-        wLength, DL_I2C_CONTROLLER_START_ENABLE, DL_I2C_CONTROLLER_STOP_ENABLE, DL_I2C_CONTROLLER_ACK_ENABLE);      // send the Tx data
- 
-    // wait for idle.  
-    while (!(DL_I2C_getControllerStatus(I2C_0_INST) & DL_I2C_CONTROLLER_STATUS_IDLE));             
-
-    // Flush Tx Buffer afterwords
-    DL_I2C_flushControllerTXFIFO(I2C_0_INST);                                                  
-
-        
-
-}
-
-void I2C_Read( uint8_t dataTx[], uint8_t dataRx[], uint8_t rLength) 
-{
-    // reset I2C controller settings    
-    DL_I2C_resetControllerTransfer(I2C_0_INST);                                                     
-    DL_I2C_flushControllerRXFIFO(I2C_0_INST);       
-
-    // Begin writing
-    DL_I2C_startControllerTransferAdvanced(I2C_0_INST, I2C_ADDRESS, DL_I2C_CONTROLLER_DIRECTION_TX,
-        1, DL_I2C_CONTROLLER_START_ENABLE, DL_I2C_CONTROLLER_STOP_DISABLE, DL_I2C_CONTROLLER_ACK_ENABLE);   
-    
-    // wait for idle.
-    while (!(DL_I2C_getControllerStatus(I2C_0_INST) & DL_I2C_CONTROLLER_STATUS_IDLE));  
-    
-    // Begin reading
-    DL_I2C_startControllerTransferAdvanced(I2C_0_INST, I2C_ADDRESS, DL_I2C_CONTROLLER_DIRECTION_RX,
-        rLength, DL_I2C_CONTROLLER_START_DISABLE, DL_I2C_CONTROLLER_STOP_ENABLE, DL_I2C_CONTROLLER_ACK_DISABLE); 
-
-    // wait for idle.
-    while (!(DL_I2C_getControllerStatus(I2C_0_INST) & DL_I2C_CONTROLLER_STATUS_IDLE));  
-
-    for (int i = 0; i < rLength; i++)
-    {
-        dataRx[i] = DL_I2C_receiveControllerData(I2C_0_INST);
-    }
-    
-    // Flush Rx Buffer afterwords
-    DL_I2C_flushControllerRXFIFO(I2C_0_INST);                          
-  
+     
 }

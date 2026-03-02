@@ -1,5 +1,5 @@
 /**
- * \copyright Copyright (C) 2021 Texas Instruments Incorporated - http://www.ti.com/
+ * \copyright Copyright (C) 2026 Texas Instruments Incorporated - http://www.ti.com/
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
@@ -31,47 +31,15 @@
  *
  */
 
-// APP NOTE: Communication Methods for Data Integrity Using Delta-Sigma Data Converters
-// URL: https://www.ti.com/lit/an/sbaa106/sbaa106.pdf
-
-#ifndef CRC_H_
-#define CRC_H_
-
-// Standard libraries
+#ifndef EXAMPLE_H_
+#define EXAMPLE_H_
 #include <stdbool.h>
 #include <stdint.h>
-
-
-//****************************************************************************
-//
-// Constants
-//
-//****************************************************************************
-
-//
-// Select CRC calculation mode...
-//
-#define CRC_LOOKUP
-//#define CRC_CALCULATION
-
-//
-// Select CRC word length...
-//
-#define CRC8            // CRC word is 8-bits wide
-//#define CRC16         // CRC word is 16-bits wide
-
-// Adjust "CRCWORD" to CRC word length
-#ifdef CRC8
-    #define CRCWORD                             uint8_t
-#elif defined(CRC16)
-    #define CRCWORD                             uint16_t
-#endif
-
-// Initial seed value for CRC calculation
-#define CRC_INITIAL_SEED                        ((CRCWORD) 0xFF)
-
-// Initial seed value for CRC calculation
-#define CRC_POLYNOMIAL                          ((CRCWORD) 0x07)
+#include "Driver/ads122y1x.h"
+#include "ti/driverlib/m0p/dl_core.h"
+#include "ti_msp_dl_config.h"
+#include "Driver/hal.h"
+#include "Driver/crc.h"
 
 
 //*****************************************************************************
@@ -79,9 +47,7 @@
 // Function Prototypes
 //
 //*****************************************************************************
-void initCRC(void);
-CRCWORD getCRC(const uint8_t dataBytes[], uint8_t numberBytes, CRCWORD initialValue);
-//uint8_t reverseByte(uint8_t n);
 
+void applicaitonExample(void);
 
-#endif /* CRC_H_ */
+#endif /* EXAMPLE_H_ */

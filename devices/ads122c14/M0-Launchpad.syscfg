@@ -9,8 +9,6 @@
 /**
  * Import the modules used in this configuration.
  */
-const GPIO   = scripting.addModule("/ti/driverlib/GPIO", {}, false);
-const GPIO1  = GPIO.addInstance();
 const I2C    = scripting.addModule("/ti/driverlib/I2C", {}, false);
 const I2C1   = I2C.addInstance();
 const SPI    = scripting.addModule("/ti/driverlib/SPI", {}, false);
@@ -20,16 +18,6 @@ const SYSCTL = scripting.addModule("/ti/driverlib/SYSCTL");
 /**
  * Write custom configuration values to the imported modules.
  */
-GPIO1.$name                          = "GPIO_GRP_0";
-GPIO1.associatedPins[0].$name        = "CSn";
-GPIO1.associatedPins[0].initialValue = "SET";
-GPIO1.associatedPins[0].pin.$assign  = "boosterpack.12";
-
-const Board                       = scripting.addModule("/ti/driverlib/Board", {}, false);
-Board.peripheral.$assign          = "DEBUGSS";
-Board.peripheral.swclkPin.$assign = "boosterpack.13";
-Board.peripheral.swdioPin.$assign = "boosterpack.17";
-
 I2C1.$name                     = "I2C_0";
 I2C1.profile                   = "CONFIG_PROFILE_1";
 I2C1.peripheral.$assign        = "I2C0";
@@ -39,17 +27,23 @@ I2C1.sdaPinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric4";
 I2C1.sclPinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric5";
 scripting.suppress("Actual bus speed differs from requested\\. Try using a                            different clock source or adjust bus speed if needed\\.                            See detailed help\\.", I2C1, "basicControllerBusSpeedArray");
 
+const Board                       = scripting.addModule("/ti/driverlib/Board", {}, false);
+Board.peripheral.$assign          = "DEBUGSS";
+Board.peripheral.swclkPin.$assign = "boosterpack.13";
+Board.peripheral.swdioPin.$assign = "boosterpack.17";
+
 SPI1.$name                      = "SPI_0";
 SPI1.phase                      = "1";
 SPI1.targetBitRate              = 4000000;
 SPI1.chipSelect                 = ["3"];
-SPI1.frameFormat                = "MOTO3";
 SPI1.sclkPinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric0";
 SPI1.mosiPinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric1";
 SPI1.misoPinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric2";
+SPI1.cs3PinConfig.$name         = "ti_driverlib_gpio_GPIOPinGeneric8";
 SPI1.peripheral.sclkPin.$assign = "boosterpack.7";
 SPI1.peripheral.mosiPin.$assign = "boosterpack.15";
 SPI1.peripheral.misoPin.$assign = "boosterpack.14";
+SPI1.peripheral.cs3Pin.$assign  = "boosterpack.12";
 
 SYSCTL.clockTreeEn = true;
 
