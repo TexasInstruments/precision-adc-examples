@@ -1,4 +1,4 @@
-## ADS122S14 Example Summary
+## ADS122C14 Example Summary
 
 In this application, the MSPM0 Launchpad acts as an I2C Controller, sending commands and receiving ADC readings from the ADS122C14 target. 
 
