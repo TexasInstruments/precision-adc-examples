@@ -1,12 +1,12 @@
 ## [ADS1285](https://www.ti.com/product/ADS1285) Example Code
 
-The following example code project is intended to run on a TI MSPM0L1306 Lauchpad.  This project utilizes a Hardware Abstraction Layer (HAL) and can be ported to other processors by making use of the HAL.c / HAL.h files. To run this code, import into your own development environment, or use TI's provided embedded development studio CCS.
+The following example code project is intended to run on a [TI MSPM0L1306 Lauchpad](https://www.ti.com/tool/LP-MSPM0L1306).  This project utilizes a Hardware Abstraction Layer (HAL) and can be ported to other processors by making use of the HAL.c / HAL.h files. To run this code, import into your own development environment, or use TI's provided embedded development studio CCS.
 
 [CCS](https://www.ti.com/tool/CCSTUDIO) - Embedded IDE
 
 [MSPM0-SDK](https://www.ti.com/tool/MSPM0-SDK) - SDK for TI's MSPM0
 
-[ADS1285 EVM](https://www.ti.com/tool/ADS1285EVM-PDK) Additional hardware uses for this demo. 
+[ADS1285 EVM](https://www.ti.com/tool/ADS1285EVM-PDK) Additional hardware used for this demo. 
 
 ---
 
