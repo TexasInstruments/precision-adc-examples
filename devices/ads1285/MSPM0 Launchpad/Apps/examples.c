@@ -73,7 +73,7 @@ void simpleADC(void)
     double_t drdyPeriod = calcFdataPeriod((getRegisterValue(CONFIG0_ADDRESS) & CONFIG0_DR_MASK));
     
     //Multiply by 81 and convert to ms
-    delay_ms((uint32_t)(ceil(81 * drdyPeriod * 1000)));
+    delay_ms((uint32_t)(ceil(81 * drdyPeriod * 1000)) +1 );
     
     //Save offset calibration value for uC to store (not necessary)
     readMultipleRegisters(OFFSET0_ADDRESS, 3);

@@ -56,8 +56,6 @@ const char *generalRegisterNames[NUM_REGISTERS] = {"ID_SYNC", \
 static uint8_t registerMap[NUM_REGISTERS];
 static uint8_t dataTx[16] = {0};
 static uint8_t dataRx[16] = {0};    
-static uint8_t data00[6] = {0};
-uint8_t adcDataArray[4];
 static uint8_t numWords = 0;
 uint32_t numSamples = 0;
 
@@ -224,9 +222,14 @@ uint32_t readDataDirect(void)
 // Read data command is a 1 frame operation
 // DIN should be set to 0x00000000 while clocking 32 SCLK bits
 
+        dataTx[0] = 0x00;
+        dataTx[1] = 0x00;
+        dataTx[2] = 0x00;
+        dataTx[3] = 0x00;
+
         waitForDRDYinterrupt(1000);     // wait for falling DRDY. 1000tick timeout
         
-        spiSendReceiveArrays(data00, dataRx, 4);
+        spiSendReceiveArrays(dataTx, dataRx, 4);
         
         int32_t highByte    = ((uint32_t) dataRx[0] << 24);
         int32_t upperByte   = ((uint32_t) dataRx[1] << 16);
@@ -246,7 +249,7 @@ uint32_t readDataDirect(void)
 //! \return 32-bit ADC data.
 //!
 //*****************************************************************************
-uint32_t readDataCMD(void)
+uint32_t readDataCommand(void)
 {
 // Read data command is a 1 frame operation
 // DIN should be set to 0x12000000 while clocking 32 SCLK bits
@@ -259,7 +262,7 @@ uint32_t readDataCMD(void)
         dataTx[3] = 0x00;
         dataTx[4] = 0x00;
 
-        spiSendReceiveArrays(data00, dataRx, 4);
+        spiSendReceiveArrays(dataTx, dataRx, 4);
         
         int32_t highByte    = ((uint32_t) dataRx[1] << 24);
         int32_t upperByte   = ((uint32_t) dataRx[2] << 16);
@@ -326,41 +329,32 @@ uint8_t getRegisterValue(uint8_t address)
 //! \return double Fdata period.
 //*****************************************************************************
 double_t calcFdataPeriod(int CONFIG0_DR)
-{
+{   
+    double_t FdataPeriod = 0;
     switch (CONFIG0_DR) {
         case 0x00:
-            if((getRegisterValue(CONFIG0_ADDRESS) & CONFIG0_MODE_MASK)==CONFIG0_MODE_LOW)
-                {return(.008);}
-            else 
-                {return(.004);}
+            FdataPeriod =  32768 / MCLK_SPEED;
+            return(FdataPeriod);
             break;
         
         case 0x08:
-            if((getRegisterValue(CONFIG0_ADDRESS) & CONFIG0_MODE_MASK)==CONFIG0_MODE_LOW)
-                {return(.004);}
-            else 
-                {return(.002);} 
+            FdataPeriod =  16384 / MCLK_SPEED;
+            return(FdataPeriod);
             break;  
             
         case 0x10:
-            if((getRegisterValue(CONFIG0_ADDRESS) & CONFIG0_MODE_MASK)==CONFIG0_MODE_LOW)
-                {return(.002);}
-            else 
-                {return(.001);} 
+            FdataPeriod = 8192 / MCLK_SPEED;
+            return(FdataPeriod);
             break;
             
         case 0x18:
-            if((getRegisterValue(CONFIG0_ADDRESS) & CONFIG0_MODE_MASK)==CONFIG0_MODE_LOW)
-                {return(.001);}
-            else 
-                {return(.0005);} 
+            FdataPeriod =  4096 / MCLK_SPEED;
+            return(FdataPeriod);
             break;
             
         case 0x20:
-            if((getRegisterValue(CONFIG0_ADDRESS) & CONFIG0_MODE_MASK)==CONFIG0_MODE_LOW)
-                {return(.0005);}
-            else 
-                {return(.00025);} 
+            FdataPeriod = 2048 / MCLK_SPEED;
+            return(FdataPeriod);
             break;
         default:
             return(0);

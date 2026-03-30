@@ -69,7 +69,7 @@ void writeSingleRegister(uint8_t address, uint8_t data);
 uint8_t readSingleRegister(uint8_t address);
 void readMultipleRegisters(uint8_t address, uint8_t numRegs);
 uint32_t readDataDirect(void);
-uint32_t readDataCMD(void);
+uint32_t readDataCommand(void);
 void restoreRegisterDefaults(void);
 uint8_t getRegisterValue(uint8_t address);
 double_t calcFdataPeriod(int CONFIG0_DR);
