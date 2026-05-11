@@ -44,7 +44,6 @@ SPI1.$name                      = "SPI_0";
 SPI1.phase                      = "1";
 SPI1.chipSelect                 = ["3"];
 SPI1.targetBitRate              = 16000000;
-SPI1.dataSize                   = 16;
 SPI1.frameFormat                = "MOTO3";
 SPI1.sclkPinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric0";
 SPI1.mosiPinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric1";

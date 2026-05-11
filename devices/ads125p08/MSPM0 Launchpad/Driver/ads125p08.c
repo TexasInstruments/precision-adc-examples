@@ -48,7 +48,7 @@
 
 // Register configuration tool available here:
 // https://dev.ti.com/gallery/view/PADC/PADC_Design_Calculator_Tool/?device=ADS125P08
-#include "Driver/ads125p08_RegisterDetails.h"   
+#include "Driver/ADS125P08_RegisterDetails.h"   
 
 
 
@@ -182,17 +182,15 @@ uint8_t getRegisterValue(uint8_t page, uint8_t address)
 
 void initADC()
 {
-    // Initalize registers as defined from the _RegisterDetails.h file
+   // Initalize registers as defined from the _RegisterDetails.h file
     restoreRegisterDefaults();
     for (int i = 0; i < SEQUENCE_SIZE; i++ )
         {
-            writeSingleRegister(0, PAGE_POINTER_ADDRESS,ADS125P08_sequencer_config[i].pageNumber);
-       
         for (int j = 0; j < ADS125P08_sequencer_config[i].registerCount; j++ )
             {
-                writeSingleRegister(i, ADS125P08_sequencer_config[i].configPointer[j].addr,ADS125P08_sequencer_config[i].configPointer[j].value);
+            writeSingleRegister(ADS125P08_sequencer_config[i].pageNumber, ADS125P08_sequencer_config[i].configPointer[j].addr,ADS125P08_sequencer_config[i].configPointer[j].value);
             }
-    }
+        }
 
     // clear status flags
     writeSingleRegister(GENERAL_SETTINGS, ADC_REF_STATUS_ADDRESS, 0xFF);
@@ -297,9 +295,19 @@ REG_IO readSingleRegister(uint8_t page, uint8_t address)
 
 void startAdcConversion(void)
 {
-    writeSingleRegister(GENERAL_SETTINGS, CONVERSION_CTRL_ADDRESS, START_STARTORRESTARTCONVERSIONS);    // write to start bit
-   
-    return;
+    // Set start bit while also preserving the STEP_INIT Field value
+    // this bit always reads 0 and should not be saved in the shadow memory.          
+    
+    //change page if needed
+    if (GENERAL_SETTINGS != registerMap[GENERAL_SETTINGS][PAGE_POINTER_ADDRESS]) {  
+        numWords = buildSPIarray(0x80 + PAGE_POINTER_ADDRESS, GENERAL_SETTINGS);
+        spiSendReceiveArrays(dataTx, dataRx, numWords);   
+        registerMap[GENERAL_SETTINGS][PAGE_POINTER_ADDRESS] = GENERAL_SETTINGS;     
+    }
+
+    //build and send frame
+    numWords = buildSPIarray(0x80 + CONVERSION_CTRL_ADDRESS, ( registerMap[GENERAL_SETTINGS][CONVERSION_CTRL_ADDRESS] | START_STARTORRESTARTCONVERSIONS ));
+    spiSendReceiveArrays(dataTx, dataRx, numWords);
 }
 
 ADC_IO readData(void)
@@ -398,8 +406,19 @@ ADC_IO readData(void)
 
 void stopAdcConversion(void)
 {
-    writeSingleRegister(GENERAL_SETTINGS, CONVERSION_CTRL_ADDRESS,STOP_STOPCONVERSIONS);   // write to stop bit
-    return;
+       // Set stop bit while also preserving the STEP_INIT Field value
+       // this bit always reads 0 and should not be saved in the shadow memory.
+              
+    //change page if needed
+    if ( GENERAL_SETTINGS != registerMap[GENERAL_SETTINGS][PAGE_POINTER_ADDRESS]) {  
+        numWords = buildSPIarray(0x80 + PAGE_POINTER_ADDRESS, GENERAL_SETTINGS);
+        spiSendReceiveArrays(dataTx, dataRx, numWords);   
+        registerMap[GENERAL_SETTINGS][PAGE_POINTER_ADDRESS] = GENERAL_SETTINGS;     
+    }
+
+    //build and send frame
+    numWords = buildSPIarray(0x80 + CONVERSION_CTRL_ADDRESS, ( registerMap[GENERAL_SETTINGS][CONVERSION_CTRL_ADDRESS] | STOP_STOPCONVERSIONS ));
+    spiSendReceiveArrays(dataTx, dataRx, numWords);
 }
 
 STATUS_IO checkStatus ()

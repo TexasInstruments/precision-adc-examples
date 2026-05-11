@@ -31,12 +31,15 @@
  */
 
 #include "Driver/ads125h18.h"
+#include "Driver/ads125h18_page0.h"
+#include "Driver/ads125h18_pages.h"
 #include "Driver/hal.h"
 #include "Driver/crc.h"
 #include "ti/driverlib/m0p/dl_core.h"
 #include "ti_msp_dl_config.h"
 #include <stdint.h>
 #include <stdbool.h>
+
 
 REG_IO ADC_Register;                // struct to hold register values, STATUS, and CRC info. 
 #define numSamples  64              // allocated number of samples for M0
