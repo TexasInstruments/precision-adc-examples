@@ -7,7 +7,7 @@ This module provides a comprehensive algorithm for computing calibration coeffic
 ### Key Features
 
 - **Z-score normalization**: Prevents numerical instability in polynomial regression
-- **Multiple configurations**: Supports 1P1T to 4P4T calibration configurations
+- **Multiple configurations**: Supports upto 4 temperature and 4 pressure (4T4P) calibration points
 - **ADC resolution options**: Handles both 16-bit and 24-bit ADC resolutions
 - **EEPROM Scaling**: Provides integer-scaled coefficients for device storage
 - **Error analysis**: Determines prediction error
@@ -63,11 +63,11 @@ Either modify the code below the `if __name__ == "__main__":` section directly i
 # Matrix structure (4T4P)
 # Omit the unused rows/columns for fewer calibration points.
 #
-#        P0:   P1:   P2:   P3:
-#   T0: [T0P0, T0P1, T0P2, T0P3],
-#   T1: [T1P0, T1P1, T1P2, T1P3],
-#   T2: [T2P0, T2P1, T2P2, T2P3],
-#   T3: [T3P0, T3P1, T3P2, T3P3],
+#        P1:   P2:   P3:   P4:
+#   T1: [T1P1, T1P2, T1P3, T1P4],
+#   T2: [T2P1, T2P2, T2P3, T2P4],
+#   T3: [T3P1, T3P2, T3P3, T3P4],
+#   T4: [T4P1, T4P2, T4P3, T4P4],
 
 # Example 4T4P data
 tadc = [
@@ -93,24 +93,15 @@ dac = [
 
 cc = PGACoeffCalculator(
     cal_point=(4, 4),  # 4T4P
-    adc_resolution=24,  # Use 24 for PGA305, 16 for PGA300
+    device="PGA305",
     tad_matrix=tadc,
     pad_matrix=padc,
     dac_matrix=dac,
 )
 cc.recommend_calibration(offset_enabled=False)
-
-# (OPTIONAL) Override calibration settings here...
-# cc.tadc_gain = 1
-# cc.padc_gain = 1
-
 cc.normalize_data()
 cc.calculate_regression()
 cc.summarize_results()
-
-# To test the DAC output for different TADC and PADC values:
-dac_output = cc.compute_dac_value(tadc_value=0x3243B3, padc_value=0xF585B6)
-print(f"DAC output: {dac_output} (Hex: 0x{cc.signed_int_to_hex(dac_output)})")
 ```
 
 #### Output example
@@ -134,46 +125,46 @@ PADC_OFFSET          -2517601           0xD9959F
 Coefficients:
 Name        Float Value   EEPROM (Hex)
 --------------------------------------
-h0         2.997735e-03     0x00311D
-h1         4.607823e-04     0x00078D
-h2         4.627157e-04     0x000795
-h3        -2.018772e-04     0xFFFCB1
-g0         2.943026e-03     0x003038
-g1         9.340898e-04     0x000F4E
-g2        -9.722807e-04     0xFFF012
-g3        -2.447421e-04     0xFFFBFD
-n0        -5.561416e-04     0xFFF6E3
-n1        -8.377596e-04     0xFFF246
-n2        -5.881312e-04     0xFFF65D
-n3        -5.174212e-04     0xFFF786
-m0        -2.047170e-03     0xFFDE76
-m1        -2.499748e-03     0xFFD70B
-m2        -1.423864e-03     0xFFE8AC
-m3        -5.351629e-04     0xFFF73B
+h0         7.674201e-01     0x311D69
+h1         1.179603e-01     0x078CA9
+h2         1.184552e-01     0x0794C5
+h3        -5.168057e-02     0xFCB144
+g0         7.534146e-01     0x3037F2
+g1         2.391270e-01     0x0F4DDB
+g2        -2.489039e-01     0xF011F6
+g3        -6.265397e-02     0xFBFD7A
+n0        -5.240755e-01     0xDE758C
+n1        -6.399355e-01     0xD70B4C
+n2        -3.645092e-01     0xE8ABE1
+n3        -1.370017e-01     0xF73B5D
+m0        -1.423722e-01     0xF6E360
+m1        -2.144665e-01     0xF2462E
+m2        -1.505616e-01     0xF65D33
+m3        -1.324598e-01     0xF785C7
 
 Calibration Point Comparison:
-Point   TADC (Hex)   PADC (Hex)   Expected   Computed   Error
---------------------------------------------------------------
-T0P0    0x3243B3     0xF585B6     0x000666   0x000666   0
-T0P1    0x324991     0x1146C8     0x001FFF   0x001FFF   0
-T0P2    0x324B34     0x397173     0x003998   0x003998   0
-T0P3    0x3247F2     0x574F0C     0x003FFF   0x003FFF   0
-T1P0    0x38C14B     0xF8434C     0x000666   0x000666   0
-T1P1    0x38CD8B     0x125217     0x001FFF   0x001FFF   0
-T1P2    0x38D8ED     0x38020D     0x003998   0x003998   0
-T1P3    0x38D326     0x5411B3     0x003FFF   0x003FFF   0
-T2P0    0x53A5DC     0xFE9E3E     0x000666   0x000666   0
-T2P1    0x53C289     0x1328D1     0x001FFF   0x001FFF   0
-T2P2    0x53E7A3     0x30FDB3     0x003998   0x003998   0
-T2P3    0x5408B2     0x474B08     0x003FFF   0x003FFF   0
-T3P0    0x619158     0xFFF43F     0x000666   0x000666   0
-T3P1    0x619E32     0x125D8A     0x001FFF   0x001FFF   0
-T3P2    0x61A6D2     0x2D2411     0x003998   0x003998   0
-T3P3    0x61AD6D     0x4134DA     0x003FFF   0x003FFF   0
+Point TADC (Hex)   PADC (Hex)   Expected   Computed   Error (codes)
+-------------------------------------------------------------------
+t1p1  0x3243B3     0xF585B6     0x0666     0x0666        -0.0031
+t1p2  0x324991     0x1146C8     0x1FFF     0x1FFF        -0.0012
+t1p3  0x324B34     0x397173     0x3998     0x3998         0.0001
+t1p4  0x3247F2     0x574F0C     0x3FFF     0x3FFF         0.0021
+t2p1  0x38C14B     0xF8434C     0x0666     0x0666        -0.0025
+t2p2  0x38CD8B     0x125217     0x1FFF     0x1FFF        -0.0010
+t2p3  0x38D8ED     0x38020D     0x3998     0x3998        -0.0000
+t2p4  0x38D326     0x5411B3     0x3FFF     0x3FFF         0.0015
+t3p1  0x53A5DC     0xFE9E3E     0x0666     0x0666        -0.0016
+t3p2  0x53C289     0x1328D1     0x1FFF     0x1FFF        -0.0012
+t3p3  0x53E7A3     0x30FDB3     0x3998     0x3998        -0.0007
+t3p4  0x5408B2     0x474B08     0x3FFF     0x3FFF        -0.0001
+t4p1  0x619158     0xFFF43F     0x0666     0x0666        -0.0018
+t4p2  0x619E32     0x125D8A     0x1FFF     0x1FFF        -0.0014
+t4p3  0x61A6D2     0x2D2411     0x3998     0x3998        -0.0011
+t4p4  0x61AD6D     0x4134DA     0x3FFF     0x3FFF        -0.0007
 
 Error Statistics:
-  Max Error:        0 codes  (   0.0 ppm FSR)
-  Mean Error:    0.00 codes  (   0.0 ppm FSR)
+  Max (Abs.) Error:       0.0031 codes  (    0.21 ppm)
+  Mean (Abs.) Error:      0.0013 codes  (    0.09 ppm)
 ```
 
 
