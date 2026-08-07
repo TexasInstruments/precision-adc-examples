@@ -1,7 +1,9 @@
 PGA3xx/9xx Calibration Coefficient Calculator
 =============================================
 
-This module provides a comprehensive algorithm for computing calibration coefficients for Texas Instruments PGA3xx and PGA9xx programmable gain amplifiers. The tool generates polynomial regression coefficients that define the transfer functions mapping temperature (TADC) and pressure (PADC)measurements to specific DAC output codes.
+`pga_coefficient_calculator.py` provides a comprehensive algorithm for computing calibration coefficients for Texas Instruments PGA3xx and PGA9xx programmable gain amplifiers. The tool generates polynomial regression coefficients that define the transfer functions mapping temperature (TADC) and pressure (PADC)measurements to specific DAC output codes.
+
+`eeprom_util.py` takes those coefficients and writes them into a paged EEPROM CSV file that can be imported directly into TI's PGA3xx configuration GUI. See [EEPROM CSV Generation](#eeprom-csv-generation) below.
 
 
 ### Key Features
@@ -167,6 +169,33 @@ Error Statistics:
   Mean (Abs.) Error:      0.0013 codes  (    0.09 ppm)
 ```
 
+
+## EEPROM CSV Generation
+
+`eeprom_util.py` maps a completed `PGACoeffCalculator` onto a device's EEPROM register layout and writes a ready-to-import CSV file.
+
+1. Start from a factory-default EEPROM dump (`example_eeprom.csv`), a tab-delimited, 16-page x 8-byte CSV matching the format exported by TI's PGA3xx GUI.
+2. Pass a calculator that has already run `recommend_calibration()`, `normalize_data()`, and `calculate_regression()` to `write_calibrated_csv()`.
+3. `eeprom_util.py` overlays the coefficient, gain, and offset registers for the calculator's device (PGA300, PGA302, or PGA305), recomputes the CRC-8 checksum, and writes the result to a new CSV.
+4. Import the output CSV into the PGA3xx GUI to program the device.
+
+Like `pga_coefficient_calculator.py`, `eeprom_util.py` declares its dependencies via PEP 723 inline script metadata and is directly executable. Running it with the sample data in `if __name__ == "__main__":` reads `example_eeprom.csv` and writes `PGA305_Calibrated.csv`:
+
+```bash
+uv run eeprom_util.py
+```
+
+To use it in your own script, import `write_calibrated_csv()` instead:
+
+```python
+from eeprom_util import write_calibrated_csv
+
+write_calibrated_csv(
+    input_csv_path="example_eeprom.csv",
+    output_csv_path="PGA305_Calibrated.csv",
+    calc=cc,  # PGACoeffCalculator instance, regression already run
+)
+```
 
 ## Troubleshooting
 

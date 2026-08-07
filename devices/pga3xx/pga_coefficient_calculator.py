@@ -92,7 +92,7 @@ class PGACoeffCalculator:
     def __init__(
         self,
         cal_point: tuple[int, int],
-        device: Literal["PGA300", "PGA302", "PGA305", "PGA900"] | DeviceConfig,
+        device: Literal["PGA300", "PGA302", "PGA305", "PGA900"],
         tad_matrix: Sequence[Sequence[int | str]],
         pad_matrix: Sequence[Sequence[int | str]],
         dac_matrix: Sequence[Sequence[int | str]],
@@ -102,8 +102,7 @@ class PGACoeffCalculator:
 
         Args:
             cal_point: Calibration configuration as (number temperature points, number pressure points).
-            device: Device name (e.g. "PGA305") or a DeviceConfig instance. Known device
-                    names are listed in DEVICE_CONFIGS.
+            device: Device name (e.g. "PGA305"). Known device names are listed in DEVICE_CONFIGS.
             tad_matrix: Temperature ADC readings as hex strings or integers.
             pad_matrix: Pressure ADC readings as hex strings or integers.
             dac_matrix: DAC output values as hex strings or integers.
@@ -123,16 +122,15 @@ class PGACoeffCalculator:
                 f"Device doesn't support more than 4T4P calibration. Received {cal_point[0]}T{cal_point[1]}P."
             )
 
-        if isinstance(device, str):
-            if device not in DEVICE_CONFIGS:
-                raise ValueError(f"Unknown device '{device}'. Known devices: {sorted(DEVICE_CONFIGS)}")
-            config = DEVICE_CONFIGS[device]
-        else:
-            config = device
+        if device not in DEVICE_CONFIGS:
+            raise ValueError(f"Unknown device '{device}'. Known devices: {sorted(DEVICE_CONFIGS)}")
+        config = DEVICE_CONFIGS[device]
 
         # Internal constants
         self.cal_point = cal_point
         """Calibration point configuration as (number temperature points, number pressure points)"""
+        self.device = device
+        """Device name as passed to the constructor (e.g. "PGA305")"""
         self.config = config
         """Device configuration containing adc_bits and dac_bits"""
         self.adc_scale = 1 << (config.adc_bits - 2)
