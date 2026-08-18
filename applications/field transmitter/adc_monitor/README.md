@@ -33,4 +33,4 @@ Key settings live at the top of `adc_monitor.py`: `PORT`, `DEVICE_VID`/`DEVICE_P
 
 Raise `UPDATE_MS` to redraw less often, or lower `WINDOW_SIZE` to shrink CPU/redraw load if the plot feels sluggish.
 
-To regenerate the window icon artwork, run `_gen_icon.py` (stdlib-only PNG encoder, no Pillow) and paste its printed output over `ICON_PNG_BASE64` in `adc_monitor.py`.
+To regenerate the window icon artwork, run `_gen_icon.py` (stdlib-only PNG encoder, no Pillow) and paste its printed output over `ICON_PNG_BASE64` in `adc_monitor.py`. 
