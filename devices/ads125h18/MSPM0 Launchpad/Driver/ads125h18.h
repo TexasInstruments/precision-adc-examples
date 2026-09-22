@@ -120,6 +120,7 @@ bool isValidCrcOut(void);
  ADC_IO regValue;
  extern bool g_Status;
  extern bool g_CRC;
+ extern uint8_t registerMap[NUM_PAGES][NUM_GENERAL_REGISTERS];
  
 //**********************************************************************************
 //

@@ -9,7 +9,7 @@
 	<ignoreDefaultDeviceSettings value="true"/>
 	<ignoreDefaultCCSSettings value="true"/>
 	<templateProperties value="id=spi_controller_command_data_control_LP_MSPM0L1306_nortos_ticlang.projectspec.spi_controller_command_data_control_LP_MSPM0L1306_nortos_ticlang,buildProfile=release,isHybrid=true"/>
-	<activeTargetConfiguration value="targetConfigs/MSPM0L1306.ccxml"/>
+	<activeTargetConfiguration value="targetConfigs/MSPM0G5187.ccxml"/>
 	<isTargetConfigurationManual value="false"/>
 	<sourceLookupPath value="${COM_TI_MSPM0_SDK_INSTALL_DIR}/source/ti/driverlib"/>
 	<origin value="C:/Users/A0505018/Desktop/M0+S14/M0 + Newhaven code example/newhaven-plus-m0-release@1df71f48261"/>

@@ -1,25 +1,28 @@
 ## ADS125H18 Example Code
 
-The following example code project is intended to run on a TI MSPM0L1306 Lauchpad.  This project utilizes a Hardware Abstraction Layer (HAL) and can be ported to other processors by making use of the HAL.c / HAL.h files.  
+The following example code project is intended to run on a TI MSPM0G3507 Lauchpad.  This project utilizes a Hardware Abstraction Layer (HAL) and can be ported to other processors by making use of the HAL.c / HAL.h files.  
 
 ## Peripherals & Pin Assignments
 
-Visit [LP_MSPM0L1306](https://www.ti.com/tool/LP-MSPM0L1306) for LaunchPad information, including user guide and hardware files.
+Visit [LP_MSPM0G3507](https://www.ti.com/tool/LP-MSPM0G3507) for LaunchPad information, including user guide and hardware files.
 
 | Peripheral | Pin | Function |
 | --- | --- | --- |
-| SPI0 | PA6 | SPI SCLK (Clock) |
-| SPI0 | PA5 | SPI PICO (Peripheral In, Controller Out) |
-| SPI0 | PA4 | SPI POCI (Peripheral Out, Controller In) |
-| SPI0 | PA23 | SPI CS1 (Chip Select 1) |
+| SPI0 | PA11 | SPI SCLK (Clock) |
+| SPI0 | PA9 | SPI PICO (Peripheral In, Controller Out) |
+| SPI0 | PA10 | SPI POCI (Peripheral Out, Controller In) |
+| SPI0 | PA28 | SPI CS1 (Chip Select 1) |
 | GPIO | PA22 | DRDYn ( Data Ready |)
 
 The included example applications executes a few simple data collection routines.  The main file **main_nortos.c** contains 3 example collection routines.  Each routine configures the ADC with unique settings and collects a number of samples in a constantly running loop.
 
 ```C 
-    simpleADC();           // A simple, single channel data converter example
-    sequencerExample();    // Channel scanning example using the sequencer
-    FIFOexample();         // Data retreival using the FIFO
+                             // uncomment one function to demo. 
+    //simpleADC();           // A simple, single channel data converter example
+    //sequencerExample();    // Channel scanning example using the sequencer
+    //FIFOexample();         // Data retreival using the FIFO
+    //csFwdExample();        // Chip Select forwarding example
+    //OWCSexample();         // Open Wire Current Source example
 ```
 
 

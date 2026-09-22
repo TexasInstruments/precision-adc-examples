@@ -90,7 +90,7 @@ const char *pageNames[NUM_PAGES] = {"GENERAL_SETTINGS", \
 //****************************************************************************
 
 // Array used to recall device register map configurations
-static uint8_t registerMap[NUM_PAGES][NUM_GENERAL_REGISTERS];
+uint8_t registerMap[NUM_PAGES][NUM_GENERAL_REGISTERS];
 static uint8_t dataTx[6] = {0};
 static uint8_t dataRx[6] = {0};
 static uint8_t data00[6] = {0};

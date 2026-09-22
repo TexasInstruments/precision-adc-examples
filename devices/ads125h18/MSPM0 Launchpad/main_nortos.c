@@ -35,6 +35,8 @@
 #include "ti_msp_dl_config.h"
 #include "Driver/hal.h"
 #include "Apps/examples.h"
+#include "Apps/OWCS.h"
+#include "Apps/CS_Forwarding.h"
 
 
 int main(void)
@@ -42,13 +44,18 @@ int main(void)
 SYSCFG_DL_init();                             // init M0 via syscfg driver
 
 NVIC_EnableIRQ(GPIO_GRP_0_INT_IRQN);          // configure and then disable the DRDYn interrupt 
-DL_GPIO_disableInterrupt(GPIOA, GPIO_GRP_0_DRDYn_PIN);  
+DL_GPIO_disableInterrupt(GPIOA, GPIO_GRP_0_DRDYn_PIN);
+
+
 
     while(1)
     {
-    simpleADC();           // A simple, single channel data converter example
+                             // uncomment one function to demo. 
+    //simpleADC();           // A simple, single channel data converter example
     //sequencerExample();    // Channel scanning example using the sequencer
-    //FIFOexample();         // data retreival using the FIFO
+    //FIFOexample();         // Data retreival using the FIFO
+    //csFwdExample();        // Chip Select forwarding example
+    //OWCSexample();         // Open Wire Current Source example
     
     }
 }

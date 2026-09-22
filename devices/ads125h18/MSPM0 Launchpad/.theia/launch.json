@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "ADS125P08_MSPM0L1306_code_example",
+            "name": "ADS125P08_MSPM0G_code_example",
             "type": "ccs-debug",
             "request": "launch",
             "projectInfo": {
@@ -24,6 +24,15 @@
             "projectInfo": {
                 "name": "ADS125P08_MSPM0L1306_code_example",
                 "resourceId": "/ADS125P08_MSPM0L1306_code_example/main_nortos.c"
+            }
+        },
+        {
+            "name": "ADS125H18_MSPM0L1306_code_example",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ADS125H18_MSPM0L1306_code_example",
+                "resourceId": "/ADS125H18_MSPM0L1306_code_example"
             }
         }
     ]
