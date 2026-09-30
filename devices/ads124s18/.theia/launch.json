@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "ADS124S28_MSPM0L3507_code_example",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ADS124S28_MSPM0L3507_code_example",
+                "resourceId": "/ADS124S28_MSPM0L3507_code_example"
+            }
+        },
+
+    ]
+}
