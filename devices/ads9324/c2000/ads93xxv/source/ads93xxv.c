@@ -118,10 +118,7 @@ void ADS93XXV_initalization(void)
 
     ADS93XXV_HAL_delay_ms(1);
 
-    ADS93XXV_HAL_writeRegister(0x02, 0x0001);
-    ADS93XXV_HAL_writeRegister(0x11, 0x0001);
-
-    ADS93XXV_HAL_writeRegister(0x02, 0x0001);
+    ADS93XXV_HAL_writeRegister(0x02, 0x0002);  // AIN1-AIN8 bank
     ADS93XXV_HAL_writeRegister(0x08, 0x5050);
     ADS93XXV_HAL_writeRegister(0x09, 0x5050);
     ADS93XXV_HAL_writeRegister(0x0A, 0x5050);
