@@ -200,8 +200,8 @@
 
     /* SCBCS field values */
     #define CONFIG1_SCBCS_OFF                   ((uint8_t) 0x00)
-    #define CONFIG1_SCBCS_1_5uA                 ((uint8_t) 0x40)
-    #define CONFIG1_SCBCS_24uA                  ((uint8_t) 0xC0)
+    #define CONFIG1_SCBCS_1_5uA                 ((uint8_t) 0x04)
+    #define CONFIG1_SCBCS_24uA                  ((uint8_t) 0x0C)
 
     /* DRATE field values (fixed-channel DRs shown) */
     #define CONFIG1_DRATE_1953SPS               ((uint8_t) 0x00)
