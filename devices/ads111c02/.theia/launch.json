@@ -1,0 +1,37 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "ADS111y0x_code_example",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ADS111y0x_code_example",
+                "resourceId": "/ADS111y0x_code_example"
+            },
+            "connections": [
+                {
+                    "name": "Texas Instruments XDS110 USB Debug Probe",
+                    "cores": [
+                        {
+                            "name": "CORTEX_M0P",
+                            "debuggerSettings": {
+                                "data": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n<PropertyValues>\n\n  <property id=\"FlashFiles\">\n    <curValue></curValue>\n  </property>\n\n</PropertyValues>\n"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "ADS122S14_MSPM0L1306_code_example",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ADS122S14_MSPM0L1306_code_example",
+                "resourceId": "/ADS122S14_MSPM0L1306_code_example"
+            }
+        }
+    ]
+}
